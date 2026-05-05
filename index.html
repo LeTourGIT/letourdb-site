@@ -6,507 +6,274 @@
 <title>LeTour Trader Dashboard</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
-
-  :root {
-    --bg:#0b0e13;--surface:#111520;--surface2:#161b26;--surface3:#1c2130;
-    --border:#222840;--border2:#2a3050;--text:#e4e8f2;--text-muted:#7a85a0;
-    --text-dim:#424d68;--green:#22c55e;--green-bg:#091a10;
-    --red:#ef4444;--amber:#f59e0b;--blue:#60a5fa;--blue-bg:#0a1628;
-    --accent:#818cf8;--gold:#fbbf24;--teal:#14b8a6;
-    --au-gold:#c9a227;
-  }
+  :root{--bg:#0b0e13;--surface:#111520;--surface2:#161b26;--surface3:#1c2130;--border:#222840;--border2:#2a3050;--text:#e4e8f2;--text-muted:#7a85a0;--text-dim:#424d68;--green:#22c55e;--green-bg:#091a10;--red:#ef4444;--amber:#f59e0b;--blue:#60a5fa;--blue-bg:#0a1628;--accent:#818cf8;--gold:#fbbf24;--au-gold:#c9a227;}
   *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);
-       min-height:100vh;font-size:14px;line-height:1.6;}
-  ::-webkit-scrollbar{width:5px;height:5px;}
-  ::-webkit-scrollbar-track{background:var(--bg);}
-  ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
-
-  /* NAV */
-  nav{background:var(--surface);border-bottom:1px solid var(--border2);
-      padding:0 32px;display:flex;align-items:center;gap:0;height:52px;
-      position:sticky;top:0;z-index:100;}
-  .nav-logo{font-family:'DM Mono',monospace;font-size:15px;font-weight:500;
-            color:var(--text);letter-spacing:.04em;margin-right:32px;
-            text-decoration:none;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6;}
+  ::-webkit-scrollbar{width:5px;height:5px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+  nav{background:var(--surface);border-bottom:1px solid var(--border2);padding:0 32px;display:flex;align-items:center;height:52px;position:sticky;top:0;z-index:100;}
+  .nav-logo{font-family:'DM Mono',monospace;font-size:15px;font-weight:500;color:var(--text);letter-spacing:.04em;margin-right:32px;text-decoration:none;}
   .nav-logo span{color:var(--accent);}
-  .nav-links{display:flex;gap:0;height:100%;}
-  .nav-links a{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;
-               text-transform:uppercase;color:var(--text-muted);text-decoration:none;
-               padding:0 16px;display:flex;align-items:center;border-bottom:2px solid transparent;
-               transition:all .15s;}
-  .nav-links a:hover{color:var(--text);border-bottom-color:var(--border2);}
+  .nav-links{display:flex;height:100%;}
+  .nav-links a{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;padding:0 16px;display:flex;align-items:center;border-bottom:2px solid transparent;transition:all .15s;}
+  .nav-links a:hover{color:var(--text);}
   .nav-links a.active{color:var(--accent);border-bottom-color:var(--accent);}
-  .nav-right{margin-left:auto;font-family:'DM Mono',monospace;font-size:10px;
-             color:var(--text-dim);letter-spacing:.06em;}
-
-  /* HERO */
+  .nav-right{margin-left:auto;font-family:'DM Mono',monospace;font-size:10px;color:var(--text-dim);}
   .hero{padding:40px 32px 32px;border-bottom:1px solid var(--border);}
-  .hero h1{font-family:'DM Mono',monospace;font-size:24px;font-weight:400;
-            letter-spacing:.04em;color:var(--text);}
-  .hero .sub{font-family:'DM Mono',monospace;font-size:11px;color:var(--text-dim);
-             letter-spacing:.08em;margin-top:6px;}
-
-  /* MAIN LAYOUT */
+  .hero h1{font-family:'DM Mono',monospace;font-size:24px;font-weight:400;letter-spacing:.04em;}
+  .hero .sub{font-family:'DM Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:.08em;margin-top:6px;}
   .container{max-width:1200px;margin:0 auto;padding:32px;}
-
-  /* LATEST CARDS */
   .latest-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:40px;}
   @media(max-width:800px){.latest-grid{grid-template-columns:1fr;}}
-
-  .market-card{background:var(--surface);border:1px solid var(--border);
-               border-radius:12px;overflow:hidden;transition:border-color .2s;}
-  .market-card:hover{border-color:var(--border2);}
-
-  .card-header{padding:16px 20px;border-bottom:1px solid var(--border);
-               display:flex;align-items:center;gap:10px;}
+  .market-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  .card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
   .card-header.us{background:linear-gradient(90deg,#0a1020,#0b1428);}
   .card-header.asx{background:linear-gradient(90deg,#0f1208,#131a08);}
   .card-flag{font-size:20px;}
-  .card-title{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;
-              letter-spacing:.1em;text-transform:uppercase;}
+  .card-title{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;}
   .card-title.us{color:var(--blue);}
   .card-title.asx{color:var(--au-gold);}
-  .card-date{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-dim);
-             margin-left:auto;letter-spacing:.05em;}
-
+  .card-date{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-dim);margin-left:auto;}
   .card-body{padding:20px;}
-  .card-empty{padding:40px 20px;text-align:center;font-family:'DM Mono',monospace;
-              font-size:11px;color:var(--text-dim);letter-spacing:.06em;}
-
+  .card-empty{padding:40px 20px;text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--text-dim);}
   .stat-row{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;}
-  .stat-index{font-family:'DM Mono',monospace;font-size:11px;color:var(--text-dim);
-              min-width:80px;letter-spacing:.06em;}
-  .stat-close{font-family:'DM Mono',monospace;font-size:15px;color:var(--text);font-weight:400;}
+  .stat-index{font-family:'DM Mono',monospace;font-size:11px;color:var(--text-dim);min-width:80px;}
+  .stat-close{font-family:'DM Mono',monospace;font-size:15px;color:var(--text);}
   .stat-chg{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;}
-  .stat-chg.up{color:var(--green);}
-  .stat-chg.dn{color:var(--red);}
-  .stat-chg.fl{color:var(--text-muted);}
-
+  .up{color:var(--green);}.dn{color:var(--red);}
   .card-tags{display:flex;flex-wrap:wrap;gap:5px;margin:14px 0 16px;}
-  .tag{font-family:'DM Mono',monospace;font-size:9.5px;padding:2px 8px;
-       border-radius:3px;letter-spacing:.05em;border:1px solid;}
+  .tag{font-family:'DM Mono',monospace;font-size:9.5px;padding:2px 8px;border-radius:3px;letter-spacing:.05em;border:1px solid;}
   .tag-athl{background:#091a10;color:var(--green);border-color:#166534;}
   .tag-warn{background:#1a1500;color:var(--amber);border-color:#713f12;}
-  .tag-info{background:var(--blue-bg);color:var(--blue);border-color:#1e3a5f;}
   .tag-soft{background:#130f20;color:var(--accent);border-color:#3730a3;}
-  .tag-neu{background:var(--surface3);color:var(--text-muted);border-color:var(--border2);}
   .tag-rba{background:#1a0e00;color:var(--amber);border-color:#7c3a00;}
-
+  .tag-neu{background:var(--surface3);color:var(--text-muted);border-color:var(--border2);}
   .card-actions{display:flex;gap:8px;padding-top:14px;border-top:1px solid var(--border);}
-  .btn{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.07em;
-       text-transform:uppercase;padding:7px 14px;border-radius:5px;
-       text-decoration:none;font-weight:500;transition:all .15s;display:inline-flex;
-       align-items:center;gap:6px;cursor:pointer;border:none;}
-  .btn-primary{background:var(--accent);color:#fff;}
+  .btn-primary{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:7px 14px;border-radius:5px;text-decoration:none;font-weight:500;background:var(--accent);color:#fff;display:inline-flex;align-items:center;}
   .btn-primary:hover{background:#6366f1;}
-  .btn-secondary{background:var(--surface2);color:var(--text-muted);
-                 border:1px solid var(--border2);}
-  .btn-secondary:hover{color:var(--text);border-color:var(--border2);}
-  .btn-dl{background:var(--surface3);color:var(--text-dim);
-          border:1px solid var(--border);}
+  .btn-dl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:7px 10px;border-radius:5px;text-decoration:none;font-weight:500;background:var(--surface3);color:var(--text-dim);border:1px solid var(--border);display:inline-flex;align-items:center;}
   .btn-dl:hover{color:var(--text-muted);}
-
-  .card-summary{font-size:12.5px;color:var(--text-muted);line-height:1.6;
-                margin-bottom:14px;}
-  .card-summary strong{color:var(--text);}
-
-  /* ARCHIVE SECTION */
-  .section-title{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;
-                 text-transform:uppercase;color:var(--text-dim);margin-bottom:16px;
-                 padding-bottom:8px;border-bottom:1px solid var(--border);}
-
-  /* SEARCH */
+  .card-summary{font-size:12.5px;color:var(--text-muted);line-height:1.6;margin-bottom:14px;}
+  .section-title{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);}
   .search-bar{display:flex;gap:10px;margin-bottom:24px;}
-  .search-input{flex:1;background:var(--surface2);border:1px solid var(--border2);
-                border-radius:6px;padding:9px 14px;color:var(--text);
-                font-family:'DM Mono',monospace;font-size:12px;outline:none;}
+  .search-input{flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:9px 14px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;outline:none;}
   .search-input:focus{border-color:var(--accent);}
   .search-input::placeholder{color:var(--text-dim);}
-  .filter-select{background:var(--surface2);border:1px solid var(--border2);
-                 border-radius:6px;padding:9px 12px;color:var(--text-muted);
-                 font-family:'DM Mono',monospace;font-size:11px;outline:none;cursor:pointer;}
-
-  /* ARCHIVE TABLE */
+  .filter-select{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:9px 12px;color:var(--text-muted);font-family:'DM Mono',monospace;font-size:11px;outline:none;cursor:pointer;}
+  .tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:24px;}
+  .tab-btn{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:10px 20px;cursor:pointer;color:var(--text-muted);border-bottom:2px solid transparent;background:none;border-top:none;border-left:none;border-right:none;margin-bottom:-1px;transition:all .15s;}
+  .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+  .tab-panel{display:none;}.tab-panel.active{display:block;}
   .archive-table{width:100%;border-collapse:collapse;}
   .archive-table thead tr{border-bottom:1px solid var(--border2);}
-  .archive-table th{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;
-                    text-transform:uppercase;color:var(--text-dim);padding:8px 10px;
-                    text-align:left;font-weight:500;}
-  .archive-table td{padding:10px 10px;border-bottom:1px solid var(--border);
-                    font-size:12.5px;vertical-align:middle;}
+  .archive-table th{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);padding:8px 10px;text-align:left;font-weight:500;}
+  .archive-table td{padding:10px;border-bottom:1px solid var(--border);font-size:12.5px;vertical-align:middle;}
   .archive-table tr:last-child td{border-bottom:none;}
   .archive-table tr:hover td{background:rgba(255,255,255,.02);}
-  .archive-table .col-date{font-family:'DM Mono',monospace;font-size:11px;
-                            color:var(--text-muted);white-space:nowrap;min-width:100px;}
-  .archive-table .col-index{font-family:'DM Mono',monospace;font-size:12px;color:var(--text);}
-  .archive-table .col-chg{font-family:'DM Mono',monospace;font-size:12px;}
-  .archive-table .col-tags{display:flex;flex-wrap:wrap;gap:4px;}
-  .archive-table .col-actions{display:flex;gap:6px;white-space:nowrap;}
-
-  /* TABS */
-  .tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:24px;}
-  .tab-btn{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;
-           text-transform:uppercase;padding:10px 20px;cursor:pointer;
-           color:var(--text-muted);border-bottom:2px solid transparent;
-           background:none;border-top:none;border-left:none;border-right:none;
-           margin-bottom:-1px;transition:all .15s;}
-  .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
-  .tab-panel{display:none;}
-  .tab-panel.active{display:block;}
-
-  /* FOOTER */
-  footer{border-top:1px solid var(--border);padding:24px 32px;
-         display:flex;justify-content:space-between;align-items:center;
-         flex-wrap:wrap;gap:8px;margin-top:60px;}
-  footer div{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-dim);
-             letter-spacing:.04em;}
-
-  /* COMPARISON BANNER */
-  .compare-note{background:var(--surface2);border:1px solid var(--border);
-                border-left:3px solid var(--accent);border-radius:6px;
-                padding:12px 16px;margin-bottom:24px;font-size:12.5px;
-                color:var(--text-muted);display:none;}
-  .compare-note.visible{display:block;}
-
-  /* NO REPORTS */
-  .empty-state{text-align:center;padding:60px 20px;}
-  .empty-state .es-icon{font-size:40px;margin-bottom:16px;}
-  .empty-state p{font-family:'DM Mono',monospace;font-size:11px;color:var(--text-dim);
-                 letter-spacing:.06em;line-height:1.8;}
+  .col-date{font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted);white-space:nowrap;}
+  .col-val{font-family:'DM Mono',monospace;font-size:12px;}
+  .col-tags{display:flex;flex-wrap:wrap;gap:4px;}
+  .col-actions{display:flex;gap:6px;white-space:nowrap;}
+  .btn-sm{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:4px;text-decoration:none;display:inline-flex;align-items:center;background:var(--surface2);color:var(--text-muted);border:1px solid var(--border2);}
+  .btn-sm:hover{color:var(--text);}
+  .empty-state{text-align:center;padding:60px 20px;font-family:'DM Mono',monospace;font-size:11px;color:var(--text-dim);line-height:1.8;}
+  footer{border-top:1px solid var(--border);padding:24px 32px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:60px;}
+  footer div{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-dim);}
 </style>
 </head>
 <body>
 
 <nav>
-  <a href="index.html" class="nav-logo">LeTour<span>DB</span></a>
+  <a href="/index.html" class="nav-logo">LeTour<span>DB</span></a>
   <div class="nav-links">
-    <a href="index.html" class="active">Dashboard</a>
-    <a href="us/index.html">🇺🇸 US Archive</a>
-    <a href="asx/index.html">🇦🇺 ASX Archive</a>
+    <a href="/index.html" class="active">Dashboard</a>
+    <a href="/us/index.html">US Archive</a>
+    <a href="/asx/index.html">ASX Archive</a>
   </div>
-  <div class="nav-right" id="last-updated">—</div>
+  <div class="nav-right" id="last-updated"></div>
 </nav>
 
 <div class="hero">
   <div style="max-width:1200px;margin:0 auto;">
-    <h1>🏆 LeTour Trader Dashboard</h1>
-    <div class="sub">DAILY MARKET INTELLIGENCE · US &amp; ASX · LETOUR DASHBOARD SYSTEM</div>
+    <h1>LeTour Trader Dashboard</h1>
+    <div class="sub">DAILY MARKET INTELLIGENCE &nbsp;·&nbsp; US &amp; ASX &nbsp;·&nbsp; LETOUR DASHBOARD SYSTEM</div>
   </div>
 </div>
 
 <div class="container">
 
-  <!-- LATEST REPORTS -->
   <div class="section-title">Latest Reports</div>
   <div class="latest-grid">
-
-    <!-- US CARD -->
-    <div class="market-card" id="us-card">
+    <div class="market-card">
       <div class="card-header us">
-        <span class="card-flag">🇺🇸</span>
+        <span class="card-flag">&#127482;&#127480;</span>
         <span class="card-title us">US Market Summary</span>
-        <span class="card-date" id="us-date">—</span>
+        <span class="card-date" id="us-date"></span>
       </div>
-      <div class="card-body" id="us-body">
-        <div class="card-empty">No reports published yet</div>
-      </div>
+      <div class="card-body" id="us-body"><div class="card-empty">No reports published yet</div></div>
     </div>
-
-    <!-- ASX CARD -->
-    <div class="market-card" id="asx-card">
+    <div class="market-card">
       <div class="card-header asx">
-        <span class="card-flag">🇦🇺</span>
+        <span class="card-flag">&#127462;&#127482;</span>
         <span class="card-title asx">ASX Market Summary</span>
-        <span class="card-date" id="asx-date">—</span>
+        <span class="card-date" id="asx-date"></span>
       </div>
-      <div class="card-body" id="asx-body">
-        <div class="card-empty">No reports published yet</div>
-      </div>
+      <div class="card-body" id="asx-body"><div class="card-empty">No reports published yet</div></div>
     </div>
-
   </div>
 
-  <!-- ARCHIVE -->
   <div class="section-title">Report Archive</div>
-
   <div class="search-bar">
-    <input type="text" class="search-input" id="search-input"
-           placeholder="Search by symbol, tag, date or keyword...">
+    <input type="text" class="search-input" id="search-input" placeholder="Search by symbol, tag, date or keyword...">
     <select class="filter-select" id="market-filter">
       <option value="all">All Markets</option>
-      <option value="us">🇺🇸 US Only</option>
-      <option value="asx">🇦🇺 ASX Only</option>
+      <option value="US">US Only</option>
+      <option value="ASX">ASX Only</option>
     </select>
-    <select class="filter-select" id="tag-filter">
-      <option value="">All Tags</option>
-    </select>
+    <select class="filter-select" id="tag-filter"><option value="">All Tags</option></select>
   </div>
 
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('all',this)">All Reports</button>
-    <button class="tab-btn" onclick="switchTab('us',this)">🇺🇸 US</button>
-    <button class="tab-btn" onclick="switchTab('asx',this)">🇦🇺 ASX</button>
+    <button class="tab-btn" onclick="switchTab('us',this)">US</button>
+    <button class="tab-btn" onclick="switchTab('asx',this)">ASX</button>
   </div>
 
   <div id="tab-all" class="tab-panel active">
-    <table class="archive-table" id="archive-table-all">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Market</th>
-          <th>Primary Index</th>
-          <th>Change</th>
-          <th>Tags</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="archive-body-all">
-        <tr><td colspan="6"><div class="empty-state">
-          <div class="es-icon">📊</div>
-          <p>No reports in archive yet.<br>Reports will appear here after the first publish.</p>
-        </div></td></tr>
-      </tbody>
+    <table class="archive-table">
+      <thead><tr><th>Date</th><th>Mkt</th><th>Index</th><th>Change</th><th>Tags</th><th>Actions</th></tr></thead>
+      <tbody id="tbody-all"><tr><td colspan="6"><div class="empty-state">No reports yet.</div></td></tr></tbody>
     </table>
   </div>
-
   <div id="tab-us" class="tab-panel">
     <table class="archive-table">
-      <thead>
-        <tr><th>Date</th><th>SPX Close</th><th>Change</th><th>VIX</th><th>Tags</th><th>Actions</th></tr>
-      </thead>
-      <tbody id="archive-body-us">
-        <tr><td colspan="6"><div class="empty-state">
-          <div class="es-icon">🇺🇸</div>
-          <p>No US reports yet.</p>
-        </div></td></tr>
-      </tbody>
+      <thead><tr><th>Date</th><th>SPX</th><th>Change</th><th>VIX</th><th>Smart Money #1</th><th>Tags</th><th>Actions</th></tr></thead>
+      <tbody id="tbody-us"><tr><td colspan="7"><div class="empty-state">No US reports yet.</div></td></tr></tbody>
     </table>
   </div>
-
   <div id="tab-asx" class="tab-panel">
     <table class="archive-table">
-      <thead>
-        <tr><th>Date</th><th>XJO Close</th><th>Change</th><th>Regime</th><th>Tags</th><th>Actions</th></tr>
-      </thead>
-      <tbody id="archive-body-asx">
-        <tr><td colspan="6"><div class="empty-state">
-          <div class="es-icon">🇦🇺</div>
-          <p>No ASX reports yet.</p>
-        </div></td></tr>
-      </tbody>
+      <thead><tr><th>Date</th><th>XJO</th><th>Change</th><th>Regime</th><th>Smart Money #1</th><th>Tags</th><th>Actions</th></tr></thead>
+      <tbody id="tbody-asx"><tr><td colspan="7"><div class="empty-state">No ASX reports yet.</div></td></tr></tbody>
     </table>
   </div>
 
 </div>
 
 <footer>
-  <div>LeTour Trader Dashboard · Powered by LeTour Dashboard System</div>
+  <div>LeTour Trader Dashboard &nbsp;·&nbsp; Powered by LeTour Dashboard System</div>
   <div id="footer-count">0 reports in archive</div>
 </footer>
 
 <script>
-// ─── Load report index ───────────────────────────────────────────
-let allReports = [];
-let allTags = new Set();
+var reports = [];
 
-async function loadIndex() {
-  try {
-    const r = await fetch('report-index.json');
-    if (!r.ok) return;
-    allReports = await r.json();
-    processReports();
-  } catch(e) {
-    // No index yet — empty state shown by default
-  }
-}
-
-function processReports() {
-  if (!allReports.length) return;
-
-  // Collect all tags
-  allReports.forEach(r => {
-    if (r.tags) r.tags.forEach(t => allTags.add(t));
-  });
-
-  // Populate tag filter
-  const tagFilter = document.getElementById('tag-filter');
-  [...allTags].sort().forEach(t => {
-    const opt = document.createElement('option');
-    opt.value = t; opt.textContent = t;
-    tagFilter.appendChild(opt);
-  });
-
-  // Sort newest first
-  allReports.sort((a,b) => new Date(b.date_iso) - new Date(a.date_iso));
-
-  // Update last-updated
-  if (allReports[0]) {
-    document.getElementById('last-updated').textContent =
-      'Updated: ' + allReports[0].date;
-  }
-
-  // Render latest cards
-  renderLatestCards();
-
-  // Render archive tables
-  renderArchive(allReports);
-
-  // Footer count
-  document.getElementById('footer-count').textContent =
-    allReports.length + ' report' + (allReports.length !== 1 ? 's' : '') + ' in archive';
-}
-
-// ─── Latest cards ────────────────────────────────────────────────
-function renderLatestCards() {
-  const latestUS  = allReports.find(r => r.market === 'US');
-  const latestASX = allReports.find(r => r.market === 'ASX');
-  if (latestUS)  renderCard('us',  latestUS);
-  if (latestASX) renderCard('asx', latestASX);
-}
-
-function tagClass(tag) {
-  const t = tag.toLowerCase();
-  if (['ath','new high','record'].some(k => t.includes(k))) return 'tag-athl';
-  if (['fomc','rba','fed','rate'].some(k => t.includes(k))) return 'tag-warn';
-  if (['earnings','results'].some(k => t.includes(k))) return 'tag-soft';
-  if (['breadth warning','overbought','divergence'].some(k => t.includes(k))) return 'tag-warn';
-  if (['oil spike','hormuz','geopolitical'].some(k => t.includes(k))) return 'tag-rba';
+function tagCls(tag) {
+  var t = (tag||'').toLowerCase();
+  if (t.indexOf('ath')>=0||t.indexOf('high')>=0||t.indexOf('record')>=0) return 'tag-athl';
+  if (t.indexOf('fomc')>=0||t.indexOf('rba')>=0||t.indexOf('rate')>=0||t.indexOf('hike')>=0) return 'tag-warn';
+  if (t.indexOf('earnings')>=0) return 'tag-soft';
+  if (t.indexOf('oil')>=0||t.indexOf('hormuz')>=0) return 'tag-rba';
   return 'tag-neu';
 }
 
-function renderCard(market, r) {
-  const dateEl = document.getElementById(market + '-date');
-  const bodyEl = document.getElementById(market + '-body');
-  if (dateEl) dateEl.textContent = r.date;
-
-  const chgClass = parseFloat(r.index_change) >= 0 ? 'up' : 'dn';
-  const tags = (r.tags || []).map(t =>
-    `<span class="tag ${tagClass(t)}">${t}</span>`).join('');
-
-  const indexLabel = market === 'us' ? 'SPX' : 'XJO';
-  const extraLine  = market === 'us'
-    ? `<div class="stat-row"><span class="stat-index">VIX</span>
-       <span class="stat-close">${r.vix || '—'}</span></div>`
-    : `<div class="stat-row"><span class="stat-index">REGIME</span>
-       <span class="stat-close" style="font-size:12px">${r.regime || '—'}</span></div>`;
-
-  const dlFolder = market === 'us' ? 'us/reports' : 'asx/reports';
-  const dlBase   = market === 'us'
-    ? `Discord_FULL_US_${r.file_date}.txt`
-    : `Discord_FULL_ASX_${r.file_date}.txt`;
-  const dlCondensed = market === 'us'
-    ? `Discord_CONDENSED_US_${r.file_date}.txt`
-    : `Discord_CONDENSED_ASX_${r.file_date}.txt`;
-
-  bodyEl.innerHTML = `
-    <div class="stat-row">
-      <span class="stat-index">${indexLabel}</span>
-      <span class="stat-close">${r.index_close}</span>
-      <span class="stat-chg ${chgClass}">${r.index_change}</span>
-    </div>
-    ${extraLine}
-    <div class="card-tags">${tags}</div>
-    <div class="card-summary">${r.summary || ''}</div>
-    <div class="card-actions">
-      <a href="${dlFolder}/${r.html_file}" class="btn btn-primary" target="_blank">View Report</a>
-      <a href="downloads/${dlBase}" class="btn btn-dl" download>↓ Full</a>
-      <a href="downloads/${dlCondensed}" class="btn btn-dl" download>↓ Condensed</a>
-    </div>`;
+function tagsHtml(arr) {
+  if (!arr||!arr.length) return '';
+  return arr.map(function(t){return '<span class="tag '+tagCls(t)+'">'+t+'</span>';}).join('');
 }
 
-// ─── Archive tables ──────────────────────────────────────────────
-function renderArchive(reports) {
-  renderTable('archive-body-all', reports, 'all');
-
-  const usReports  = reports.filter(r => r.market === 'US');
-  const asxReports = reports.filter(r => r.market === 'ASX');
-  renderTable('archive-body-us',  usReports,  'us');
-  renderTable('archive-body-asx', asxReports, 'asx');
+function reportUrl(r)  { return '/'+r.market.toLowerCase()+'/reports/'+r.html_file; }
+function fullUrl(r)    { return '/downloads/'+(r.market==='US'?'Discord_FULL_US_':'Discord_FULL_ASX_')+r.file_date+'.txt'; }
+function condUrl(r)    { return '/downloads/'+(r.market==='US'?'Discord_CONDENSED_US_':'Discord_CONDENSED_ASX_')+r.file_date+'.txt'; }
+function actionBtns(r) {
+  return '<a href="'+reportUrl(r)+'" class="btn-sm" target="_blank">View</a>'+
+         '<a href="'+fullUrl(r)+'" class="btn-sm" download>&#8595; Full</a>'+
+         '<a href="'+condUrl(r)+'" class="btn-sm" download>&#8595; Cond</a>';
 }
 
-function renderTable(tbodyId, reports, mode) {
-  const tbody = document.getElementById(tbodyId);
-  if (!tbody) return;
-  if (!reports.length) return; // keep empty state
-
-  tbody.innerHTML = reports.map(r => {
-    const chgClass = parseFloat(r.index_change) >= 0 ? 'up' : 'dn';
-    const tags = (r.tags || []).map(t =>
-      `<span class="tag ${tagClass(t)}">${t}</span>`).join('');
-
-    const dlFolder  = r.market === 'US' ? 'us/reports' : 'asx/reports';
-    const rptFolder = r.market === 'US' ? 'us/reports' : 'asx/reports';
-    const mktBadge  = mode === 'all'
-      ? `<td><span style="font-size:16px">${r.market === 'US' ? '🇺🇸' : '🇦🇺'}</span></td>` : '';
-
-    const extra = mode === 'us'
-      ? `<td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted)">${r.vix || '—'}</td>`
-      : mode === 'asx'
-      ? `<td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted)">${r.regime || '—'}</td>`
-      : '';
-
-    const dlBase = r.market === 'US'
-      ? `Discord_FULL_US_${r.file_date}.txt`
-      : `Discord_FULL_ASX_${r.file_date}.txt`;
-    const dlCond = r.market === 'US'
-      ? `Discord_CONDENSED_US_${r.file_date}.txt`
-      : `Discord_CONDENSED_ASX_${r.file_date}.txt`;
-
-    return `<tr data-tags="${(r.tags||[]).join(',').toLowerCase()}"
-                data-market="${r.market.toLowerCase()}"
-                data-date="${r.date}"
-                data-summary="${(r.summary||'').toLowerCase()}">
-      <td class="col-date">${r.date}</td>
-      ${mktBadge}
-      <td class="col-index">${r.index_close}</td>
-      <td class="col-chg ${chgClass}">${r.index_change}</td>
-      ${extra}
-      <td class="col-tags">${tags}</td>
-      <td class="col-actions">
-        <a href="${rptFolder}/${r.html_file}" class="btn btn-secondary" target="_blank">View</a>
-        <a href="downloads/${dlBase}" class="btn btn-dl" download>↓ Full</a>
-        <a href="downloads/${dlCond}" class="btn btn-dl" download>↓ Cond.</a>
-      </td>
-    </tr>`;
-  }).join('');
+function renderCards() {
+  var us=null, asx=null;
+  for (var i=0;i<reports.length;i++) {
+    if (!us  && reports[i].market==='US')  us=reports[i];
+    if (!asx && reports[i].market==='ASX') asx=reports[i];
+    if (us&&asx) break;
+  }
+  if (us)  renderCard('us',us);
+  if (asx) renderCard('asx',asx);
 }
 
-// ─── Search & filter ─────────────────────────────────────────────
-function applyFilters() {
-  const q      = document.getElementById('search-input').value.toLowerCase().trim();
-  const market = document.getElementById('market-filter').value;
-  const tag    = document.getElementById('tag-filter').value.toLowerCase();
-
-  document.querySelectorAll('#archive-body-all tr[data-market]').forEach(row => {
-    const rowMarket  = row.dataset.market;
-    const rowTags    = row.dataset.tags;
-    const rowDate    = row.dataset.date.toLowerCase();
-    const rowSummary = row.dataset.summary;
-    const text       = rowTags + ' ' + rowDate + ' ' + rowSummary;
-
-    const matchQ      = !q      || text.includes(q);
-    const matchMarket = market === 'all' || rowMarket === market;
-    const matchTag    = !tag    || rowTags.includes(tag);
-
-    row.style.display = (matchQ && matchMarket && matchTag) ? '' : 'none';
-  });
+function renderCard(mkt,r) {
+  document.getElementById(mkt+'-date').textContent = r.date||'';
+  var chg = parseFloat(r.index_change||0)>=0?'up':'dn';
+  var lbl = mkt==='us'?'SPX':'XJO';
+  var ext = mkt==='us'
+    ? '<div class="stat-row"><span class="stat-index">VIX</span><span class="stat-close">'+(r.vix||'—')+'</span></div>'
+    : '<div class="stat-row"><span class="stat-index">REGIME</span><span class="stat-close" style="font-size:12px">'+(r.regime||'—')+'</span></div>';
+  document.getElementById(mkt+'-body').innerHTML =
+    '<div class="stat-row"><span class="stat-index">'+lbl+'</span><span class="stat-close">'+(r.index_close||'—')+'</span><span class="stat-chg '+chg+'">'+(r.index_change||'')+'</span></div>'+
+    ext+
+    '<div class="card-tags">'+tagsHtml(r.tags)+'</div>'+
+    '<div class="card-summary">'+(r.summary||'')+'</div>'+
+    '<div class="card-actions">'+
+      '<a href="'+reportUrl(r)+'" class="btn-primary" target="_blank">View Report</a>'+
+      '<a href="'+fullUrl(r)+'"  class="btn-dl" download>&#8595; Full</a>'+
+      '<a href="'+condUrl(r)+'" class="btn-dl" download>&#8595; Condensed</a>'+
+    '</div>';
 }
 
-document.getElementById('search-input').addEventListener('input', applyFilters);
-document.getElementById('market-filter').addEventListener('change', applyFilters);
-document.getElementById('tag-filter').addEventListener('change', applyFilters);
+function renderTables() {
+  var all=[],us=[],asx=[];
+  for (var i=0;i<reports.length;i++) {
+    var r=reports[i];
+    var chg=parseFloat(r.index_change||0)>=0?'up':'dn';
+    var tgs=tagsHtml(r.tags);
+    var acts=actionBtns(r);
+    var attr='data-tags="'+(r.tags||[]).join(',').toLowerCase()+'" data-market="'+r.market+'" data-date="'+(r.date||'').toLowerCase()+'" data-summary="'+(r.summary||'').toLowerCase()+'"';
+    all.push('<tr '+attr+'><td class="col-date">'+r.date+'</td><td>'+r.market+'</td><td class="col-val">'+r.index_close+'</td><td class="col-val '+chg+'">'+r.index_change+'</td><td class="col-tags">'+tgs+'</td><td class="col-actions">'+acts+'</td></tr>');
+    if (r.market==='US')  us.push('<tr '+attr+'><td class="col-date">'+r.date+'</td><td class="col-val">'+r.index_close+'</td><td class="col-val '+chg+'">'+r.index_change+'</td><td class="col-val" style="color:var(--text-muted)">'+(r.vix||'—')+'</td><td style="font-size:11px;color:var(--accent);font-family:\'DM Mono\',monospace">'+(r.smart_money_top||'—')+'</td><td class="col-tags">'+tgs+'</td><td class="col-actions">'+acts+'</td></tr>');
+    if (r.market==='ASX') asx.push('<tr '+attr+'><td class="col-date">'+r.date+'</td><td class="col-val">'+r.index_close+'</td><td class="col-val '+chg+'">'+r.index_change+'</td><td style="font-size:10px;color:var(--text-muted);font-family:\'DM Mono\',monospace">'+(r.regime||'—')+'</td><td style="font-size:11px;color:#c9a227;font-family:\'DM Mono\',monospace">'+(r.smart_money_top||'—')+'</td><td class="col-tags">'+tgs+'</td><td class="col-actions">'+acts+'</td></tr>');
+  }
+  if (all.length)  document.getElementById('tbody-all').innerHTML=all.join('');
+  if (us.length)   document.getElementById('tbody-us').innerHTML=us.join('');
+  if (asx.length)  document.getElementById('tbody-asx').innerHTML=asx.join('');
+}
 
-// ─── Tabs ────────────────────────────────────────────────────────
-function switchTab(id, btn) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + id).classList.add('active');
+function filter() {
+  var q=(document.getElementById('search-input').value||'').toLowerCase();
+  var m=document.getElementById('market-filter').value;
+  var t=(document.getElementById('tag-filter').value||'').toLowerCase();
+  var rows=document.querySelectorAll('#tbody-all tr[data-market]');
+  for (var i=0;i<rows.length;i++) {
+    var row=rows[i];
+    var txt=row.dataset.tags+' '+row.dataset.date+' '+row.dataset.summary;
+    row.style.display=(!q||txt.indexOf(q)>=0)&&(m==='all'||row.dataset.market===m)&&(!t||row.dataset.tags.indexOf(t)>=0)?'':'none';
+  }
+}
+
+function switchTab(id,btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('tab-'+id).classList.add('active');
   btn.classList.add('active');
 }
 
-// ─── Init ────────────────────────────────────────────────────────
-loadIndex();
+document.getElementById('search-input').addEventListener('input',filter);
+document.getElementById('market-filter').addEventListener('change',filter);
+document.getElementById('tag-filter').addEventListener('change',filter);
+
+fetch('/report-index.json')
+  .then(function(r){return r.json();})
+  .then(function(data){
+    if (!Array.isArray(data)||!data.length) return;
+    reports=data.sort(function(a,b){return new Date(b.date_iso)-new Date(a.date_iso);});
+    var tagSet={};
+    reports.forEach(function(r){(r.tags||[]).forEach(function(t){tagSet[t]=1;});});
+    var sel=document.getElementById('tag-filter');
+    Object.keys(tagSet).sort().forEach(function(t){var o=document.createElement('option');o.value=t;o.textContent=t;sel.appendChild(o);});
+    document.getElementById('last-updated').textContent='Updated: '+reports[0].date;
+    document.getElementById('footer-count').textContent=reports.length+' report'+(reports.length!==1?'s':'')+' in archive';
+    renderCards();
+    renderTables();
+  }).catch(function(){});
 </script>
 </body>
 </html>
