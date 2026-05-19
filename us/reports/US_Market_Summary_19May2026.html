@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>US Market Summary | 19 May 2026 | LeTour Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0d12;
+  --bg2: #0f1318;
+  --bg3: #141a22;
+  --bg4: #1a2230;
+  --border: #1e2a38;
+  --border2: #263347;
+  --text: #cdd8e8;
+  --text2: #7a85a0;
+  --text3: #4a5568;
+  --accent: #3b82f6;
+  --green: #22c55e;
+  --green-dim: rgba(34,197,94,0.08);
+  --green-bg: rgba(34,197,94,0.12);
+  --red: #ef4444;
+  --red-dim: rgba(239,68,68,0.08);
+  --amber: #f59e0b;
+  --amber-dim: rgba(245,158,11,0.08);
+  --near-white: #f0f4ff;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+a { color: var(--accent); text-decoration: none; }
+
+/* ── LAYOUT ── */
+.container { max-width: 1280px; margin: 0 auto; padding: 0 20px 60px; }
+
+/* ── HEADER ── */
+.header {
+  background: linear-gradient(135deg, #0a0d12 0%, #0f1520 50%, #0a0d12 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 24px 0 20px;
+  position: sticky; top: 0; z-index: 100;
+  backdrop-filter: blur(12px);
+}
+.header-inner { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+.header-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-flag { font-size: 22px; }
+.brand-title { font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; }
+.brand-date { font-family: var(--mono); font-size: 13px; color: var(--near-white); font-weight: 500; }
+.badges { display: flex; gap: 6px; flex-wrap: wrap; }
+.badge {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  padding: 3px 8px; border-radius: 3px; letter-spacing: 0.5px;
+  border: 1px solid;
+}
+.badge-bull { color: var(--green); border-color: rgba(34,197,94,0.3); background: var(--green-dim); }
+.badge-warn { color: var(--amber); border-color: rgba(245,158,11,0.3); background: var(--amber-dim); }
+.badge-bear { color: var(--red); border-color: rgba(239,68,68,0.3); background: var(--red-dim); }
+.badge-neutral { color: var(--text2); border-color: var(--border2); background: var(--bg3); }
+
+.ticker-bar {
+  display: flex; gap: 24px; flex-wrap: wrap; align-items: center;
+  padding: 12px 16px; background: var(--bg3);
+  border: 1px solid var(--border); border-radius: 6px;
+}
+.ticker-item { display: flex; align-items: center; gap: 8px; }
+.ticker-sym { font-family: var(--mono); font-size: 11px; color: var(--text2); font-weight: 500; }
+.ticker-val { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--near-white); }
+.ticker-chg { font-family: var(--mono); font-size: 12px; font-weight: 500; }
+.up { color: var(--green); }
+.dn { color: var(--red); }
+.am { color: var(--amber); }
+.muted { color: var(--text2); }
+.ticker-div { width: 1px; height: 20px; background: var(--border2); }
+
+/* ── SECTION ── */
+.section { margin-top: 28px; }
+.section-title {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--text2);
+  margin-bottom: 14px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 8px;
+}
+.section-title::before { content: ''; display: block; width: 3px; height: 14px; background: var(--accent); border-radius: 2px; }
+
+/* ── CARD ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+}
+.card + .card { margin-top: 12px; }
+
+/* ── ALERT BARS ── */
+.alert {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 14px; border-radius: 6px; margin-bottom: 8px;
+  border-left: 3px solid;
+}
+.alert-warn { background: var(--amber-dim); border-color: var(--amber); }
+.alert-bear { background: var(--red-dim); border-color: var(--red); }
+.alert-bull { background: var(--green-dim); border-color: var(--green); }
+.alert-icon { font-size: 14px; margin-top: 2px; flex-shrink: 0; }
+.alert-text { font-size: 13px; line-height: 1.5; color: var(--text); }
+.alert-text strong { font-weight: 600; }
+
+/* ── MACRO REGIME SNAPSHOT ── */
+.regime-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.regime-card {
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: 6px; padding: 14px 16px;
+}
+.regime-label { font-family: var(--mono); font-size: 11px; color: var(--near-white); font-weight: 500; margin-bottom: 8px; }
+.regime-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; font-family: var(--mono); font-size: 11px; }
+.regime-key { color: var(--text2); }
+.regime-val { font-weight: 500; }
+
+/* ── INDEX TABLE ── */
+.idx-table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 12px; }
+.idx-table th {
+  text-align: left; padding: 8px 12px;
+  font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--text3); border-bottom: 1px solid var(--border);
+  font-weight: 500;
+}
+.idx-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+.idx-table tr:last-child td { border-bottom: none; }
+.idx-table tr:hover td { background: var(--bg3); }
+.idx-name { font-size: 13px; font-weight: 500; color: var(--near-white); }
+.idx-close { font-size: 13px; }
+.idx-meta { font-size: 10px; color: var(--text2); margin-top: 2px; }
+
+/* ── BREADTH TABS ── */
+.tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+.tab-btn {
+  padding: 8px 18px; font-family: var(--mono); font-size: 11px; font-weight: 500;
+  letter-spacing: 1px; color: var(--text2); cursor: pointer;
+  border: none; background: transparent; border-bottom: 2px solid transparent;
+  transition: all 0.15s; text-transform: uppercase;
+}
+.tab-btn.active { color: var(--near-white); border-bottom-color: var(--accent); }
+.tab-btn:hover:not(.active) { color: var(--text); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+.breadth-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.breadth-stat {
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: 6px; padding: 12px 14px;
+}
+.bstat-label { font-size: 10px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; font-family: var(--mono); }
+.bstat-val { font-family: var(--mono); font-size: 18px; font-weight: 500; }
+.bstat-sub { font-size: 10px; color: var(--text2); margin-top: 3px; }
+
+.progress-bar { height: 4px; background: var(--border); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
+
+/* ── SECTOR HEATMAP ── */
+.heatmap-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 0; border-bottom: 1px solid var(--border);
+}
+.heatmap-row:last-child { border-bottom: none; }
+.hm-ticker { font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--text2); width: 44px; flex-shrink: 0; }
+.hm-bar-wrap { flex: 1; position: relative; height: 20px; display: flex; align-items: center; }
+.hm-zero { position: absolute; left: 50%; top: 0; width: 1px; height: 100%; background: var(--border2); }
+.hm-bar { position: absolute; height: 12px; border-radius: 2px; transition: width 0.4s ease; }
+.hm-bar.pos { left: 50%; }
+.hm-bar.neg { right: 50%; }
+.hm-pct { font-family: var(--mono); font-size: 11px; font-weight: 500; width: 52px; text-align: right; flex-shrink: 0; }
+.hm-note { font-size: 11px; color: var(--text2); flex: 1; max-width: 380px; }
+
+/* ── ETF FLAGS ── */
+.etf-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 700px) { .etf-cols { grid-template-columns: 1fr; } }
+.etf-col-title { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+.etf-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--border); }
+.etf-row:last-child { border-bottom: none; }
+.etf-info { display: flex; flex-direction: column; gap: 2px; }
+.etf-sym { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--near-white); }
+.etf-name { font-size: 10px; color: var(--text2); }
+.etf-chg { font-family: var(--mono); font-size: 12px; font-weight: 500; text-align: right; }
+.etf-5d { font-size: 10px; color: var(--text2); text-align: right; margin-top: 2px; }
+
+/* ── RS SPOTLIGHT ── */
+.rs-table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 11px; }
+.rs-table th {
+  text-align: left; padding: 6px 10px;
+  font-size: 9px; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--text3); border-bottom: 1px solid var(--border); font-weight: 500;
+}
+.rs-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); }
+.rs-table tr:last-child td { border-bottom: none; }
+.rs-table tr:hover td { background: var(--bg3); }
+.rs-rank { color: var(--text2); width: 28px; }
+.rs-sym { font-weight: 500; color: var(--near-white); }
+.rs-score { color: var(--amber); }
+.rs-ind { color: var(--text2); font-size: 10px; }
+.rs-flag { font-size: 9px; padding: 1px 5px; border-radius: 2px; font-weight: 600; }
+.rs-flag-h { background: rgba(34,197,94,0.2); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+.rs-flag-thin { background: rgba(245,158,11,0.15); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+
+/* ── SMART MONEY ── */
+.sm-table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 11px; }
+.sm-table th {
+  text-align: left; padding: 6px 10px;
+  font-size: 9px; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--text3); border-bottom: 1px solid var(--border); font-weight: 500;
+}
+.sm-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); }
+.sm-table tr:last-child td { border-bottom: none; }
+.sm-table tr.surge { background: var(--green-dim); border-left: 3px solid var(--green); }
+.sm-table tr.surge .sm-ind { color: var(--green); }
+.sm-table tr.exit { background: var(--red-dim); border-left: 3px solid var(--red); }
+.sm-rank-ref { color: var(--text2); }
+.sm-arrow-up { color: var(--green); }
+.sm-arrow-dn { color: var(--red); }
+.sm-arrow-flat { color: var(--text3); }
+.sm-roc { color: var(--green); }
+.sm-ind { color: var(--near-white); }
+
+/* ── KEY MOVERS ── */
+.movers-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 700px) { .movers-cols { grid-template-columns: 1fr; } }
+.mover-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.mover-row:last-child { border-bottom: none; }
+.mover-info { flex: 1; }
+.mover-sym { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--near-white); }
+.mover-detail { font-size: 11px; color: var(--text2); margin-top: 2px; line-height: 1.4; }
+.mover-chg { font-family: var(--mono); font-size: 13px; font-weight: 500; white-space: nowrap; }
+
+/* ── COMMODITIES ── */
+.commod-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.commod-group { background: var(--bg3); border: 1px solid var(--border2); border-radius: 6px; padding: 14px 16px; }
+.commod-group-title { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+.commod-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); }
+.commod-row:last-child { border-bottom: none; }
+.commod-sym { font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--text); }
+.commod-price { font-family: var(--mono); font-size: 11px; color: var(--text2); }
+.commod-chg { font-family: var(--mono); font-size: 11px; font-weight: 500; }
+
+/* ── EARNINGS ── */
+.earnings-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+.earning-card {
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: 8px; padding: 16px;
+}
+.earning-card.bullish { border-left: 3px solid var(--green); }
+.earning-card.bearish { border-left: 3px solid var(--red); }
+.earning-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.earning-sym { font-family: var(--mono); font-size: 16px; font-weight: 500; color: var(--near-white); }
+.earning-chg { font-family: var(--mono); font-size: 13px; font-weight: 500; }
+.earning-name { font-size: 11px; color: var(--text2); margin-top: 2px; }
+.earning-metrics { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.earning-metric {
+  background: var(--bg4); border: 1px solid var(--border);
+  border-radius: 4px; padding: 4px 8px;
+  font-family: var(--mono); font-size: 10px; color: var(--text2);
+}
+.earning-metric span { color: var(--text); font-weight: 500; }
+.earning-insight { font-size: 11px; color: var(--text2); line-height: 1.5; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
+.earning-insight em { color: var(--text); font-style: normal; }
+
+/* ── KEY HEADLINES ── */
+.headline { padding: 14px 0; border-bottom: 1px solid var(--border); }
+.headline:last-child { border-bottom: none; }
+.headline-cat { font-family: var(--mono); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
+.headline-text { font-size: 13px; line-height: 1.6; color: var(--text); }
+.headline-text strong { font-weight: 600; color: var(--near-white); }
+
+/* ── SESSION SUMMARY ── */
+.summary-text { font-size: 13px; line-height: 1.8; color: var(--text); }
+.summary-text p { margin-bottom: 12px; }
+.summary-text p:last-child { margin-bottom: 0; }
+.bullet-row { display: flex; gap: 8px; align-items: flex-start; padding: 4px 0; font-size: 12px; line-height: 1.5; }
+.bullet-fire { color: var(--amber); }
+.bullet-warn { color: var(--red); }
+
+/* ── FOOTER ── */
+.footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.footer-left { font-family: var(--mono); font-size: 10px; color: var(--text3); }
+.footer-right { font-family: var(--mono); font-size: 10px; color: var(--text3); text-align: right; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="brand">
+        <span class="brand-flag">🇺🇸</span>
+        <div>
+          <div class="brand-title">LeTour · US Market Summary</div>
+          <div class="brand-date">Tuesday 19 May 2026</div>
+        </div>
+      </div>
+      <div class="badges">
+        <span class="badge badge-bull">Bullish</span>
+        <span class="badge badge-warn">Breadth Warning</span>
+        <span class="badge badge-warn">Elevated Yields</span>
+        <span class="badge badge-bear">Losing Streak</span>
+        <span class="badge badge-warn">Earnings Night</span>
+        <span class="badge badge-warn">Geopolitical</span>
+        <span class="badge badge-neutral">NVDA Wed</span>
+      </div>
+    </div>
+    <div class="ticker-bar">
+      <div class="ticker-item">
+        <span class="ticker-sym">SPX</span>
+        <span class="ticker-val">7,353.61</span>
+        <span class="ticker-chg dn">-0.55%</span>
+      </div>
+      <div class="ticker-div"></div>
+      <div class="ticker-item">
+        <span class="ticker-sym">NDX</span>
+        <span class="ticker-val">28,818.84</span>
+        <span class="ticker-chg dn">-0.55%</span>
+      </div>
+      <div class="ticker-div"></div>
+      <div class="ticker-item">
+        <span class="ticker-sym">DJI</span>
+        <span class="ticker-val">49,363.88</span>
+        <span class="ticker-chg dn">-0.85%</span>
+      </div>
+      <div class="ticker-div"></div>
+      <div class="ticker-item">
+        <span class="ticker-sym">RUT</span>
+        <span class="ticker-val">2,747.07</span>
+        <span class="ticker-chg dn">-0.65%</span>
+      </div>
+      <div class="ticker-div"></div>
+      <div class="ticker-item">
+        <span class="ticker-sym">VIX</span>
+        <span class="ticker-val">18.06</span>
+        <span class="ticker-chg am">+1.35%</span>
+      </div>
+      <div class="ticker-div"></div>
+      <div class="ticker-item">
+        <span class="ticker-sym">30YR</span>
+        <span class="ticker-val">5.12%</span>
+        <span class="ticker-chg am">⚠ 2007 HIGH</span>
+      </div>
+      <div class="ticker-div"></div>
+      <div class="ticker-item">
+        <span class="ticker-sym">WTI</span>
+        <span class="ticker-val">~$104</span>
+        <span class="ticker-chg muted">flat</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- CRITICAL ALERTS -->
+<div class="section">
+  <div class="alert alert-warn">
+    <span class="alert-icon">⚠</span>
+    <div class="alert-text"><strong>BREADTH DIVERGENCE — THIRD CONSECUTIVE SESSION:</strong> SPX 185 Adv / 314 Dec (1:1.7 ratio). Three-day losing streak with negative breadth on each. 5day trend now DOWN across all four indices.</div>
+  </div>
+  <div class="alert alert-warn">
+    <span class="alert-icon">🪨</span>
+    <div class="alert-text"><strong>BOND VIGILANTES ACTIVE:</strong> 30yr Treasury touched 5.12% — highest since 2007. Incoming Fed Chair Warsh faces credibility test. CME FedWatch now prices 42% rate-hike probability by year-end. Rate-cut consensus of 3 for 2026 has collapsed.</div>
+  </div>
+  <div class="alert alert-bear">
+    <span class="alert-icon">⚡</span>
+    <div class="alert-text"><strong>NVDA EARNINGS WEDNESDAY — CYCLE CHECKPOINT:</strong> $79.2B revenue estimate (+79.5% YoY). Beat-and-raise = AI premium restored. Miss or light guide = correction toward SPX 7,200 support accelerates.</div>
+  </div>
+</div>
+
+<!-- AFTER-HOURS / EARNINGS -->
+<div class="section">
+  <div class="section-title">🌙 Earnings — Tuesday 19 May 2026</div>
+  <div class="earnings-cards">
+    <div class="earning-card bullish">
+      <div class="earning-header">
+        <div>
+          <div class="earning-sym">HD</div>
+          <div class="earning-name">Home Depot — Q1 FY2027 (BMO) — S&P 500</div>
+        </div>
+        <div class="earning-chg up">+0.77%</div>
+      </div>
+      <div class="earning-metrics">
+        <div class="earning-metric">Rev <span>$41.77B</span></div>
+        <div class="earning-metric">Est <span>$41.63B</span></div>
+        <div class="earning-metric">EPS adj <span>$3.43</span></div>
+        <div class="earning-metric">EPS est <span>$3.41</span></div>
+        <div class="earning-metric">Comps <span>+0.6%</span></div>
+        <div class="earning-metric">FCF margin <span class="up">12.4%</span></div>
+        <div class="earning-metric">Guide <span class="up">REAFFIRMED</span></div>
+      </div>
+      <div class="earning-insight"><em>FCF margin expansion from 8.8% → 12.4%</em> is the lead signal — management executing on costs even as traffic volume softens. Comp miss (0.6% vs 0.9% est) reflects housing market drag; the street had consensus that comp would disappoint, hence the muted +0.77% reaction. Guidance reaffirmation in a rising-yield/falling-confidence environment is a genuine resilience signal. Big-ticket transactions (+0.8%) confirms the pro contractor customer is still active. Watch WMT Thursday for the paired consumer read.</div>
+    </div>
+
+    <div class="earning-card bearish">
+      <div class="earning-header">
+        <div>
+          <div class="earning-sym">STX / MU</div>
+          <div class="earning-name">Seagate (Monday) / Micron contagion extending Tuesday</div>
+        </div>
+        <div class="earning-chg dn">STX -6.87% (Mon)</div>
+      </div>
+      <div class="earning-metrics">
+        <div class="earning-metric">STX Mon <span class="dn">-6.87%</span></div>
+        <div class="earning-metric">MU Tue <span class="dn">-5.95%</span></div>
+        <div class="earning-metric">SNDK <span class="dn">-5.35%</span></div>
+        <div class="earning-metric">WDC <span class="dn">-4.84%</span></div>
+      </div>
+      <div class="earning-insight">CEO Mosley's JPMorgan comment ("factories take too long") is a <em>supply ceiling narrative, not a demand bust</em>. Seagate's Q3 revenue was +44% YoY with record margins and nearline capacity sold through 2027–2028. The irony: capacity constraint is bullish for pricing but caps near-term revenue growth elasticity. Institutional thesis shift: from "demand + capacity growth" to "demand + pricing power, no volume elasticity." Watch SNDK, MU for stabilisation or further extension Tuesday close.</div>
+    </div>
+
+    <div class="earning-card bullish">
+      <div class="earning-header">
+        <div>
+          <div class="earning-sym">D + NEE</div>
+          <div class="earning-name">Dominion Energy / NextEra — $67B All-Stock Acquisition (Monday)</div>
+        </div>
+        <div class="earning-chg up">D +9.44% (Mon)</div>
+      </div>
+      <div class="earning-metrics">
+        <div class="earning-metric">Deal <span>$66.8B</span></div>
+        <div class="earning-metric">Premium <span class="up">+23%</span></div>
+        <div class="earning-metric">Exchange <span>0.8138 NEE/D</span></div>
+        <div class="earning-metric">Close <span>12–18 months</span></div>
+        <div class="earning-metric">Queued AI demand <span class="up">47 GW</span></div>
+      </div>
+      <div class="earning-insight">The AI power trade institutionally confirmed at utility-scale. Dominion's Northern Virginia footprint is <em>"Data Center Alley"</em> — world's largest data center market with 47 GW queued demand. Combined entity: world's largest regulated utility, 110 GW, 10M customers, 9%+ EPS growth target through 2032. NEE dilution-sold; D premium-bid. Analyst consensus flagging AEP, SO, PCG as next utility M&A consolidation targets. PJM forecasts 94% of load growth 2024–2030 from data centers.</div>
+    </div>
+  </div>
+</div>
+
+<!-- MACRO REGIME -->
+<div class="section">
+  <div class="section-title">📡 Macro Regime Snapshot</div>
+  <div class="regime-grid">
+    <div class="regime-card">
+      <div class="regime-label">SPX — S&P 500</div>
+      <div class="regime-row"><span class="regime-key">Regime</span><span class="regime-val" style="color:var(--green)">Bullish</span></div>
+      <div class="regime-row"><span class="regime-key">5day Trend</span><span class="regime-val" style="color:var(--red)">Down</span></div>
+      <div class="regime-row"><span class="regime-key">20day Trend</span><span class="regime-val" style="color:var(--green)">Up</span></div>
+      <div class="regime-row"><span class="regime-key">vs 50MA</span><span class="regime-val" style="color:var(--green)">+5.55%</span></div>
+      <div class="regime-row"><span class="regime-key">vs 200MA</span><span class="regime-val" style="color:var(--green)">+7.65%</span></div>
+      <div class="regime-row"><span class="regime-key">RSI-15</span><span class="regime-val">61.82</span></div>
+      <div class="regime-row"><span class="regime-key">Volatility</span><span class="regime-val">Normal</span></div>
+    </div>
+    <div class="regime-card">
+      <div class="regime-label">NDX — Nasdaq 100</div>
+      <div class="regime-row"><span class="regime-key">Regime</span><span class="regime-val" style="color:var(--green)">Bullish</span></div>
+      <div class="regime-row"><span class="regime-key">5day Trend</span><span class="regime-val" style="color:var(--red)">Down</span></div>
+      <div class="regime-row"><span class="regime-key">20day Trend</span><span class="regime-val" style="color:var(--green)">Up</span></div>
+      <div class="regime-row"><span class="regime-key">vs 50MA</span><span class="regime-val" style="color:var(--green)">+9.38%</span></div>
+      <div class="regime-row"><span class="regime-key">vs 200MA</span><span class="regime-val" style="color:var(--green)">+12.68%</span></div>
+      <div class="regime-row"><span class="regime-key">RSI-15</span><span class="regime-val">65.64</span></div>
+      <div class="regime-row"><span class="regime-key">Volatility</span><span class="regime-val" style="color:var(--amber)">Elevated ⚠</span></div>
+    </div>
+    <div class="regime-card">
+      <div class="regime-label">RUT — Russell 2000</div>
+      <div class="regime-row"><span class="regime-key">Regime</span><span class="regime-val" style="color:var(--green)">Bullish</span></div>
+      <div class="regime-row"><span class="regime-key">5day Trend</span><span class="regime-val" style="color:var(--red)">Down</span></div>
+      <div class="regime-row"><span class="regime-key">20day Trend</span><span class="regime-val" style="color:var(--red)">Down</span></div>
+      <div class="regime-row"><span class="regime-key">vs 50MA</span><span class="regime-val" style="color:var(--green)">+2.99%</span></div>
+      <div class="regime-row"><span class="regime-key">vs 200MA</span><span class="regime-val" style="color:var(--green)">+7.77%</span></div>
+      <div class="regime-row"><span class="regime-key">RSI-15</span><span class="regime-val" style="color:var(--amber)">47.55 ⚠</span></div>
+      <div class="regime-row"><span class="regime-key">Volatility</span><span class="regime-val">Normal</span></div>
+    </div>
+    <div class="regime-card">
+      <div class="regime-label">DJI — Dow Jones</div>
+      <div class="regime-row"><span class="regime-key">Regime</span><span class="regime-val" style="color:var(--green)">Bullish</span></div>
+      <div class="regime-row"><span class="regime-key">5day Trend</span><span class="regime-val" style="color:var(--red)">Down</span></div>
+      <div class="regime-row"><span class="regime-key">20day Trend</span><span class="regime-val" style="color:var(--green)">Up</span></div>
+      <div class="regime-row"><span class="regime-key">vs 50MA</span><span class="regime-val" style="color:var(--green)">+2.63%</span></div>
+      <div class="regime-row"><span class="regime-key">vs 200MA</span><span class="regime-val" style="color:var(--green)">+3.75%</span></div>
+      <div class="regime-row"><span class="regime-key">RSI-15</span><span class="regime-val">53.18</span></div>
+      <div class="regime-row"><span class="regime-key">Volatility</span><span class="regime-val">Normal</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- INDEX PERFORMANCE -->
+<div class="section">
+  <div class="section-title">📊 Index Performance</div>
+  <div class="card">
+    <table class="idx-table">
+      <thead>
+        <tr>
+          <th>Index</th>
+          <th>Close</th>
+          <th>1day</th>
+          <th>RSI-15</th>
+          <th>ROC-15</th>
+          <th>vs 50MA</th>
+          <th>vs 200MA</th>
+          <th>Regime</th>
+          <th>Volatility</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="idx-name">S&P 500</div><div class="idx-meta">$SPX · 5d: Down · 20d: Up</div></td>
+          <td class="idx-close" style="font-family:var(--mono)">7,353.61</td>
+          <td class="dn" style="font-family:var(--mono);font-weight:500">-0.55%</td>
+          <td style="font-family:var(--mono)">61.82</td>
+          <td style="font-family:var(--mono);color:var(--green)">+3.01</td>
+          <td style="font-family:var(--mono);color:var(--green)">+5.55%</td>
+          <td style="font-family:var(--mono);color:var(--green)">+7.65%</td>
+          <td style="color:var(--green);font-family:var(--mono);font-weight:500">Bullish</td>
+          <td style="font-family:var(--mono)">Normal</td>
+        </tr>
+        <tr>
+          <td><div class="idx-name">Nasdaq 100</div><div class="idx-meta">$NDX · 5d: Down · 20d: Up</div></td>
+          <td class="idx-close" style="font-family:var(--mono)">28,818.84</td>
+          <td class="dn" style="font-family:var(--mono);font-weight:500">-0.55%</td>
+          <td style="font-family:var(--mono)">65.64</td>
+          <td style="font-family:var(--mono);color:var(--green)">+6.62</td>
+          <td style="font-family:var(--mono);color:var(--green)">+9.38%</td>
+          <td style="font-family:var(--mono);color:var(--green)">+12.68%</td>
+          <td style="color:var(--green);font-family:var(--mono);font-weight:500">Bullish</td>
+          <td style="font-family:var(--mono);color:var(--amber)">Elevated ⚠</td>
+        </tr>
+        <tr>
+          <td><div class="idx-name">Russell 2000</div><div class="idx-meta">$RUT · 5d: Down · 20d: Down</div></td>
+          <td class="idx-close" style="font-family:var(--mono)">2,747.07</td>
+          <td class="dn" style="font-family:var(--mono);font-weight:500">-0.65%</td>
+          <td style="font-family:var(--mono);color:var(--amber)">47.55 ⚠</td>
+          <td style="font-family:var(--mono);color:var(--red)">-0.33</td>
+          <td style="font-family:var(--mono);color:var(--green)">+2.99%</td>
+          <td style="font-family:var(--mono);color:var(--green)">+7.77%</td>
+          <td style="color:var(--green);font-family:var(--mono);font-weight:500">Bullish</td>
+          <td style="font-family:var(--mono)">Normal</td>
+        </tr>
+        <tr>
+          <td><div class="idx-name">Dow Jones</div><div class="idx-meta">$DJI · 5d: Down · 20d: Up</div></td>
+          <td class="idx-close" style="font-family:var(--mono)">49,363.88</td>
+          <td class="dn" style="font-family:var(--mono);font-weight:500">-0.85%</td>
+          <td style="font-family:var(--mono)">53.18</td>
+          <td style="font-family:var(--mono);color:var(--green)">+0.45</td>
+          <td style="font-family:var(--mono);color:var(--green)">+2.63%</td>
+          <td style="font-family:var(--mono);color:var(--green)">+3.75%</td>
+          <td style="color:var(--green);font-family:var(--mono);font-weight:500">Bullish</td>
+          <td style="font-family:var(--mono)">Normal</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="padding:14px 12px 0; font-size:12px; color:var(--text2); line-height:1.7; border-top:1px solid var(--border); margin-top:4px;">
+      All four indices in confirmed Bullish regime — structural floor from the post-March recovery intact. Three-session losing streak pulls SPX back toward the 7,200–7,300 support zone from the 01/05 ATH. RUT RSI-15 at 47.55 with negative ROC-15 is the most concerning signal: small caps are the canary for rate-hike risk absorption. NDX holding above 50MA by +9.38% still implies meaningful cushion before structural trend damage. The 5day trend turning Down on all four indices simultaneously demands NVDA Wednesday as a restoration catalyst — without it, selling pressure likely extends into Thursday.
+    </div>
+  </div>
+</div>
+
+<!-- SESSION SUMMARY -->
+<div class="section">
+  <div class="section-title">📝 Session Summary</div>
+  <div class="card">
+    <div class="summary-text">
+      <p>Tuesday delivered a third consecutive losing session as two macro forces collided: the Warsh-era bond vigilante selloff — 30-year Treasury touching 5.12%, its highest since 2007 — and the Seagate-triggered memory chip contagion extending from Monday. The 10-year yield settled near 4.66%, the 2-year at 4.11%. This yield spike is a direct Warsh confirmation tax: the bond market is demanding that incoming Fed Chair Kevin Warsh establish inflation-fighting credibility before it will let yields relax. Ed Yardeni, who coined the "bond vigilantes" term, stated plainly that "the Fed must catch up to the bond market" — and CME FedWatch now prices a 42% probability of a rate hike by year-end. The consensus of three cuts for 2026 has collapsed.</p>
+      <p>The Seagate-Micron supply ceiling narrative extended for a second session. CEO Dave Mosley's JPMorgan comment — that building new factories "would just take too long" — is a supply constraint declaration, not a demand bust. Seagate's fundamentals remain outstanding (Q3 revenue +44% YoY, record FCF, nearline capacity committed through 2027–2028). But the market is repricing the gap between AI storage demand and available supply as a ceiling on near-term earnings elasticity. Seagate -6.87% Monday, with MU -5.95% and SNDK -5.35% extending Tuesday confirms this is systematic, not isolated.</p>
+      <p>Home Depot delivered a clean beat — $41.77B revenue vs $41.63B est, EPS $3.43 adj vs $3.41 est — and reaffirmed full-year FY2026 guidance. The most important number was free cash flow margin expanding from 8.8% to 12.4%, confirming management is executing on costs even as housing-driven traffic softens. CEO Decker noted the core homeowner customer remains "remarkably resilient" despite higher gas prices and plummeting consumer confidence. The muted +0.77% reaction reflects exactly this: the street got what it expected. Watch Walmart Thursday — it provides the paired discount retail consumer read.</p>
+      <p>The NextEra/Dominion $67B acquisition (confirmed Monday) continued to reverberate. The strategic thesis is irreducible: Dominion's Northern Virginia footprint is "Data Center Alley" — the world's largest data center concentration with 47 GW queued demand. PJM's grid forecasts 94% of load growth through 2030 attributable to data centers. NextEra acquires that grid position and pairs it with best-in-class renewables development capability. Analysts flagged AEP, Southern Company, and PCG as the next utility consolidation candidates. The AI power megatrend has now been confirmed at utility-scale M&A.</p>
+    </div>
+    <div style="border-top:1px solid var(--border); margin-top:14px; padding-top:12px;">
+      <div class="bullet-row"><span class="bullet-fire">🔥</span><span>Energy + defensives only green SPDR sectors: XLE +1.17%, XOP +1.33%, XLV +1.10% — classic "higher for longer" portfolio rotation fingerprint</span></div>
+      <div class="bullet-row"><span class="bullet-fire">🔥</span><span>NextEra/Dominion $67B deal: AI power demand megatrend institutionally confirmed at utility scale — AEP, SO, PCG flagged as next consolidation targets</span></div>
+      <div class="bullet-row"><span class="bullet-fire">🔥</span><span>GCTS new 20day High and DDOG new 20day High in a down tape — select RS names being accumulated despite broad selling</span></div>
+      <div class="bullet-row"><span class="bullet-warn">⚠</span><span>Breadth: SPX 185/314 — negative third consecutive session. 5day trend DOWN across all four indices simultaneously</span></div>
+      <div class="bullet-row"><span class="bullet-warn">⚠</span><span>Bond market: 30yr at 5.12% highest since 2007. Rate-hike probability 42% by year-end. Metals complex -12% to -15% over 5days — USD safe-haven dominance</span></div>
+      <div class="bullet-row"><span class="bullet-warn">⚠</span><span>AIIO -24% and QUCY -24% — thin-float RS names reversing hard in risk-off; classic high-momentum float wash in deteriorating tape</span></div>
+      <div class="bullet-row"><span class="bullet-warn">⚠</span><span>RUT RSI-15 47.55 with negative ROC-15 — small caps absorbing disproportionate rate-sensitivity selling; sector rotation not capitulation</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- MARKET BREADTH -->
+<div class="section">
+  <div class="section-title">📈 Market Breadth</div>
+  <div class="card">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab(event,'spx')">SPX</button>
+      <button class="tab-btn" onclick="showTab(event,'ndx')">NDX</button>
+      <button class="tab-btn" onclick="showTab(event,'rut')">RUT</button>
+      <button class="tab-btn" onclick="showTab(event,'dji')">DJI</button>
+    </div>
+
+    <!-- SPX -->
+    <div id="spx" class="tab-panel active">
+      <div class="breadth-grid">
+        <div class="breadth-stat">
+          <div class="bstat-label">Advancers</div>
+          <div class="bstat-val up">185</div>
+          <div class="bstat-sub">Decliners: <span class="dn">314</span></div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">Stocks ±4% Today</div>
+          <div class="bstat-val"><span class="up">1</span> / <span class="dn">17</span></div>
+          <div class="bstat-sub">+4% / -4%</div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">% Above 20MA</div>
+          <div class="bstat-val am">39.8%</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:39.8%;background:var(--amber)"></div></div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">% Above 50MA</div>
+          <div class="bstat-val am">46.4%</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:46.4%;background:var(--amber)"></div></div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">% Above 200MA</div>
+          <div class="bstat-val up">50.0%</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:50%;background:var(--amber)"></div></div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">T2108 (40MA%)</div>
+          <div class="bstat-val am">46.2%</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:46.2%;background:var(--amber)"></div></div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">New 20D Highs / Lows</div>
+          <div class="bstat-val"><span class="up">55</span> / <span class="dn">90</span></div>
+          <div class="bstat-sub">Highs vs lows: negative</div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">QTR +25% / -25%</div>
+          <div class="bstat-val"><span class="up">87</span> / <span class="dn">47</span></div>
+          <div class="bstat-sub">Quarterly momentum</div>
+        </div>
+      </div>
+      <div style="padding:12px 0 0; font-size:11px; color:var(--text2); line-height:1.6;">
+        SPX breadth is structurally deteriorating: % above 20MA at 39.8% is below the 45% floor. T2108 at 46.2% is approaching the 40% warning threshold. New 20D Lows (90) outpacing New 20D Highs (55) confirms the pullback is broad-based, not isolated to a few sectors. Three consecutive sessions of negative Adv/Dec on index-level declines = genuine distribution phase, not mere consolidation.
+      </div>
+    </div>
+
+    <!-- NDX -->
+    <div id="ndx" class="tab-panel">
+      <div class="breadth-grid">
+        <div class="breadth-stat">
+          <div class="bstat-label">Advancers</div>
+          <div class="bstat-val up">39</div>
+          <div class="bstat-sub">Decliners: <span class="dn">61</span></div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">Stocks ±4% Today</div>
+          <div class="bstat-val"><span class="up">1</span> / <span class="dn">1</span></div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">% Above 20MA</div>
+          <div class="bstat-val am">49/51</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:49%;background:var(--amber)"></div></div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">% Above 50MA</div>
+          <div class="bstat-val up">56/44</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:56%;background:var(--green)"></div></div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">% Above 200MA</div>
+          <div class="bstat-val up">54/46</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:54%;background:var(--green)"></div></div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">T2108 (40MA%)</div>
+          <div class="bstat-val up">57.0%</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:57%;background:var(--green)"></div></div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">New 20D Highs / Lows</div>
+          <div class="bstat-val"><span class="up">13</span> / <span class="dn">7</span></div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">QTR +25% / -25%</div>
+          <div class="bstat-val"><span class="up">33</span> / <span class="dn">5</span></div>
+        </div>
+      </div>
+      <div style="padding:12px 0 0; font-size:11px; color:var(--text2);">NDX breadth is more resilient than SPX — T2108 at 57% and 50MA participation still above 50% provide cushion. NVDA earnings Wednesday will be the acid test for whether the 56 stocks above 50MA can hold.</div>
+    </div>
+
+    <!-- RUT -->
+    <div id="rut" class="tab-panel">
+      <div class="breadth-grid">
+        <div class="breadth-stat">
+          <div class="bstat-label">Advancers</div>
+          <div class="bstat-val up">592</div>
+          <div class="bstat-sub">Decliners: <span class="dn">1,262</span></div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">Stocks ±4% Today</div>
+          <div class="bstat-val"><span class="up">41</span> / <span class="dn">88</span></div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">% Above 20MA</div>
+          <div class="bstat-val dn">32.2%</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:32.2%;background:var(--red)"></div></div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">% Above 50MA</div>
+          <div class="bstat-val am">52.5%</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:52.5%;background:var(--amber)"></div></div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">% Above 200MA</div>
+          <div class="bstat-val am">52.8%</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:52.8%;background:var(--amber)"></div></div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">T2108 (40MA%)</div>
+          <div class="bstat-val am">46.1%</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:46.1%;background:var(--amber)"></div></div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">New 20D Highs / Lows</div>
+          <div class="bstat-val"><span class="up">102</span> / <span class="dn">384</span></div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">QTR +25% / -25%</div>
+          <div class="bstat-val"><span class="up">572</span> / <span class="dn">397</span></div>
+        </div>
+      </div>
+      <div style="padding:12px 0 0; font-size:11px; color:var(--text2);">RUT is the most distressed index in this session: Adv/Dec ratio 592/1262 (1:2.1), % above 20MA collapsed to 32.2%, and New 20D Lows 384 vs Highs 102. This is small-cap rate-sensitivity being price-cleared. RSI-15 at 47.55 with negative ROC-15 puts RUT closest to intermediate support retest.</div>
+    </div>
+
+    <!-- DJI -->
+    <div id="dji" class="tab-panel">
+      <div class="breadth-grid">
+        <div class="breadth-stat">
+          <div class="bstat-label">Advancers</div>
+          <div class="bstat-val up">9</div>
+          <div class="bstat-sub">Decliners: <span class="dn">21</span></div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">% Above 50MA</div>
+          <div class="bstat-val am">15/15</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:50%;background:var(--amber)"></div></div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">T2108 (40MA%)</div>
+          <div class="bstat-val up">53.3%</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:53.3%;background:var(--green)"></div></div>
+        </div>
+        <div class="breadth-stat">
+          <div class="bstat-label">New 20D Highs / Lows</div>
+          <div class="bstat-val"><span class="up">3</span> / <span class="dn">6</span></div>
+        </div>
+      </div>
+      <div style="padding:12px 0 0; font-size:11px; color:var(--text2);">Dow breadth 9/21 Adv/Dec. DJI -0.85% worst performer today — heavyweight financials (XLF -1.24%) and industrials (XLI -1.18%) both red, diluting the energy partial offset.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTOR HEATMAP -->
+<div class="section">
+  <div class="section-title">🌡️ Sector Heatmap (1day | SPDR ETFs)</div>
+  <div class="card">
+    <!-- XLE +1.17 -->
+    <div class="heatmap-row">
+      <span class="hm-ticker">XLE</span>
+      <div class="hm-bar-wrap">
+        <div class="hm-zero"></div>
+        <div class="hm-bar pos" style="width:40%;background:#166534"></div>
+      </div>
+      <span class="hm-pct up">+1.17%</span>
+      <span class="hm-note">Iran war sustains WTI ~$104; IEA warns reserves "not endless" — energy bid structural</span>
+    </div>
+    <!-- XLV +1.10 -->
+    <div class="heatmap-row">
+      <span class="hm-ticker">XLV</span>
+      <div class="hm-bar-wrap">
+        <div class="hm-zero"></div>
+        <div class="hm-bar pos" style="width:38%;background:#166534"></div>
+      </div>
+      <span class="hm-pct up">+1.10%</span>
+      <span class="hm-note">Defensive rotation on rising yields; Managed Healthcare Smart Money #4 — active accumulation</span>
+    </div>
+    <!-- XLU +0.91 -->
+    <div class="heatmap-row">
+      <span class="hm-ticker">XLU</span>
+      <div class="hm-bar-wrap">
+        <div class="hm-zero"></div>
+        <div class="hm-bar pos" style="width:30%;background:#15803d"></div>
+      </div>
+      <span class="hm-pct up">+0.91%</span>
+      <span class="hm-note">NextEra/Dominion deal reframes utility AI-power thesis; defensives bid on Warsh hawkish pivot</span>
+    </div>
+    <!-- XLRE +0.43 -->
+    <div class="heatmap-row">
+      <span class="hm-ticker">XLRE</span>
+      <div class="hm-bar-wrap">
+        <div class="hm-zero"></div>
+        <div class="hm-bar pos" style="width:15%;background:#166534aa"></div>
+      </div>
+      <span class="hm-pct up">+0.43%</span>
+      <span class="hm-note">Real Estate Rental ROC rising in Smart Money (#11); selective yield-play positioning</span>
+    </div>
+    <!-- XLP +0.22 -->
+    <div class="heatmap-row">
+      <span class="hm-ticker">XLP</span>
+      <div class="hm-bar-wrap">
+        <div class="hm-zero"></div>
+        <div class="hm-bar pos" style="width:7%;background:#166534aa"></div>
+      </div>
+      <span class="hm-pct up">+0.22%</span>
+      <span class="hm-note">Classic defensive tuck; Discount Stores Smart Money #13 rising</span>
+    </div>
+    <!-- XLK -0.64 -->
+    <div class="heatmap-row">
+      <span class="hm-ticker">XLK</span>
+      <div class="hm-bar-wrap">
+        <div class="hm-zero"></div>
+        <div class="hm-bar neg" style="width:22%;background:#991b1b"></div>
+      </div>
+      <span class="hm-pct dn">-0.64%</span>
+      <span class="hm-note">Seagate/MU/SNDK contagion; NVDA/TSLA/META lower; 30yr yield ceiling on growth multiples</span>
+    </div>
+    <!-- XLC -0.97 -->
+    <div class="heatmap-row">
+      <span class="hm-ticker">XLC</span>
+      <div class="hm-bar-wrap">
+        <div class="hm-zero"></div>
+        <div class="hm-bar neg" style="width:33%;background:#991b1b"></div>
+      </div>
+      <span class="hm-pct dn">-0.97%</span>
+      <span class="hm-note">Alphabet and Meta selling; AI premium deflating in the session before NVDA Wed</span>
+    </div>
+    <!-- XLY -1.11 -->
+    <div class="heatmap-row">
+      <span class="hm-ticker">XLY</span>
+      <div class="hm-bar-wrap">
+        <div class="hm-zero"></div>
+        <div class="hm-bar neg" style="width:38%;background:#991b1b"></div>
+      </div>
+      <span class="hm-pct dn">-1.11%</span>
+      <span class="hm-note">Amazon, Tesla rate-sensitive; housing-adjacent consumer names repriced on yield spike</span>
+    </div>
+    <!-- XLI -1.18 -->
+    <div class="heatmap-row">
+      <span class="hm-ticker">XLI</span>
+      <div class="hm-bar-wrap">
+        <div class="hm-zero"></div>
+        <div class="hm-bar neg" style="width:40%;background:#991b1b"></div>
+      </div>
+      <span class="hm-pct dn">-1.18%</span>
+      <span class="hm-note">IEA demand ceiling warning weighs on CAT/infrastructure cycle; Industrials Smart Money rank declining</span>
+    </div>
+    <!-- XLF -1.24 -->
+    <div class="heatmap-row">
+      <span class="hm-ticker">XLF</span>
+      <div class="hm-bar-wrap">
+        <div class="hm-zero"></div>
+        <div class="hm-bar neg" style="width:42%;background:#7f1d1d"></div>
+      </div>
+      <span class="hm-pct dn">-1.24%</span>
+      <span class="hm-note">Rate-hike risk reprices NIM assumptions; bank valuations re-rated under inverted curve pressure</span>
+    </div>
+    <!-- XLB -2.35 -->
+    <div class="heatmap-row">
+      <span class="hm-ticker">XLB</span>
+      <div class="hm-bar-wrap">
+        <div class="hm-zero"></div>
+        <div class="hm-bar neg" style="width:78%;background:#7f1d1d"></div>
+      </div>
+      <span class="hm-pct dn">-2.35%</span>
+      <span class="hm-note">5day -5.95%; gold/silver/copper/rare earth synchronised rout — USD strength crushing metals complex</span>
+    </div>
+    <div style="margin-top:12px; font-size:11px; color:var(--text2); line-height:1.6; padding-top:10px; border-top:1px solid var(--border);">
+      10day ROC: Mining Support +38% | Household Products +22% | Auto &amp; Truck +17% | Healthcare Facilities +10.71% | Semis +5.61% (still top 10 despite rotation) &nbsp;·&nbsp; 60day: Technology sector +32.88% | Semiconductors industry +55.57% (structural 60day leader)
+    </div>
+  </div>
+</div>
+
+<!-- ETF DASHBOARD ±3% -->
+<div class="section">
+  <div class="section-title">⚡ ETF Dashboard — ±3% Flags</div>
+  <div class="card">
+    <div class="etf-cols">
+      <div>
+        <div class="etf-col-title" style="color:var(--green)">🟢 Above +3% — Zero ETFs Today</div>
+        <div style="padding:8px 0; font-size:11px; color:var(--text2); font-family:var(--mono);">Best performer: XOP +1.33% | XLE +1.17% | XLV +1.10%</div>
+        <div style="font-size:11px; color:var(--text2); padding:6px 0; border-top:1px solid var(--border);">Zero ETFs above +3% signals broad risk-off, not theme rotation. No concentrated institutional surge narrative today — this is an orderly "higher for longer" repricing, not a rotation event.</div>
+      </div>
+      <div>
+        <div class="etf-col-title" style="color:var(--red)">🔴 Below -3%</div>
+        <div class="etf-row">
+          <div class="etf-info"><div class="etf-sym">COPX</div><div class="etf-name">Global X Copper Miners</div></div>
+          <div><div class="etf-chg dn">-3.03%</div><div class="etf-5d dn">5day: -12.56%</div></div>
+        </div>
+        <div class="etf-row">
+          <div class="etf-info"><div class="etf-sym">URA</div><div class="etf-name">Global X Uranium ETF</div></div>
+          <div><div class="etf-chg dn">-3.04%</div><div class="etf-5d dn">5day: -13.16%</div></div>
+        </div>
+        <div class="etf-row">
+          <div class="etf-info"><div class="etf-sym">GDX</div><div class="etf-name">VanEck Gold Miners</div></div>
+          <div><div class="etf-chg dn">-3.86%</div><div class="etf-5d dn">5day: -13.75%</div></div>
+        </div>
+        <div class="etf-row">
+          <div class="etf-info"><div class="etf-sym">SLV</div><div class="etf-name">iShares Silver Trust</div></div>
+          <div><div class="etf-chg dn">-4.35%</div><div class="etf-5d dn">5day: -14.83%</div></div>
+        </div>
+        <div class="etf-row">
+          <div class="etf-info"><div class="etf-sym dn">SIL</div><div class="etf-name">Global X Silver Miners ⚠ EXTREME</div></div>
+          <div><div class="etf-chg dn">-4.55%</div><div class="etf-5d dn">5day: -15.79%</div></div>
+        </div>
+        <div style="font-size:10px; color:var(--text2); padding-top:8px; border-top:1px solid var(--border); margin-top:4px;">VIX: 18.06 (+1.35%) | 5day: +0.39% — volatility ticking up but orderly</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KEY MOVERS -->
+<div class="section">
+  <div class="section-title">🏆 Key Movers (SPX / NDX / Russell 1000)</div>
+  <div class="card">
+    <div class="movers-cols">
+      <div>
+        <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--green);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Gainers</div>
+        <div class="mover-row">
+          <div class="mover-info"><div class="mover-sym">D</div><div class="mover-detail">Dominion Energy — NextEra $67B acquisition [DEAL] (Mon)</div></div>
+          <div class="mover-chg up">+9.44%</div>
+        </div>
+        <div class="mover-row">
+          <div class="mover-info"><div class="mover-sym">MPC</div><div class="mover-detail">Marathon Petroleum — refining margin + crude spread play [ENERGY]</div></div>
+          <div class="mover-chg up">+7.5%</div>
+        </div>
+        <div class="mover-row">
+          <div class="mover-info"><div class="mover-sym">MXL</div><div class="mover-detail">MaxLinear — RS#1 Semiconductors; semi bounce day</div></div>
+          <div class="mover-chg up">+8.46%</div>
+        </div>
+        <div class="mover-row">
+          <div class="mover-info"><div class="mover-sym">GCTS</div><div class="mover-detail">GCT Semiconductor — RS#15 [H] NEW 20D HIGH; semi chain resilience</div></div>
+          <div class="mover-chg up">+8.53%</div>
+        </div>
+        <div class="mover-row">
+          <div class="mover-info"><div class="mover-sym">AGL</div><div class="mover-detail">agilon health — Healthcare Facilities RS#3; Smart Money #5 theme</div></div>
+          <div class="mover-chg up">+1.61%</div>
+        </div>
+        <div class="mover-row">
+          <div class="mover-info"><div class="mover-sym">HD</div><div class="mover-detail">Home Depot — Q1 beat + guidance reaffirmed [EARNINGS BMO]</div></div>
+          <div class="mover-chg up">+0.77%</div>
+        </div>
+        <div class="mover-row">
+          <div class="mover-info"><div class="mover-sym">DDOG</div><div class="mover-detail">Datadog — [H] NEW 20D HIGH; software RS accumulation</div></div>
+          <div class="mover-chg up">+3.03%</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--red);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);">Laggards</div>
+        <div class="mover-row">
+          <div class="mover-info"><div class="mover-sym">REGN</div><div class="mover-detail">Regeneron — Phase 3 melanoma trial failure; company-specific</div></div>
+          <div class="mover-chg dn">-10.5%</div>
+        </div>
+        <div class="mover-row">
+          <div class="mover-info"><div class="mover-sym">UNH</div><div class="mover-detail">UnitedHealth — continued de-rating on structural healthcare uncertainty</div></div>
+          <div class="mover-chg dn">-4.8%</div>
+        </div>
+        <div class="mover-row">
+          <div class="mover-info"><div class="mover-sym">MU</div><div class="mover-detail">Micron — Seagate supply ceiling contagion day 2 [SEMI]</div></div>
+          <div class="mover-chg dn">-5.95%</div>
+        </div>
+        <div class="mover-row">
+          <div class="mover-info"><div class="mover-sym">AIIO</div><div class="mover-detail">Robo.ai — RS#5 thin float reversal ⚠ THIN (ADR 32.7%)</div></div>
+          <div class="mover-chg dn">-24.29%</div>
+        </div>
+        <div class="mover-row">
+          <div class="mover-info"><div class="mover-sym">QUCY</div><div class="mover-detail">Quantum Cyber — RS#4 thin float reversal ⚠ THIN (ADR 35.5%)</div></div>
+          <div class="mover-chg dn">-23.64%</div>
+        </div>
+        <div class="mover-row">
+          <div class="mover-info"><div class="mover-sym">GDX</div><div class="mover-detail">VanEck Gold Miners — precious metals unwind; 5day -13.75%</div></div>
+          <div class="mover-chg dn">-3.86%</div>
+        </div>
+        <div class="mover-row">
+          <div class="mover-info"><div class="mover-sym">MRAM</div><div class="mover-detail">Everspin — RS#12; memory adjacent profit-taking</div></div>
+          <div class="mover-chg dn">-4.89%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RS SPOTLIGHT -->
+<div class="section">
+  <div class="section-title">⚡ RS Spotlight — Top 20 (16cc. RS MOMO · 19/05/26)</div>
+  <div class="card">
+    <table class="rs-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>SYM</th>
+          <th>RS Score</th>
+          <th>Industry Group</th>
+          <th>1day</th>
+          <th>3month</th>
+          <th>Flags</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="rs-rank">1</td><td class="rs-sym">MXL</td><td class="rs-score">98.95</td><td class="rs-ind">Semiconductors</td><td class="up">+8.46%</td><td class="up">+428.8%</td><td></td></tr>
+        <tr><td class="rs-rank">2</td><td class="rs-sym">RXT</td><td class="rs-score">98.93</td><td class="rs-ind">IT Services &amp; Consulting</td><td class="dn">-2.19%</td><td class="up">+215.1%</td><td></td></tr>
+        <tr><td class="rs-rank">3</td><td class="rs-sym">AGL</td><td class="rs-score">98.90</td><td class="rs-ind">Healthcare Facilities</td><td class="up">+1.61%</td><td class="up">+713.5%</td><td></td></tr>
+        <tr><td class="rs-rank">4</td><td class="rs-sym">QUCY</td><td class="rs-score">98.86</td><td class="rs-ind">Healthcare Facilities</td><td class="dn">-23.64%</td><td class="up">+326.0%</td><td><span class="rs-flag rs-flag-thin">⚠ THIN</span></td></tr>
+        <tr><td class="rs-rank">5</td><td class="rs-sym">AIIO</td><td class="rs-score">98.84</td><td class="rs-ind">Auto &amp; Truck Manuf.</td><td class="dn">-24.29%</td><td class="up">+94.1%</td><td><span class="rs-flag rs-flag-thin">⚠ THIN</span></td></tr>
+        <tr><td class="rs-rank">6</td><td class="rs-sym">PIII</td><td class="rs-score">98.82</td><td class="rs-ind">Biotechnology</td><td class="up">+14.39%</td><td class="up">+392.5%</td><td></td></tr>
+        <tr><td class="rs-rank">7</td><td class="rs-sym">AAOI</td><td class="rs-score">98.77</td><td class="rs-ind">Electronic Equipment</td><td class="dn">-1.11%</td><td class="up">+217.5%</td><td></td></tr>
+        <tr><td class="rs-rank">8</td><td class="rs-sym">BAND</td><td class="rs-score">98.75</td><td class="rs-ind">Software</td><td class="dn">-3.70%</td><td class="up">+286.0%</td><td></td></tr>
+        <tr><td class="rs-rank">9</td><td class="rs-sym">AXTI</td><td class="rs-score">98.73</td><td class="rs-ind">Semiconductors</td><td class="up">+6.61%</td><td class="up">+297.1%</td><td></td></tr>
+        <tr><td class="rs-rank">10</td><td class="rs-sym">SNDK</td><td class="rs-score">98.68</td><td class="rs-ind">Computer Hardware</td><td class="up">+3.77%</td><td class="up">+107.6%</td><td></td></tr>
+        <tr><td class="rs-rank">11</td><td class="rs-sym">WOLF</td><td class="rs-score">98.65</td><td class="rs-ind">Semiconductors</td><td class="dn">-0.88%</td><td class="up">+218.5%</td><td></td></tr>
+        <tr><td class="rs-rank">12</td><td class="rs-sym">MRAM</td><td class="rs-score">98.57</td><td class="rs-ind">Semiconductors</td><td class="dn">-4.89%</td><td class="up">+195.1%</td><td></td></tr>
+        <tr><td class="rs-rank">13</td><td class="rs-sym">DGXX</td><td class="rs-score">98.56</td><td class="rs-ind">Blockchain &amp; Crypto</td><td class="up">+6.63%</td><td class="up">+219.0%</td><td></td></tr>
+        <tr><td class="rs-rank">14</td><td class="rs-sym">EVC</td><td class="rs-score">98.54</td><td class="rs-ind">Broadcasting</td><td class="up">+1.00%</td><td class="up">+173.0%</td><td></td></tr>
+        <tr style="background:var(--green-dim)"><td class="rs-rank">15</td><td class="rs-sym" style="color:var(--green)">GCTS</td><td class="rs-score">98.52</td><td class="rs-ind">Semiconductors</td><td class="up">+8.53%</td><td class="up">+117.1%</td><td><span class="rs-flag rs-flag-h">[H]</span></td></tr>
+        <tr><td class="rs-rank">16</td><td class="rs-sym">KOS</td><td class="rs-score">98.50</td><td class="rs-ind">Oil &amp; Gas E&amp;P</td><td class="dn">-0.93%</td><td class="up">+54.4%</td><td></td></tr>
+        <tr><td class="rs-rank">17</td><td class="rs-sym">SATL</td><td class="rs-score">98.49</td><td class="rs-ind">Mining Support</td><td class="up">+1.26%</td><td class="up">+200.9%</td><td></td></tr>
+        <tr><td class="rs-rank">18</td><td class="rs-sym">WTI</td><td class="rs-score">98.43</td><td class="rs-ind">Oil &amp; Gas E&amp;P</td><td class="dn">-3.05%</td><td class="up">+82.4%</td><td></td></tr>
+        <tr><td class="rs-rank">19</td><td class="rs-sym">DOCN</td><td class="rs-score">98.40</td><td class="rs-ind">IT Services &amp; Consulting</td><td class="up">+1.76%</td><td class="up">+153.2%</td><td></td></tr>
+        <tr><td class="rs-rank">20</td><td class="rs-sym">AEHR</td><td class="rs-score">98.38</td><td class="rs-ind">Semi Equipment</td><td class="dn">-2.91%</td><td class="up">+136.4%</td><td></td></tr>
+      </tbody>
+    </table>
+    <div style="padding:14px 0 0; font-size:12px; color:var(--text2); line-height:1.7; border-top:1px solid var(--border); margin-top:6px;">
+      The top 20 structure has rotated from 01/05: <strong style="color:var(--near-white)">Healthcare Facilities now holds #3–#4</strong> (AGL, QUCY), confirming Smart Money's #5 rank for that group is driven by genuine institutional accumulation, not defensive hiding. <strong style="color:var(--near-white)">Semiconductors hold 6 of 20 slots</strong> despite today's selloff — the 60day structural leader (+55.57%) is being dip-bought within the RS accumulation layer. GCTS new 20D High [H] during a broad selloff is the single strongest structural resilience signal of the session. RXT (#2, Rackspace) and DOCN (#19) building IT Services cluster — cloud managed services quietly accumulating alongside the AI infrastructure narrative. RS #21–25 footnote: INTC +2.43% continuing RS rank climb — Intel structural re-rating still in motion.
+    </div>
+  </div>
+</div>
+
+<!-- SMART MONEY -->
+<div class="section">
+  <div class="section-title">🧠 Smart Money Monitor — Top 16 (10day Rotation)</div>
+  <div class="card">
+    <table class="sm-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Industry</th>
+          <th>Arrow</th>
+          <th>ROC</th>
+          <th>Rank 1D</th>
+          <th>Rank 5D</th>
+          <th>Rank 9D</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="surge">
+          <td style="color:var(--text2)">1</td>
+          <td class="sm-ind">Mining Support Services &amp; Equipment</td>
+          <td class="sm-arrow-up">↑↑ SURGE</td>
+          <td class="sm-roc">+38.00%</td>
+          <td class="sm-rank-ref">1</td>
+          <td class="sm-rank-ref">2</td>
+          <td class="sm-rank-ref">94</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text2)">2</td>
+          <td class="sm-ind">Household Products</td>
+          <td class="sm-arrow-up">↑↑</td>
+          <td class="sm-roc">+21.87%</td>
+          <td class="sm-rank-ref">3</td>
+          <td class="sm-rank-ref">14</td>
+          <td class="sm-rank-ref">61</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text2)">3</td>
+          <td class="sm-ind">Auto &amp; Truck Manufacturers</td>
+          <td class="sm-arrow-up">↑↑</td>
+          <td class="sm-roc">+16.99%</td>
+          <td class="sm-rank-ref">2</td>
+          <td class="sm-rank-ref">17</td>
+          <td class="sm-rank-ref">72</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text2)">4</td>
+          <td class="sm-ind">Managed Healthcare</td>
+          <td class="sm-arrow-up">↑</td>
+          <td class="sm-roc">+12.44%</td>
+          <td class="sm-rank-ref">8</td>
+          <td class="sm-rank-ref">6</td>
+          <td class="sm-rank-ref">4</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text2)">5</td>
+          <td class="sm-ind">Healthcare Facilities &amp; Services</td>
+          <td class="sm-arrow-up">↑↑</td>
+          <td class="sm-roc">+10.71%</td>
+          <td class="sm-rank-ref">5</td>
+          <td class="sm-rank-ref">19</td>
+          <td class="sm-rank-ref">37</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text2)">6</td>
+          <td class="sm-ind">Heavy Electrical Equipment</td>
+          <td class="sm-arrow-flat">→</td>
+          <td class="sm-roc">+9.94%</td>
+          <td class="sm-rank-ref">4</td>
+          <td class="sm-rank-ref">4</td>
+          <td class="sm-rank-ref">3</td>
+        </tr>
+        <tr class="surge">
+          <td style="color:var(--text2)">7</td>
+          <td class="sm-ind">School College &amp; University</td>
+          <td class="sm-arrow-up">↑↑ SURGE</td>
+          <td class="sm-roc">+7.70%</td>
+          <td class="sm-rank-ref">14</td>
+          <td class="sm-rank-ref">67</td>
+          <td class="sm-rank-ref">138</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text2)">8</td>
+          <td class="sm-ind">Oil &amp; Gas Drilling</td>
+          <td class="sm-arrow-up">↑</td>
+          <td class="sm-roc">+7.38%</td>
+          <td class="sm-rank-ref">10</td>
+          <td class="sm-rank-ref">73</td>
+          <td class="sm-rank-ref">19</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text2)">9</td>
+          <td class="sm-ind">Tobacco</td>
+          <td class="sm-arrow-up">↑↑</td>
+          <td class="sm-roc">+7.15%</td>
+          <td class="sm-rank-ref">18</td>
+          <td class="sm-rank-ref">62</td>
+          <td class="sm-rank-ref">109</td>
+        </tr>
+        <tr class="exit">
+          <td style="color:var(--text2)">10</td>
+          <td class="sm-ind" style="color:var(--red)">Semiconductors</td>
+          <td class="sm-arrow-dn">↓↓</td>
+          <td class="sm-roc">+5.61%</td>
+          <td class="sm-rank-ref">7</td>
+          <td class="sm-rank-ref">1</td>
+          <td class="sm-rank-ref">1</td>
+        </tr>
+        <tr class="surge">
+          <td style="color:var(--text2)">11</td>
+          <td class="sm-ind">Real Estate Rental Dev &amp; Ops</td>
+          <td class="sm-arrow-up">↑↑</td>
+          <td class="sm-roc">+4.69%</td>
+          <td class="sm-rank-ref">25</td>
+          <td class="sm-rank-ref">75</td>
+          <td class="sm-rank-ref">118</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text2)">12</td>
+          <td class="sm-ind">Reinsurance</td>
+          <td class="sm-arrow-flat">→</td>
+          <td class="sm-roc">+2.85%</td>
+          <td class="sm-rank-ref">12</td>
+          <td class="sm-rank-ref">86</td>
+          <td class="sm-rank-ref">77</td>
+        </tr>
+        <tr class="surge">
+          <td style="color:var(--text2)">13</td>
+          <td class="sm-ind">Discount Stores</td>
+          <td class="sm-arrow-up">↑↑</td>
+          <td class="sm-roc">+2.38%</td>
+          <td class="sm-rank-ref">19</td>
+          <td class="sm-rank-ref">71</td>
+          <td class="sm-rank-ref">116</td>
+        </tr>
+        <tr class="exit">
+          <td style="color:var(--text2)">14</td>
+          <td class="sm-ind" style="color:var(--red)">Computer Hardware</td>
+          <td class="sm-arrow-dn">↓↓</td>
+          <td class="sm-roc">+2.34%</td>
+          <td class="sm-rank-ref">11</td>
+          <td class="sm-rank-ref">5</td>
+          <td class="sm-rank-ref">2</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text2)">15</td>
+          <td class="sm-ind">Oil Related Services &amp; Equipment</td>
+          <td class="sm-arrow-up">↑</td>
+          <td class="sm-roc">+2.03%</td>
+          <td class="sm-rank-ref">22</td>
+          <td class="sm-rank-ref">49</td>
+          <td class="sm-rank-ref">34</td>
+        </tr>
+        <tr class="surge">
+          <td style="color:var(--text2)">16</td>
+          <td class="sm-ind">Consumer Publishing</td>
+          <td class="sm-arrow-up">↑↑ SURGE</td>
+          <td class="sm-roc">+1.22%</td>
+          <td class="sm-rank-ref">15</td>
+          <td class="sm-rank-ref">102</td>
+          <td class="sm-rank-ref">120</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="padding:14px 0 0; font-size:12px; color:var(--text2); line-height:1.7; border-top:1px solid var(--border); margin-top:6px;">
+      <strong style="color:var(--amber)">⚠ Mining Support Services #1 (from #94):</strong> 93-rank surge in 9 days — the highest-velocity move in the table. Hard-asset supply chain infrastructure accumulation while spot commodities sell off is the key contradiction to monitor. SATL at RS#17 is the reference stock. Capital positioning for post-Hormuz mining and material operations recovery, even as USD strength depresses spot prices. <strong style="color:var(--red)">⚠ Semiconductors #10 (from #1):</strong> 9-rank compression driven by Seagate supply ceiling narrative. 60day structural lead still intact (+55.57%) — this is profit-taking against a still-dominant theme, not a regime exit. GCTS [H] and MXL +8.46% demonstrate the dip-buying is happening in select names within the group. <strong style="color:var(--amber)">⚠ School/University #7 (from #138):</strong> 131-rank surge in 9 days — highest velocity rank gain in the entire table today. The inflection is striking and may relate to AI curriculum licensing cycles or EdTech M&A anticipation. Monitor for a second confirmation session. The rotation narrative overall is consolidating around: energy infrastructure, defensives (healthcare, household products, tobacco), and value/yield plays (real estate, reinsurance, discount stores) — a textbook "higher for longer" portfolio repositioning.
+    </div>
+  </div>
+</div>
+
+<!-- COMMODITIES -->
+<div class="section">
+  <div class="section-title">🪙 Commodities, FX &amp; Digital Assets</div>
+  <div class="commod-grid">
+    <div class="commod-group">
+      <div class="commod-group-title">⚡ Energy — Iran War</div>
+      <div class="commod-row"><span class="commod-sym">WTI Crude</span><span class="commod-price">~$104/bbl</span><span class="commod-chg muted">flat</span></div>
+      <div class="commod-row"><span class="commod-sym">XOP E&P</span><span class="commod-price">$178.56</span><span class="commod-chg up">+1.33%</span></div>
+      <div class="commod-row"><span class="commod-sym">XLE Energy</span><span class="commod-price">$61.29</span><span class="commod-chg up">+1.17%</span></div>
+      <div class="commod-row"><span class="commod-sym">OIH Oil Svcs</span><span class="commod-price">$451.02</span><span class="commod-chg dn">-0.64%</span></div>
+      <div style="font-size:10px;color:var(--text2);padding-top:6px;border-top:1px solid var(--border);margin-top:4px;">IEA: strategic reserves "not endless." Commercial inventories depleting rapidly. WTI stable not rising — Hormuz still blockaded but no fresh escalation today.</div>
+    </div>
+    <div class="commod-group">
+      <div class="commod-group-title">🥇 Precious Metals Rout</div>
+      <div class="commod-row"><span class="commod-sym">GLD Gold</span><span class="commod-price">$411.50</span><span class="commod-chg dn">-1.66%</span></div>
+      <div class="commod-row"><span class="commod-sym">SLV Silver</span><span class="commod-price">$66.90</span><span class="commod-chg dn">-4.35%</span></div>
+      <div class="commod-row"><span class="commod-sym">GDX Gold Mine</span><span class="commod-price">$83.78</span><span class="commod-chg dn">-3.86%</span></div>
+      <div class="commod-row"><span class="commod-sym">SIL Silver Mine</span><span class="commod-price">$86.49</span><span class="commod-chg dn">-4.55%</span></div>
+      <div style="font-size:10px;color:var(--text2);padding-top:6px;border-top:1px solid var(--border);margin-top:4px;">5day: GDX -13.75% | SLV -14.83% | REMX -14.72% — USD safe-haven dominance as Warsh Fed premium crushes metals inflation-hedge positioning.</div>
+    </div>
+    <div class="commod-group">
+      <div class="commod-group-title">⛏ Base &amp; Nuclear Metals</div>
+      <div class="commod-row"><span class="commod-sym">COPX Copper</span><span class="commod-price">$79.37</span><span class="commod-chg dn">-3.03%</span></div>
+      <div class="commod-row"><span class="commod-sym">URA Uranium</span><span class="commod-price">$47.20</span><span class="commod-chg dn">-3.04%</span></div>
+      <div class="commod-row"><span class="commod-sym">URNM U Miners</span><span class="commod-price">$57.08</span><span class="commod-chg dn">-2.84%</span></div>
+      <div class="commod-row"><span class="commod-sym">REMX Rare Earth</span><span class="commod-price">$92.13</span><span class="commod-chg dn">-2.70%</span></div>
+      <div style="font-size:10px;color:var(--text2);padding-top:6px;border-top:1px solid var(--border);margin-top:4px;">5day: COPX -12.56% | URNM -12.85% — unified multi-sector metals rout. Institutional de-grossing of inflation-hedge basket.</div>
+    </div>
+    <div class="commod-group">
+      <div class="commod-group-title">₿ Digital Assets + FX</div>
+      <div class="commod-row"><span class="commod-sym">IBIT Bitcoin</span><span class="commod-price">$43.50</span><span class="commod-chg dn">-0.07%</span></div>
+      <div class="commod-row"><span class="commod-sym">ETHA Ethereum</span><span class="commod-price">$15.93</span><span class="commod-chg dn">-0.44%</span></div>
+      <div class="commod-row"><span class="commod-sym">AUD/USD</span><span class="commod-price">0.7203</span><span class="commod-chg muted">flat</span></div>
+      <div class="commod-row"><span class="commod-sym">ASX SPI 200</span><span class="commod-price">8,639</span><span class="commod-chg up">+1.36%</span></div>
+      <div style="font-size:10px;color:var(--text2);padding-top:6px;border-top:1px solid var(--border);margin-top:4px;">Crypto mild pressure; 5day BTC -5.02%, ETH -7.60%. Risk-off but orderly. ASX SPI bounce (+1.36%) partly recovering prior losses.</div>
+    </div>
+  </div>
+</div>
+
+<!-- KEY HEADLINES -->
+<div class="section">
+  <div class="section-title">📰 Key Headlines</div>
+  <div class="card">
+    <div class="headline">
+      <div class="headline-cat" style="color:var(--amber)">🪨 Bond Market / Fed</div>
+      <div class="headline-text"><strong>Bond vigilantes test Warsh on day one:</strong> 30-year Treasury touched 5.12% intraday — highest since 2007 — as the bond market demands incoming Fed Chair Kevin Warsh establish hawkish inflation credibility. CME FedWatch now prices a 42% rate-hike probability by year-end. Ed Yardeni argues Warsh may need to signal a tightening bias in June to "appease the Bond Vigilantes" before they'll let long yields stabilise. The consensus of three cuts for 2026 has fully collapsed — market is pricing 0–1 cuts all year. Rate-hike risk is now the dominant variable for equity valuation.</div>
+    </div>
+    <div class="headline">
+      <div class="headline-cat" style="color:var(--red)">⚡ Semiconductors / AI Storage</div>
+      <div class="headline-text"><strong>Seagate/memory chip two-session rout: supply ceiling, not demand bust:</strong> Seagate -6.87% Monday as CEO Mosley warned factories "take too long" to build, triggering MU -5.95%, SNDK -5.35%, WDC -4.84%. The structural demand narrative is intact — AI nearline HDD capacity is sold through 2027–2028. The market is repricing from "demand + capacity growth" to "demand + pricing power, no volume elasticity." <strong>NVDA Wednesday ($79.2B rev estimate, +79.5% YoY) is the counter-narrative test.</strong> Beat-and-raise = AI premium restored. Miss or light guide = correction toward SPX 7,200 accelerates.</div>
+    </div>
+    <div class="headline">
+      <div class="headline-cat" style="color:var(--green)">🏠 Earnings</div>
+      <div class="headline-text"><strong>Home Depot Q1 — resilient consumer in challenging housing market:</strong> Revenue $41.77B (+4.8% YoY), EPS $3.43 adj, guidance reaffirmed. FCF margin expanded from 8.8% to 12.4% — the lead signal. Comp +0.6% missed 0.9% estimate on housing drag; core homeowner customer "remarkably resilient" per CEO Decker. Big-ticket transactions (+0.8%) confirms pro customer still spending. Muted +0.77% stock reaction: street got what it modelled. Walmart Thursday is the paired discount consumer read.</div>
+    </div>
+    <div class="headline">
+      <div class="headline-cat" style="color:var(--green)">⚡ Utility M&amp;A / AI Power</div>
+      <div class="headline-text"><strong>NextEra/Dominion $67B — AI power megatrend confirmed at utility scale:</strong> World's largest regulated utility created. Dominion's Northern Virginia footprint includes "Data Center Alley" — 47 GW queued AI demand. NEE fell on dilution (23% premium), D surged. Combined entity: 110 GW, 10M customers, 9%+ EPS growth through 2032. AEP, Southern Company, and PCG flagged as next consolidation targets. PJM forecast: 94% of load growth 2024–2030 from data centers. The AI infrastructure buildout has now hit the power grid layer.</div>
+    </div>
+    <div class="headline">
+      <div class="headline-cat" style="color:var(--red)">⚠ Risk Watch</div>
+      <div class="headline-text"><strong>Third consecutive losing session — correction or pause:</strong> 5day trend now DOWN across all four indices. Breadth 185/314 negative (3rd session). Metals complex -12% to -15% over 5 days. AIIO -24%, QUCY -24% — thin-float RS names reversing in risk-off. Iran peace proposal still stalled (Trump: "TOTALLY UNACCEPTABLE"). IEA warns strategic oil reserves "not endless." The fundamental Bullish regime is intact; the tactical picture is cautious. NVDA Wednesday is the circuit-breaker event.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-left">LeTour Dashboard · US Market Summary · 19/05/2026<br>Data: RealTest · Excel Dashboard · Yahoo Finance · Reuters · CNBC · TheStreet · Bloomberg · Edward Jones</div>
+  <div class="footer-right">Generated by LeTour AI<br>All data sourced from Excel dashboard + web research</div>
+</div>
+
+</div><!-- .container -->
+
+<script>
+function showTab(event, id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
