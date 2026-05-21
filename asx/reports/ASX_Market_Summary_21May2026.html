@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASX Market Summary | 21 May 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --bg2: #0f1117;
+    --bg3: #141820;
+    --border: #1e2430;
+    --gold: #c9a227;
+    --gold-dim: #8a6e1c;
+    --text: #e2e8f0;
+    --text-muted: #7a85a0;
+    --text-dim: #4a5568;
+    --green: #22c55e;
+    --red: #ef4444;
+    --amber: #f59e0b;
+    --blue: #60a5fa;
+    --teal: #2dd4bf;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 0 0 40px 0;
+  }
+  .mono { font-family: 'DM Mono', monospace; }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0a0c10 0%, #0f1520 100%);
+    border-bottom: 1px solid var(--gold-dim);
+    padding: 28px 32px 20px;
+  }
+  .header-flag { font-size: 28px; }
+  .header-title {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 4px;
+  }
+  .header-date {
+    font-size: 22px;
+    font-weight: 600;
+    color: #f0f4ff;
+    margin-bottom: 12px;
+  }
+  .header-ticker-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+  }
+  .ticker-item { display: flex; align-items: center; gap: 6px; }
+  .ticker-sym { color: var(--text-muted); font-size: 11px; }
+  .ticker-val { color: #f0f4ff; font-weight: 500; }
+  .ticker-chg.pos { color: var(--green); }
+  .ticker-chg.neg { color: var(--red); }
+
+  .badge-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 3px;
+  }
+  .badge-bear { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+  .badge-neutral { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
+  .badge-gold { background: rgba(201,162,39,0.12); color: var(--gold); border: 1px solid rgba(201,162,39,0.3); }
+  .badge-teal { background: rgba(45,212,191,0.1); color: #2dd4bf; border: 1px solid rgba(45,212,191,0.25); }
+  .badge-blue { background: rgba(96,165,250,0.1); color: #60a5fa; border: 1px solid rgba(96,165,250,0.25); }
+
+  /* SECTIONS */
+  .section { padding: 24px 32px; border-bottom: 1px solid var(--border); }
+  .section-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--gold-dim), transparent);
+  }
+
+  /* US OVERNIGHT */
+  .us-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .us-cell {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 12px;
+  }
+  .us-sym { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); margin-bottom: 2px; }
+  .us-val { font-family: 'DM Mono', monospace; font-size: 14px; color: #f0f4ff; font-weight: 500; }
+  .us-chg { font-family: 'DM Mono', monospace; font-size: 12px; margin-top: 2px; }
+  .pos { color: var(--green); }
+  .neg { color: var(--red); }
+  .amb { color: var(--amber); }
+
+  .insight-box {
+    background: var(--bg2);
+    border-left: 3px solid var(--gold-dim);
+    padding: 12px 16px;
+    border-radius: 0 4px 4px 0;
+    font-size: 13px;
+    color: #b0bcd0;
+    line-height: 1.65;
+  }
+
+  /* RBA WATCH */
+  .rba-box {
+    background: rgba(245,158,11,0.06);
+    border: 1px solid rgba(245,158,11,0.25);
+    border-radius: 6px;
+    padding: 18px;
+  }
+  .rba-header { color: var(--amber); font-weight: 600; font-size: 13px; margin-bottom: 12px; font-family: 'DM Mono', monospace; }
+  .rba-row { display: flex; justify-content: space-between; align-items: baseline; padding: 4px 0; border-bottom: 1px solid rgba(245,158,11,0.08); font-size: 13px; }
+  .rba-label { color: var(--text-muted); }
+  .rba-val { font-family: 'DM Mono', monospace; font-size: 13px; }
+
+  /* INDEX TABLE */
+  .index-table { width: 100%; border-collapse: collapse; font-family: 'DM Mono', monospace; font-size: 12px; }
+  .index-table th { text-align: left; padding: 6px 10px; color: var(--text-muted); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+  .index-table td { padding: 9px 10px; border-bottom: 1px solid rgba(30,36,48,0.5); vertical-align: middle; }
+  .index-table tr:last-child td { border-bottom: none; }
+  .index-name { color: #f0f4ff; font-weight: 500; }
+
+  /* MACRO REGIME */
+  .regime-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+  .regime-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 14px;
+  }
+  .regime-index { color: #f0f4ff; font-weight: 500; font-size: 13px; margin-bottom: 8px; }
+  .regime-row { display: flex; justify-content: space-between; font-family: 'DM Mono', monospace; font-size: 11px; padding: 3px 0; }
+  .regime-lbl { color: var(--text-muted); }
+
+  /* BREADTH TABS */
+  .tabs { display: flex; gap: 4px; margin-bottom: 16px; }
+  .tab {
+    padding: 6px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--bg2);
+    color: var(--text-muted);
+    transition: all 0.15s;
+  }
+  .tab.active { background: rgba(201,162,39,0.12); border-color: var(--gold-dim); color: var(--gold); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .breadth-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+  .breadth-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px;
+  }
+  .bc-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .bc-val { font-family: 'DM Mono', monospace; font-size: 18px; font-weight: 500; }
+  .bc-bar-wrap { margin-top: 6px; height: 3px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden; }
+  .bc-bar { height: 100%; border-radius: 2px; transition: width 0.3s; }
+
+  /* SECTOR HEATMAP */
+  .heatmap-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: 12px;
+  }
+  .hm-label { width: 200px; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text); flex-shrink: 0; }
+  .hm-bar-wrap { flex: 1; display: flex; align-items: center; position: relative; height: 24px; }
+  .hm-axis { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,0.08); }
+  .hm-bar { height: 18px; border-radius: 2px; transition: width 0.3s; }
+  .hm-bar.pos { position: absolute; left: 50%; }
+  .hm-bar.neg { position: absolute; right: 50%; }
+  .hm-pct { width: 55px; font-family: 'DM Mono', monospace; font-size: 12px; text-align: right; flex-shrink: 0; }
+  .hm-note { color: var(--text-muted); font-size: 11px; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* RS TABLE */
+  .rs-table { width: 100%; border-collapse: collapse; font-family: 'DM Mono', monospace; font-size: 12px; }
+  .rs-table th { text-align: left; padding: 5px 8px; color: var(--text-dim); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+  .rs-table td { padding: 8px 8px; border-bottom: 1px solid rgba(30,36,48,0.5); vertical-align: middle; }
+  .rs-table tr:last-child td { border-bottom: none; }
+  .rs-sym { color: var(--gold); font-weight: 500; }
+  .rs-score { color: #f0f4ff; }
+  .rs-thin { color: var(--amber); font-size: 10px; }
+  .h-flag { color: var(--green); font-size: 10px; font-weight: 600; }
+  .rs-const { color: var(--text-dim); font-size: 10px; }
+
+  /* SMART MONEY */
+  .sm-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .sm-table th { text-align: left; padding: 5px 8px; color: var(--text-dim); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+  .sm-table td { padding: 8px 8px; border-bottom: 1px solid rgba(30,36,48,0.5); vertical-align: middle; font-family: 'DM Mono', monospace; }
+  .sm-table tr:last-child td { border-bottom: none; }
+  .sm-surge { background: rgba(34,197,94,0.06); border-left: 3px solid var(--green); }
+  .sm-surge .sm-ind { color: var(--green); }
+  .sm-ind { font-family: 'DM Sans', sans-serif; font-size: 12px; color: #e2e8f0; }
+  .sm-arrow-up { color: var(--green); }
+  .sm-arrow-dn { color: var(--red); }
+  .sm-arrow-flat { color: var(--text-muted); }
+  .sm-roc { color: var(--green); }
+  .sm-rank { color: var(--text-muted); font-size: 11px; }
+
+  /* FX COMMODITIES */
+  .fx-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+  .fx-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 14px;
+  }
+  .fx-sym { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+  .fx-val { font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 500; color: #f0f4ff; }
+  .fx-chg { font-family: 'DM Mono', monospace; font-size: 11px; margin-top: 2px; }
+  .fx-note { font-size: 11px; color: var(--text-muted); margin-top: 4px; line-height: 1.4; }
+
+  /* HEADLINES */
+  .headline-item {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+  }
+  .headline-tag { font-size: 10px; color: var(--gold); font-family: 'DM Mono', monospace; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .headline-text { font-size: 13px; color: #b0bcd0; line-height: 1.6; }
+
+  /* CALLOUT */
+  .callout {
+    background: rgba(34,197,94,0.05);
+    border-left: 3px solid var(--green);
+    padding: 10px 14px;
+    border-radius: 0 4px 4px 0;
+    margin: 10px 0;
+    font-size: 12px;
+    color: #a0b8c0;
+  }
+  .callout.amber { background: rgba(245,158,11,0.05); border-color: var(--amber); }
+  .callout.red { background: rgba(239,68,68,0.05); border-color: var(--red); }
+
+  /* FOOTER */
+  .footer {
+    padding: 20px 32px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    border-top: 1px solid var(--border);
+    line-height: 1.8;
+  }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: linear-gradient(to right, transparent, var(--border), transparent); margin: 12px 0; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-title">🇦🇺 ASX Market Summary</div>
+  <div class="header-date">Thursday, 21 May 2026</div>
+  <div class="header-ticker-bar">
+    <div class="ticker-item">
+      <span class="ticker-sym">XJO</span>
+      <span class="ticker-val">8,621.7</span>
+      <span class="ticker-chg pos">+1.47%</span>
+    </div>
+    <div class="ticker-item">
+      <span class="ticker-sym">XAO</span>
+      <span class="ticker-val">8,840.8</span>
+      <span class="ticker-chg pos">+1.42%</span>
+    </div>
+    <div class="ticker-item">
+      <span class="ticker-sym">XTO</span>
+      <span class="ticker-val">7,226.3</span>
+      <span class="ticker-chg pos">+1.47%</span>
+    </div>
+    <div class="ticker-item">
+      <span class="ticker-sym">XSO</span>
+      <span class="ticker-val">3,374.6</span>
+      <span class="ticker-chg pos">positive</span>
+    </div>
+    <div class="ticker-item">
+      <span class="ticker-sym">AUD/USD</span>
+      <span class="ticker-val">0.7149</span>
+      <span class="ticker-chg pos">+0.56%</span>
+    </div>
+    <div class="ticker-item">
+      <span class="ticker-sym">GOLD</span>
+      <span class="ticker-val">$4,543</span>
+      <span class="ticker-chg pos">+1.38%</span>
+    </div>
+  </div>
+  <div class="badge-row">
+    <span class="badge badge-bear">XJO Bearish</span>
+    <span class="badge badge-bear">XAO Bearish</span>
+    <span class="badge badge-neutral">XSO Neutral Bear</span>
+    <span class="badge badge-teal">Jobs Miss → RBA Hold</span>
+    <span class="badge badge-gold">NVDA Beat</span>
+    <span class="badge badge-blue">WTI &lt;$100 — Iran Deal</span>
+  </div>
+</div>
+
+<!-- US OVERNIGHT -->
+<div class="section">
+  <div class="section-title">🇺🇸 US Overnight Wrap — ASX Open Signal (20/05/26)</div>
+  <div class="us-grid">
+    <div class="us-cell">
+      <div class="us-sym">SPX</div>
+      <div class="us-val">7,432.97</div>
+      <div class="us-chg pos">+1.08%</div>
+    </div>
+    <div class="us-cell">
+      <div class="us-sym">NDX</div>
+      <div class="us-val">26,270</div>
+      <div class="us-chg pos">+1.54%</div>
+    </div>
+    <div class="us-cell">
+      <div class="us-sym">DJI</div>
+      <div class="us-val">50,009</div>
+      <div class="us-chg pos">+1.31% ↑50K</div>
+    </div>
+    <div class="us-cell">
+      <div class="us-sym">VIX</div>
+      <div class="us-val">17.44</div>
+      <div class="us-chg pos">-3.43%</div>
+    </div>
+    <div class="us-cell">
+      <div class="us-sym">WTI</div>
+      <div class="us-val">$98.26</div>
+      <div class="us-chg pos">-5.66% ⬇SUB-$100</div>
+    </div>
+    <div class="us-cell">
+      <div class="us-sym">BRENT</div>
+      <div class="us-val">$105.02</div>
+      <div class="us-chg pos">-5.63%</div>
+    </div>
+    <div class="us-cell" style="background:rgba(34,197,94,0.05); border-color:rgba(34,197,94,0.2);">
+      <div class="us-sym">NVDA Q1 REV</div>
+      <div class="us-val" style="font-size:12px;">$81.62B</div>
+      <div class="us-chg pos">+85% YoY BEAT</div>
+    </div>
+    <div class="us-cell" style="background:rgba(34,197,94,0.05); border-color:rgba(34,197,94,0.2);">
+      <div class="us-sym">NVDA Q2 GUIDE</div>
+      <div class="us-val" style="font-size:12px;">$91B</div>
+      <div class="us-chg pos">vs $87.4B exp</div>
+    </div>
+  </div>
+  <div class="insight-box">
+    The dominant overnight driver was <strong style="color:#f0f4ff;">WTI -5.66% to $98.26</strong> — the first sub-$100 close in weeks — on Trump's "final stages" Iran deal language and confirmed supertanker Hormuz transits. For Australia, sub-$100 WTI directly weakens the RBA's energy-driven CPI assumptions, removing the primary justification for further tightening beyond the two hikes already delivered in 2026.<br><br>
+    Nvidia's Q1 FY27 results were a clean beat: revenue $81.62B (+85% YoY) vs $79.19B expected, EPS $1.87 vs $1.77. Q2 guidance $91B vs $87.4B consensus — a $3.6B beat. Data Center hit $75.2B (+92% YoY). Despite strong numbers, NVDA futures slipped marginally post-close — the classic "meet perfection" dynamic. For ASX: the four largest hyperscalers have collectively committed $725B in capex for 2026 (+77% YoY). <strong style="color:#f0f4ff;">NXT (Nextdc) and MP1 (Megaport)</strong> are the primary ASX beneficiaries of the confirmed AI infrastructure super-cycle.
+  </div>
+</div>
+
+<!-- RBA WATCH -->
+<div class="section">
+  <div class="section-title">⚠️ RBA Watch — June Meeting Risk Profile</div>
+  <div class="rba-box">
+    <div class="rba-header">⚠ RATE ENVIRONMENT — JUNE MEETING (3 JUNE 2026)</div>
+    <div class="rba-row">
+      <span class="rba-label">Current Cash Rate</span>
+      <span class="rba-val" style="color:#f0f4ff;">4.10% (2 hikes in 2026: Feb + Mar)</span>
+    </div>
+    <div class="rba-row">
+      <span class="rba-label">June Hike Probability</span>
+      <span class="rba-val" style="color:var(--green);">~15% (WAS ~60% BEFORE TODAY)</span>
+    </div>
+    <div class="rba-row">
+      <span class="rba-label">Apr Unemployment</span>
+      <span class="rba-val" style="color:var(--amber);">4.5% (vs 4.3% exp) — 4.5yr high</span>
+    </div>
+    <div class="rba-row">
+      <span class="rba-label">Mar CPI</span>
+      <span class="rba-val" style="color:var(--red);">4.6% — 160bp above 3% target ceiling</span>
+    </div>
+    <div class="rba-row">
+      <span class="rba-label">WTI Overnight</span>
+      <span class="rba-val" style="color:var(--green);">$98.26 — below $100; removes energy inflation premium</span>
+    </div>
+    <div class="rba-row">
+      <span class="rba-label">Analyst Consensus</span>
+      <span class="rba-val" style="color:#f0f4ff;">CBA: cut growth 1.6%; OxEco: peak UE 4.8% late 2027</span>
+    </div>
+    <div style="margin-top:12px; font-size:12px; color:#9ab0b8; line-height:1.6;">
+      Today's jobs print fundamentally changed the June calculus. The unemployment surge (4.5% vs 4.3%, employment -19,000) validates the RBA board's growing concern about activity slowdown flagged in the May minutes. State Street economist: <em>"Validates the RBA's inclination to hold in June and raises the bar significantly for any change."</em> Inflation remains the primary concern at 4.6%, but a 15% hike probability means the market has effectively priced June as a hold. The two 2026 hikes (Feb + Mar) may now represent the cycle peak.
+    </div>
+  </div>
+</div>
+
+<!-- MACRO REGIME -->
+<div class="section">
+  <div class="section-title">📡 Macro Regime Snapshot</div>
+  <div class="regime-grid">
+    <div class="regime-card">
+      <div class="regime-index">XJO — ASX 200</div>
+      <div class="regime-row"><span class="regime-lbl">Regime</span><span style="color:var(--red); font-weight:600;">Bearish</span></div>
+      <div class="regime-row"><span class="regime-lbl">5day Trend</span><span style="color:var(--red);">Down</span></div>
+      <div class="regime-row"><span class="regime-lbl">20day Trend</span><span style="color:var(--red);">Down</span></div>
+      <div class="regime-row"><span class="regime-lbl">RSI-15</span><span style="color:var(--amber);">45.90</span></div>
+      <div class="regime-row"><span class="regime-lbl">vs 50MA</span><span style="color:var(--red);">-0.87%</span></div>
+      <div class="regime-row"><span class="regime-lbl">vs 200MA</span><span style="color:var(--red);">-2.06%</span></div>
+    </div>
+    <div class="regime-card">
+      <div class="regime-index">XAO — All Ords</div>
+      <div class="regime-row"><span class="regime-lbl">Regime</span><span style="color:var(--red); font-weight:600;">Bearish</span></div>
+      <div class="regime-row"><span class="regime-lbl">5day Trend</span><span style="color:var(--red);">Down</span></div>
+      <div class="regime-row"><span class="regime-lbl">20day Trend</span><span style="color:var(--red);">Down</span></div>
+      <div class="regime-row"><span class="regime-lbl">RSI-15</span><span style="color:var(--amber);">45.55</span></div>
+      <div class="regime-row"><span class="regime-lbl">vs 50MA</span><span style="color:var(--red);">-0.82%</span></div>
+      <div class="regime-row"><span class="regime-lbl">vs 200MA</span><span style="color:var(--red);">-2.54%</span></div>
+    </div>
+    <div class="regime-card">
+      <div class="regime-index">XTO — ASX 100</div>
+      <div class="regime-row"><span class="regime-lbl">Regime</span><span style="color:var(--red); font-weight:600;">Bearish</span></div>
+      <div class="regime-row"><span class="regime-lbl">5day Trend</span><span style="color:var(--red);">Down</span></div>
+      <div class="regime-row"><span class="regime-lbl">20day Trend</span><span style="color:var(--red);">Down</span></div>
+      <div class="regime-row"><span class="regime-lbl">RSI-15</span><span style="color:var(--amber);">46.57</span></div>
+      <div class="regime-row"><span class="regime-lbl">vs 50MA</span><span style="color:var(--red);">-0.75%</span></div>
+      <div class="regime-row"><span class="regime-lbl">vs 200MA</span><span style="color:var(--red);">-1.54%</span></div>
+    </div>
+    <div class="regime-card">
+      <div class="regime-index">XSO — Small Ords</div>
+      <div class="regime-row"><span class="regime-lbl">Regime</span><span style="color:var(--amber); font-weight:600;">Neutral Bear</span></div>
+      <div class="regime-row"><span class="regime-lbl">5day Trend</span><span style="color:var(--red);">Down</span></div>
+      <div class="regime-row"><span class="regime-lbl">20day Trend</span><span style="color:var(--red);">Down</span></div>
+      <div class="regime-row"><span class="regime-lbl">RSI-15</span><span style="color:var(--amber);">42.37</span></div>
+      <div class="regime-row"><span class="regime-lbl">vs 50MA</span><span style="color:var(--red);">-1.69%</span></div>
+      <div class="regime-row"><span class="regime-lbl">vs 200MA</span><span style="color:var(--red);">-7.89%</span></div>
+    </div>
+  </div>
+  <div class="callout amber" style="margin-top:12px;">
+    All four indices are in 5day AND 20day downtrends. XJO, XAO, and XTO have moved to a full <strong>Bearish</strong> regime (10MA &lt; 20MA &lt; 50MA all aligned bearish) — a deterioration from last session's Neutral Bear readings. XSO "Neutral Bear" preserves partial medium-term structure (20MA &gt; 50MA) but small-caps' -7.89% gap to 200MA reveals the deepest structural damage. Today's bounce is the right response to the right catalyst — but regime reversal requires reclaiming 50MA (8,690) as a minimum threshold.
+  </div>
+</div>
+
+<!-- INDEX PERFORMANCE -->
+<div class="section">
+  <div class="section-title">📊 Index Performance — 21/05/26</div>
+  <table class="index-table">
+    <thead>
+      <tr>
+        <th>INDEX</th><th>CLOSE</th><th>1DAY</th><th>5DAY</th><th>20DAY</th>
+        <th>REGIME</th><th>RSI-15</th><th>ROC-15</th><th>vs 50MA</th><th>vs 200MA</th><th>VOLATILITY</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="index-name">XJO ASX 200</td>
+        <td class="mono">8,621.7</td>
+        <td class="pos">+1.47%</td>
+        <td class="neg">Down</td>
+        <td class="neg">Down</td>
+        <td style="color:var(--red);">Bearish</td>
+        <td class="mono amb">45.90</td>
+        <td class="mono neg">-0.51</td>
+        <td class="mono neg">-0.87%</td>
+        <td class="mono neg">-2.06%</td>
+        <td style="color:var(--text-muted);">Normal</td>
+      </tr>
+      <tr>
+        <td class="index-name">XAO All Ords</td>
+        <td class="mono">8,840.8</td>
+        <td class="pos">+1.42%</td>
+        <td class="neg">Down</td>
+        <td class="neg">Down</td>
+        <td style="color:var(--red);">Bearish</td>
+        <td class="mono amb">45.55</td>
+        <td class="mono neg">-0.53</td>
+        <td class="mono neg">-0.82%</td>
+        <td class="mono neg">-2.54%</td>
+        <td style="color:var(--text-muted);">Normal</td>
+      </tr>
+      <tr>
+        <td class="index-name">XTO ASX 100</td>
+        <td class="mono">7,226.3</td>
+        <td class="pos">+1.47%</td>
+        <td class="neg">Down</td>
+        <td class="neg">Down</td>
+        <td style="color:var(--red);">Bearish</td>
+        <td class="mono amb">46.57</td>
+        <td class="mono neg">-0.34</td>
+        <td class="mono neg">-0.75%</td>
+        <td class="mono neg">-1.54%</td>
+        <td style="color:var(--text-muted);">Normal</td>
+      </tr>
+      <tr>
+        <td class="index-name">XSO Small Ords</td>
+        <td class="mono">3,374.6</td>
+        <td class="pos">positive</td>
+        <td class="neg">Down</td>
+        <td class="neg">Down</td>
+        <td style="color:var(--amber);">Neutral Bear</td>
+        <td class="mono amb">42.37</td>
+        <td class="mono neg">-1.73</td>
+        <td class="mono neg">-1.69%</td>
+        <td class="mono neg">-7.89%</td>
+        <td style="color:var(--text-muted);">Normal</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SESSION SUMMARY -->
+<div class="section">
+  <div class="section-title">📝 Session Summary</div>
+  <p style="color:#b0bcd0; line-height:1.7; margin-bottom:12px;">
+    Thursday 21 May delivered the ASX 200's strongest session in recent weeks with a +1.47% advance to 8,621.7 — but the engine was data, not global risk appetite alone. April's unemployment print came in at 4.5%, a 4.5-year high and 20 basis points above the 4.3% consensus, triggering an immediate and dramatic repricing of RBA June meeting expectations: hike probability collapsed from approximately 60% to just 15%. This is the single most consequential piece of domestic macro data since the March CPI print drove rates expectations in the opposite direction three weeks ago.
+  </p>
+  <p style="color:#b0bcd0; line-height:1.7; margin-bottom:12px;">
+    The market's "bad news is good news" interpretation was textbook rate-sensitive logic — and the sector ordering told the story precisely. Financials surged +1.45%, the same sector that led declines on every prior RBA anxiety session. REITs +2.21% were the second-strongest sector. When REITs and Financials rally simultaneously, the market is explicitly pricing out imminent rate action. Both sectors face structural headwinds at 4.35%+ and have been the largest underperformers all year. One weak jobs print does not end the RBA's tightening bias — inflation at 4.6% remains 160bp above the target ceiling — but it removes the immediate trigger pressure and leaves the two 2026 hikes potentially representing the cycle peak.
+  </p>
+  <p style="color:#b0bcd0; line-height:1.7; margin-bottom:12px;">
+    WTI crude -5.66% overnight to sub-$100 provided the second structural pillar. Iran deal proximity removes the energy inflation premium that has been embedded in RBA models since February when the Hormuz blockade began. Sub-$100 WTI structurally changes the RBA's inputs for its June review — energy costs have been the most persistent driver of above-band CPI and the primary justification for continued tightening. With oil retreating and unemployment rising, the June meeting is now almost certainly a hold.
+  </p>
+  <p style="color:#b0bcd0; line-height:1.7; margin-bottom:12px;">
+    The Nvidia beat — revenue $81.62B (+85% YoY) vs $79.19B expected, Q2 guidance $91B vs $87.4B consensus — was the third tailwind. WBT (Weebit Nano) +12.98% [H] is the cleanest ASX expression of the confirmed Blackwell architecture demand cycle. The four largest hyperscalers have committed $725B in combined AI capex for 2026, up 77% year-on-year. That figure does not have a slowdown narrative attached to it.
+  </p>
+  <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;">
+    <span style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.25); padding:4px 10px; border-radius:3px; font-size:11px; color:var(--red); font-family:'DM Mono',monospace;">⚠ XJO below 50MA (-0.87%) + 200MA (-2.06%)</span>
+    <span style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.25); padding:4px 10px; border-radius:3px; font-size:11px; color:var(--red); font-family:'DM Mono',monospace;">⚠ XAO 20d Highs=27 Lows=28 — no breadth follow-through</span>
+    <span style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.25); padding:4px 10px; border-radius:3px; font-size:11px; color:var(--red); font-family:'DM Mono',monospace;">⚠ XSO -7.89% vs 200MA — structural small-cap damage</span>
+    <span style="background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.25); padding:4px 10px; border-radius:3px; font-size:11px; color:var(--green); font-family:'DM Mono',monospace;">✅ XJO Adv/Dec 157/37 (4.2:1)</span>
+    <span style="background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.25); padding:4px 10px; border-radius:3px; font-size:11px; color:var(--green); font-family:'DM Mono',monospace;">✅ RBA hike prob: 60% → 15%</span>
+    <span style="background:rgba(201,162,39,0.1); border:1px solid rgba(201,162,39,0.25); padding:4px 10px; border-radius:3px; font-size:11px; color:var(--gold); font-family:'DM Mono',monospace;">🔥 WBT +12.98% [H] | CAT.au +10.91% [H] | ELV +9.30% | IGO +7.46%</span>
+  </div>
+</div>
+
+<!-- MARKET BREADTH -->
+<div class="section">
+  <div class="section-title">📈 Market Breadth</div>
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('xjo')">XJO</div>
+    <div class="tab" onclick="showTab('xao')">XAO</div>
+    <div class="tab" onclick="showTab('xto')">XTO</div>
+    <div class="tab" onclick="showTab('xso')">XSO</div>
+  </div>
+
+  <div id="tab-xjo" class="tab-content active">
+    <div class="breadth-grid">
+      <div class="breadth-card">
+        <div class="bc-label">Advancers</div>
+        <div class="bc-val" style="color:var(--green);">157</div>
+      </div>
+      <div class="breadth-card">
+        <div class="bc-label">Decliners</div>
+        <div class="bc-val" style="color:var(--red);">37</div>
+      </div>
+      <div class="breadth-card" style="border-color:rgba(34,197,94,0.3);">
+        <div class="bc-label">Adv/Dec Ratio</div>
+        <div class="bc-val" style="color:var(--green);">4.2:1</div>
+      </div>
+      <div class="breadth-card">
+        <div class="bc-label">+4% Today</div>
+        <div class="bc-val" style="color:var(--green);">13</div>
+      </div>
+      <div class="breadth-card">
+        <div class="bc-label">-4% Today</div>
+        <div class="bc-val" style="color:var(--green);">1</div>
+      </div>
+      <div class="breadth-card">
+        <div class="bc-label">Above 20MA</div>
+        <div class="bc-val" style="color:var(--red);">41.5%</div>
+        <div class="bc-bar-wrap"><div class="bc-bar" style="width:41.5%;background:var(--red);"></div></div>
+      </div>
+      <div class="breadth-card">
+        <div class="bc-label">Above 50MA</div>
+        <div class="bc-val" style="color:var(--amber);">44.5%</div>
+        <div class="bc-bar-wrap"><div class="bc-bar" style="width:44.5%;background:var(--amber);"></div></div>
+      </div>
+      <div class="breadth-card">
+        <div class="bc-label">Above 200MA</div>
+        <div class="bc-val" style="color:var(--red);">36.5%</div>
+        <div class="bc-bar-wrap"><div class="bc-bar" style="width:36.5%;background:var(--red);"></div></div>
+      </div>
+      <div class="breadth-card">
+        <div class="bc-label">T2108 (40d MA)</div>
+        <div class="bc-val" style="color:var(--amber);">45.0%</div>
+        <div class="bc-bar-wrap"><div class="bc-bar" style="width:45%;background:var(--amber);"></div></div>
+      </div>
+      <div class="breadth-card">
+        <div class="bc-label">20d Highs</div>
+        <div class="bc-val" style="color:var(--green);">15</div>
+      </div>
+      <div class="breadth-card">
+        <div class="bc-label">20d Lows</div>
+        <div class="bc-val" style="color:var(--green);">6</div>
+      </div>
+      <div class="breadth-card">
+        <div class="bc-label">QTR +25%</div>
+        <div class="bc-val" style="color:var(--green);">35</div>
+      </div>
+      <div class="breadth-card">
+        <div class="bc-label">QTR -25%</div>
+        <div class="bc-val" style="color:var(--red);">43</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-xao" class="tab-content">
+    <div class="breadth-grid">
+      <div class="breadth-card"><div class="bc-label">Advancers</div><div class="bc-val" style="color:var(--green);">349</div></div>
+      <div class="breadth-card"><div class="bc-label">Decliners</div><div class="bc-val" style="color:var(--red);">98</div></div>
+      <div class="breadth-card" style="border-color:rgba(34,197,94,0.3);"><div class="bc-label">Adv/Dec Ratio</div><div class="bc-val" style="color:var(--green);">3.6:1</div></div>
+      <div class="breadth-card"><div class="bc-label">+4% Today</div><div class="bc-val" style="color:var(--green);">32</div></div>
+      <div class="breadth-card"><div class="bc-label">-4% Today</div><div class="bc-val" style="color:var(--red);">7</div></div>
+      <div class="breadth-card"><div class="bc-label">Above 20MA</div><div class="bc-val" style="color:var(--red);">32.8%</div><div class="bc-bar-wrap"><div class="bc-bar" style="width:32.8%;background:var(--red);"></div></div></div>
+      <div class="breadth-card"><div class="bc-label">Above 50MA</div><div class="bc-val" style="color:var(--red);">38.5%</div><div class="bc-bar-wrap"><div class="bc-bar" style="width:38.5%;background:var(--red);"></div></div></div>
+      <div class="breadth-card"><div class="bc-label">Above 200MA</div><div class="bc-val" style="color:var(--red);">34.6%</div><div class="bc-bar-wrap"><div class="bc-bar" style="width:34.6%;background:var(--red);"></div></div></div>
+      <div class="breadth-card"><div class="bc-label">T2108 (40d MA)</div><div class="bc-val" style="color:var(--red);">38.5%</div><div class="bc-bar-wrap"><div class="bc-bar" style="width:38.5%;background:var(--red);"></div></div></div>
+      <div class="breadth-card"><div class="bc-label">20d Highs</div><div class="bc-val" style="color:var(--amber);">27</div></div>
+      <div class="breadth-card"><div class="bc-label">20d Lows</div><div class="bc-val" style="color:var(--amber);">28</div></div>
+      <div class="breadth-card"><div class="bc-label">QTR +25%</div><div class="bc-val" style="color:var(--green);">95</div></div>
+      <div class="breadth-card"><div class="bc-label">QTR -25%</div><div class="bc-val" style="color:var(--red);">139</div></div>
+    </div>
+    <div class="callout amber" style="margin-top:10px; font-size:11px;">XAO 20d Highs (27) ≈ 20d Lows (28) — effectively dead even. Breadth has not confirmed the bounce at the All-Ords level. The improving participation in XJO (4.2:1 ratio, 15 highs vs 6 lows) is more encouraging than the broader market signal.</div>
+  </div>
+
+  <div id="tab-xto" class="tab-content">
+    <div class="breadth-grid">
+      <div class="breadth-card"><div class="bc-label">Advancers</div><div class="bc-val" style="color:var(--green);">77</div></div>
+      <div class="breadth-card"><div class="bc-label">Decliners</div><div class="bc-val" style="color:var(--red);">21</div></div>
+      <div class="breadth-card" style="border-color:rgba(34,197,94,0.3);"><div class="bc-label">Adv/Dec Ratio</div><div class="bc-val" style="color:var(--green);">3.7:1</div></div>
+      <div class="breadth-card"><div class="bc-label">+4% Today</div><div class="bc-val" style="color:var(--green);">4</div></div>
+      <div class="breadth-card"><div class="bc-label">-4% Today</div><div class="bc-val" style="color:var(--green);">0</div></div>
+      <div class="breadth-card"><div class="bc-label">Above 20MA</div><div class="bc-val" style="color:var(--amber);">51%</div><div class="bc-bar-wrap"><div class="bc-bar" style="width:51%;background:var(--amber);"></div></div></div>
+      <div class="breadth-card"><div class="bc-label">Above 50MA</div><div class="bc-val" style="color:var(--amber);">48%</div><div class="bc-bar-wrap"><div class="bc-bar" style="width:48%;background:var(--amber);"></div></div></div>
+      <div class="breadth-card"><div class="bc-label">Above 200MA</div><div class="bc-val" style="color:var(--red);">38%</div><div class="bc-bar-wrap"><div class="bc-bar" style="width:38%;background:var(--red);"></div></div></div>
+      <div class="breadth-card"><div class="bc-label">T2108 (40d MA)</div><div class="bc-val" style="color:var(--amber);">47%</div><div class="bc-bar-wrap"><div class="bc-bar" style="width:47%;background:var(--amber);"></div></div></div>
+      <div class="breadth-card"><div class="bc-label">20d Highs</div><div class="bc-val" style="color:var(--green);">8</div></div>
+      <div class="breadth-card"><div class="bc-label">20d Lows</div><div class="bc-val" style="color:var(--green);">3</div></div>
+    </div>
+  </div>
+
+  <div id="tab-xso" class="tab-content">
+    <div class="breadth-grid">
+      <div class="breadth-card"><div class="bc-label">Advancers</div><div class="bc-val" style="color:var(--green);">125</div></div>
+      <div class="breadth-card"><div class="bc-label">Decliners</div><div class="bc-val" style="color:var(--red);">25</div></div>
+      <div class="breadth-card" style="border-color:rgba(34,197,94,0.3);"><div class="bc-label">Adv/Dec Ratio</div><div class="bc-val" style="color:var(--green);">5.0:1</div></div>
+      <div class="breadth-card"><div class="bc-label">+4% Today</div><div class="bc-val" style="color:var(--green);">13</div></div>
+      <div class="breadth-card"><div class="bc-label">-4% Today</div><div class="bc-val" style="color:var(--red);">2</div></div>
+      <div class="breadth-card"><div class="bc-label">Above 20MA</div><div class="bc-val" style="color:var(--red);">32.3%</div><div class="bc-bar-wrap"><div class="bc-bar" style="width:32.3%;background:var(--red);"></div></div></div>
+      <div class="breadth-card"><div class="bc-label">Above 50MA</div><div class="bc-val" style="color:var(--red);">36.1%</div><div class="bc-bar-wrap"><div class="bc-bar" style="width:36.1%;background:var(--red);"></div></div></div>
+      <div class="breadth-card"><div class="bc-label">Above 200MA</div><div class="bc-val" style="color:var(--red);">31.6%</div><div class="bc-bar-wrap"><div class="bc-bar" style="width:31.6%;background:var(--red);"></div></div></div>
+      <div class="breadth-card"><div class="bc-label">T2108 (40d MA)</div><div class="bc-val" style="color:var(--red);">39.4%</div><div class="bc-bar-wrap"><div class="bc-bar" style="width:39.4%;background:var(--red);"></div></div></div>
+      <div class="breadth-card"><div class="bc-label">20d Highs</div><div class="bc-val" style="color:var(--amber);">9</div></div>
+      <div class="breadth-card"><div class="bc-label">20d Lows</div><div class="bc-val" style="color:var(--amber);">9</div></div>
+    </div>
+    <div class="callout red" style="margin-top:10px; font-size:11px;">XSO -7.89% vs 200MA is the deepest structural damage in the index family. Despite a strong 5.0:1 Adv/Dec ratio today, only 31.6% of small-caps are above their 200MA — the most rate-sensitive segment of the market has absorbed the most accumulated damage from the 2026 hike cycle.</div>
+  </div>
+</div>
+
+<!-- SECTOR HEATMAP -->
+<div class="section">
+  <div class="section-title">🌡️ Sector Heatmap — 1day (ASX 200 | 7c sheet)</div>
+  <div style="max-width:900px;">
+    <!-- Materials XMJ +2.56% -->
+    <div class="heatmap-row">
+      <div class="hm-label">Materials XMJ</div>
+      <div class="hm-bar-wrap">
+        <div class="hm-axis"></div>
+        <div class="hm-bar pos" style="width:calc(2.56/3*48%);background:#166534;top:3px;"></div>
+      </div>
+      <div class="hm-pct pos">+2.56%</div>
+      <div class="hm-note">ELV +9.3%, MIN +2.9%, PLS +2.2%; lithium complex sustained</div>
+    </div>
+    <!-- Real Estate XRE +2.21% -->
+    <div class="heatmap-row">
+      <div class="hm-label">Real Estate XRE</div>
+      <div class="hm-bar-wrap">
+        <div class="hm-axis"></div>
+        <div class="hm-bar pos" style="width:calc(2.21/3*48%);background:#166534;top:3px;"></div>
+      </div>
+      <div class="hm-pct pos">+2.21%</div>
+      <div class="hm-note">Most direct rate-relief expression; RBA hike odds → 15%</div>
+    </div>
+    <!-- Industrials XNJ +1.62% -->
+    <div class="heatmap-row">
+      <div class="hm-label">Industrials XNJ</div>
+      <div class="hm-bar-wrap">
+        <div class="hm-axis"></div>
+        <div class="hm-bar pos" style="width:calc(1.62/3*48%);background:#15803d;top:3px;"></div>
+      </div>
+      <div class="hm-pct pos">+1.62%</div>
+      <div class="hm-note">SIQ [H] +0.43%, SSM +1.33%; employment services + construction</div>
+    </div>
+    <!-- Financials XFJ +1.45% -->
+    <div class="heatmap-row">
+      <div class="hm-label">Financials XFJ</div>
+      <div class="hm-bar-wrap">
+        <div class="hm-axis"></div>
+        <div class="hm-bar pos" style="width:calc(1.45/3*48%);background:#15803d;top:3px;"></div>
+      </div>
+      <div class="hm-pct pos">+1.45%</div>
+      <div class="hm-note">AMP [H] +1.59%, IFT [H] +4.61%; rate relief sponsorship confirmed</div>
+    </div>
+    <!-- Cons. Disc XDJ +1.29% -->
+    <div class="heatmap-row">
+      <div class="hm-label">Cons. Disc. XDJ</div>
+      <div class="hm-bar-wrap">
+        <div class="hm-axis"></div>
+        <div class="hm-bar pos" style="width:calc(1.29/3*48%);background:#15803d;top:3px;"></div>
+      </div>
+      <div class="hm-pct pos">+1.29%</div>
+      <div class="hm-note">Consumer confidence lift on rate reprieve thesis</div>
+    </div>
+    <!-- Healthcare XHJ +1.17% -->
+    <div class="heatmap-row">
+      <div class="hm-label">Healthcare XHJ</div>
+      <div class="hm-bar-wrap">
+        <div class="hm-axis"></div>
+        <div class="hm-bar pos" style="width:calc(1.17/3*48%);background:#15803d;top:3px;"></div>
+      </div>
+      <div class="hm-pct pos">+1.17%</div>
+      <div class="hm-note">EIQ (Echoiq) [H] +14.7%; Medical Equipment #5 in Smart Money</div>
+    </div>
+    <!-- Cons Staples XSJ +0.18% -->
+    <div class="heatmap-row">
+      <div class="hm-label">Cons. Staples XSJ</div>
+      <div class="hm-bar-wrap">
+        <div class="hm-axis"></div>
+        <div class="hm-bar pos" style="width:calc(0.18/3*48%);background:rgba(22,101,52,0.5);top:3px;"></div>
+      </div>
+      <div class="hm-pct pos">+0.18%</div>
+      <div class="hm-note">Near-flat; defensives rotation muted</div>
+    </div>
+    <!-- IT XIJ +0.02% -->
+    <div class="heatmap-row">
+      <div class="hm-label">Info Tech XIJ</div>
+      <div class="hm-bar-wrap">
+        <div class="hm-axis"></div>
+        <div class="hm-bar pos" style="width:calc(0.02/3*48%);background:rgba(22,101,52,0.3);top:3px;"></div>
+      </div>
+      <div class="hm-pct" style="color:var(--text-muted);">+0.02%</div>
+      <div class="hm-note">NXT +2.6%; XIJ flat despite NVDA beat — digestion session</div>
+    </div>
+    <!-- Comm Services XTJ -0.64% -->
+    <div class="heatmap-row">
+      <div class="hm-label">Comm. Services XTJ</div>
+      <div class="hm-bar-wrap">
+        <div class="hm-axis"></div>
+        <div class="hm-bar neg" style="width:calc(0.64/3*48%);background:#991b1b;top:3px;"></div>
+      </div>
+      <div class="hm-pct neg">-0.64%</div>
+      <div class="hm-note">Wireless Telco #57 Smart Money; TLS under pressure</div>
+    </div>
+    <!-- Utilities XUJ -0.67% -->
+    <div class="heatmap-row">
+      <div class="hm-label">Utilities XUJ</div>
+      <div class="hm-bar-wrap">
+        <div class="hm-axis"></div>
+        <div class="hm-bar neg" style="width:calc(0.67/3*48%);background:#991b1b;top:3px;"></div>
+      </div>
+      <div class="hm-pct neg">-0.67%</div>
+      <div class="hm-note">Defensive rotation OUT as risk appetite recovered; paradoxical red</div>
+    </div>
+    <!-- Energy XEJ -0.95% -->
+    <div class="heatmap-row">
+      <div class="hm-label">Energy XEJ</div>
+      <div class="hm-bar-wrap">
+        <div class="hm-axis"></div>
+        <div class="hm-bar neg" style="width:calc(0.95/3*48%);background:#991b1b;top:3px;"></div>
+      </div>
+      <div class="hm-pct neg">-0.95%</div>
+      <div class="hm-note">WTI -5.66%; Woodside/Santos USD revenue compression begins</div>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:14px; font-size:12px;">
+    The sector ordering is analytically precise: rate relief (XRE +2.21%, XFJ +1.45%) + commodity recovery (XMJ +2.56%) simultaneously, while Energy (XEJ -0.95%) bears the cost of that same oil drop that removes the inflation premium. REITs green + Financials green together is the clearest possible signal that the market is pricing a rate hold in June. Utilities red DESPITE the rate relief is bullish rotation confirmation — money moved from bond-proxy defensives INTO cyclicals as risk appetite spiked.
+  </div>
+</div>
+
+<!-- KEY MOVERS -->
+<div class="section">
+  <div class="section-title">⚡ Key Movers — ASX 100/200/300 (21/05/26)</div>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+    <div>
+      <div style="font-size:11px; color:var(--green); font-family:'DM Mono',monospace; letter-spacing:1px; text-transform:uppercase; margin-bottom:10px;">▲ Gainers</div>
+      <table style="width:100%; border-collapse:collapse; font-size:12px;">
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:6px 0; font-family:'DM Mono',monospace; color:var(--gold);">WBT</td>
+          <td style="padding:6px 4px; color:var(--green); font-family:'DM Mono',monospace;">+12.98% <span style="color:var(--green); font-size:10px;">[H]</span></td>
+          <td style="padding:6px 0; color:var(--text-muted); font-size:11px;">Nvidia beat direct read; Blackwell demand = WBT IP cycle</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:6px 0; font-family:'DM Mono',monospace; color:var(--gold);">CAT.au</td>
+          <td style="padding:6px 4px; color:var(--green); font-family:'DM Mono',monospace;">+10.91% <span style="color:var(--green); font-size:10px;">[H]</span></td>
+          <td style="padding:6px 0; color:var(--text-muted); font-size:11px;">FY26 EBITDA $24.7M vs $23M exp; 67% growth vs 50% guide</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:6px 0; font-family:'DM Mono',monospace; color:var(--gold);">ELV</td>
+          <td style="padding:6px 4px; color:var(--green); font-family:'DM Mono',monospace;">+9.30%</td>
+          <td style="padding:6px 0; color:var(--text-muted); font-size:11px;">Elevra Lithium; 3M +68.3%; sustained institutional RS</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:6px 0; font-family:'DM Mono',monospace; color:var(--gold);">IGO</td>
+          <td style="padding:6px 4px; color:var(--green); font-family:'DM Mono',monospace;">+7.46%</td>
+          <td style="padding:6px 0; color:var(--text-muted); font-size:11px;">Lithium/nickel complex recovery; 3M +8.6% catching up</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:6px 0; font-family:'DM Mono',monospace; color:var(--gold);">IFT</td>
+          <td style="padding:6px 4px; color:var(--green); font-family:'DM Mono',monospace;">+4.61% <span style="color:var(--green); font-size:10px;">[H]</span></td>
+          <td style="padding:6px 0; color:var(--text-muted); font-size:11px;">Infratil; Contact Energy block sale complete; structure clean</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 0; font-family:'DM Mono',monospace; color:var(--gold);">MP1</td>
+          <td style="padding:6px 4px; color:var(--green); font-family:'DM Mono',monospace;">+3.63%</td>
+          <td style="padding:6px 0; color:var(--text-muted); font-size:11px;">Megaport; hyperscaler demand confirmed via NVDA guidance</td>
+        </tr>
+      </table>
+    </div>
+    <div>
+      <div style="font-size:11px; color:var(--red); font-family:'DM Mono',monospace; letter-spacing:1px; text-transform:uppercase; margin-bottom:10px;">▼ Laggards</div>
+      <table style="width:100%; border-collapse:collapse; font-size:12px;">
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:6px 0; font-family:'DM Mono',monospace; color:var(--gold);">ZIP</td>
+          <td style="padding:6px 4px; color:var(--red); font-family:'DM Mono',monospace;">-2.73%</td>
+          <td style="padding:6px 0; color:var(--text-muted); font-size:11px;">Consumer Lending #55 in Smart Money; 3M -29.4%</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:6px 0; font-family:'DM Mono',monospace; color:var(--gold);">CPU</td>
+          <td style="padding:6px 4px; color:var(--amber); font-family:'DM Mono',monospace;">+0.96%</td>
+          <td style="padding:6px 0; color:var(--text-muted); font-size:11px;">Computershare; Professional Info Svcs #3 Smart Money</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 0; font-family:'DM Mono',monospace; color:var(--gold);">NHC</td>
+          <td style="padding:6px 4px; color:var(--amber); font-family:'DM Mono',monospace;">+0.55%</td>
+          <td style="padding:6px 0; color:var(--text-muted); font-size:11px;">New Hope Coal; Coal #45 Smart Money; energy sector drag</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- RS SPOTLIGHT -->
+<div class="section">
+  <div class="section-title">⚡ RS Spotlight — 21/05/26 (6c. 3M Movers)</div>
+  <div style="font-size:11px; color:var(--amber); font-family:'DM Mono',monospace; letter-spacing:1px; text-transform:uppercase; margin-bottom:10px; padding:6px 10px; background:rgba(245,158,11,0.05); border-radius:3px;">⚠ ALL-ASX TOP 10 — SPECULATIVE TIER (includes micro-caps)</div>
+  <table class="rs-table" style="margin-bottom:20px;">
+    <thead>
+      <tr><th>#</th><th>SYMBOL</th><th>RS</th><th>INDUSTRY</th><th>1DAY</th><th>3M</th><th>FLAG</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="mono" style="color:var(--text-muted);">1</td><td class="rs-sym">14D</td><td class="rs-score">98.96</td><td style="color:var(--text-muted); font-size:11px;">Electrical Components</td><td class="pos">+252% 3M</td><td class="pos">252%</td><td><span class="rs-thin">⚠ THIN</span></td></tr>
+      <tr><td class="mono" style="color:var(--text-muted);">2</td><td class="rs-sym">AI1</td><td class="rs-score">98.83</td><td style="color:var(--text-muted); font-size:11px;">IT Services & Consulting</td><td>—</td><td class="pos">340%</td><td><span class="rs-thin">⚠ THIN</span></td></tr>
+      <tr><td class="mono" style="color:var(--text-muted);">3</td><td class="rs-sym">OCN</td><td class="rs-score">98.70</td><td style="color:var(--text-muted); font-size:11px;">Specialty Mining</td><td>—</td><td class="pos">212%</td><td><span class="rs-thin">⚠ THIN</span></td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:12px; color:var(--text-muted); margin-bottom:16px;">Top of the All-ASX list reflects micro-cap momentum names — high ADR, sub-$200M market caps. Treat as speculative sector expression, not institutional signals.</p>
+
+  <div style="font-size:11px; color:var(--green); font-family:'DM Mono',monospace; letter-spacing:1px; text-transform:uppercase; margin-bottom:10px; padding:6px 10px; background:rgba(34,197,94,0.05); border-radius:3px;">ASX 200/300 RS LEADERS — INSTITUTIONAL GRADE</div>
+  <table class="rs-table">
+    <thead>
+      <tr><th>#</th><th>SYM</th><th>RS</th><th>INDUSTRY</th><th>1DAY</th><th>3M</th><th>INDEX</th><th>FLAG</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="mono" style="color:var(--text-muted);">1</td><td class="rs-sym">MP1</td><td class="rs-score">97.82</td><td style="font-size:11px; color:#ccc;">IT Services & Consulting</td><td class="pos">+3.63%</td><td class="pos">+73.8%</td><td class="rs-const">ASX200</td><td></td></tr>
+      <tr><td class="mono" style="color:var(--text-muted);">2</td><td class="rs-sym">WBT</td><td class="rs-score">97.19</td><td style="font-size:11px; color:#ccc;">Semiconductors</td><td class="pos">+12.98%</td><td class="pos">+38.3%</td><td class="rs-const">ASX300</td><td><span class="h-flag">[H]</span></td></tr>
+      <tr><td class="mono" style="color:var(--text-muted);">3</td><td class="rs-sym">ELV</td><td class="rs-score">96.44</td><td style="font-size:11px; color:#ccc;">Specialty Mining</td><td class="pos">+9.30%</td><td class="pos">+68.3%</td><td class="rs-const">ASX300</td><td></td></tr>
+      <tr><td class="mono" style="color:var(--text-muted);">4</td><td class="rs-sym">SIQ</td><td class="rs-score">95.43</td><td style="font-size:11px; color:#ccc;">Employment Services</td><td class="pos">+0.43%</td><td class="pos">+40.7%</td><td class="rs-const">ASX300</td><td><span class="h-flag">[H]</span></td></tr>
+      <tr><td class="mono" style="color:var(--text-muted);">5</td><td class="rs-sym">IFT</td><td class="rs-score">95.36</td><td style="font-size:11px; color:#ccc;">Investment Mgmt</td><td class="pos">+4.61%</td><td class="pos">+41.8%</td><td class="rs-const">ASX200</td><td><span class="h-flag">[H]</span></td></tr>
+      <tr><td class="mono" style="color:var(--text-muted);">6</td><td class="rs-sym">AMP</td><td class="rs-score">91.33</td><td style="font-size:11px; color:#ccc;">Diversified Investment</td><td class="pos">+1.59%</td><td class="pos">+27.6%</td><td class="rs-const">ASX200</td><td><span class="h-flag">[H]</span></td></tr>
+      <tr><td class="mono" style="color:var(--text-muted);">7</td><td class="rs-sym">CAT.au</td><td class="rs-score">88.87</td><td style="font-size:11px; color:#ccc;">Software</td><td class="pos">+10.91%</td><td class="pos">+14.6%</td><td class="rs-const">ASX300</td><td><span class="h-flag">[H]</span></td></tr>
+      <tr><td class="mono" style="color:var(--text-muted);">8</td><td class="rs-sym">MIN</td><td class="rs-score">90.83</td><td style="font-size:11px; color:#ccc;">Integrated Mining</td><td class="pos">+2.90%</td><td class="pos">+20.9%</td><td class="rs-const">ASX200</td><td></td></tr>
+      <tr><td class="mono" style="color:var(--text-muted);">9</td><td class="rs-sym">PLS</td><td class="rs-score">91.46</td><td style="font-size:11px; color:#ccc;">Integrated Mining</td><td class="pos">+2.16%</td><td class="pos">+30.5%</td><td class="rs-const">ASX200</td><td></td></tr>
+      <tr><td class="mono" style="color:var(--text-muted);">10</td><td class="rs-sym">IGO</td><td class="rs-score">82.32</td><td style="font-size:11px; color:#ccc;">Specialty Mining</td><td class="pos">+7.46%</td><td class="pos">+8.6%</td><td class="rs-const">ASX200</td><td></td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="margin-top:12px; font-size:12px;">
+    <strong>WBT [H] +12.98%</strong> is the cleanest Nvidia read-through on the ASX — a semiconductor IP company directly leveraged to the Blackwell-era memory demand cycle. Revenue $81.6B at Nvidia means chip infrastructure demand is accelerating; WBT makes the underlying IP that makes that silicon stack possible. This is causation with a 14-hour lag, not coincidence.<br><br>
+    Five [H] 20-day highs in the ASX200/300 RS list (WBT, SIQ, IFT, AMP, CAT) = institutional accumulation confirming this is not purely short-covering. The lithium complex (ELV, MIN, PLS) holding top-10 RS positions three weeks after the LTR catalyst confirms the re-rating thesis has durability.
+  </div>
+</div>
+
+<!-- SMART MONEY -->
+<div class="section">
+  <div class="section-title">🧠 Smart Money Monitor — 10day Rotation (17b sheet)</div>
+  <table class="sm-table">
+    <thead>
+      <tr><th>#</th><th>INDUSTRY</th><th>ARROW</th><th>ROC</th><th>1D AGO</th><th>5D AGO</th><th>9D AGO</th></tr>
+    </thead>
+    <tbody>
+      <tr class="sm-surge">
+        <td>1</td><td class="sm-ind">Renewable Fuels</td>
+        <td class="sm-arrow-up">↑↑ SURGE</td>
+        <td class="sm-roc">+15.32%</td>
+        <td class="sm-rank">#1</td><td class="sm-rank">#80</td><td class="sm-rank">#72</td>
+      </tr>
+      <tr class="sm-surge">
+        <td>2</td><td class="sm-ind">Semiconductors</td>
+        <td class="sm-arrow-up">↑↑ SURGE</td>
+        <td class="sm-roc">+15.14%</td>
+        <td class="sm-rank">#2</td><td class="sm-rank">#1</td><td class="sm-rank">#51</td>
+      </tr>
+      <tr>
+        <td>3</td><td class="sm-ind">Professional Information Services</td>
+        <td class="sm-arrow-up">↑</td>
+        <td class="sm-roc">+9.13%</td>
+        <td class="sm-rank">#4</td><td class="sm-rank">#34</td><td class="sm-rank">#18</td>
+      </tr>
+      <tr>
+        <td>4</td><td class="sm-ind">Insurance Funds</td>
+        <td class="sm-arrow-up">↑↑</td>
+        <td class="sm-roc">+8.38%</td>
+        <td class="sm-rank">#3</td><td class="sm-rank">#10</td><td class="sm-rank">#41</td>
+      </tr>
+      <tr>
+        <td>5</td><td class="sm-ind">Medical Equipment Supplies & Distribution</td>
+        <td class="sm-arrow-flat">→ easing</td>
+        <td class="sm-roc">+7.95%</td>
+        <td class="sm-rank">#12</td><td class="sm-rank">#14</td><td class="sm-rank">#2</td>
+      </tr>
+      <tr class="sm-surge">
+        <td>6</td><td class="sm-ind">Integrated Oil & Gas</td>
+        <td class="sm-arrow-up">↑↑ SURGE</td>
+        <td class="sm-roc">+6.55%</td>
+        <td class="sm-rank">#11</td><td class="sm-rank">#57</td><td class="sm-rank">#59</td>
+      </tr>
+      <tr class="sm-surge">
+        <td>7</td><td class="sm-ind">Appliances Tools & Housewares</td>
+        <td class="sm-arrow-up">↑↑ SURGE</td>
+        <td class="sm-roc">+3.71%</td>
+        <td class="sm-rank">#6</td><td class="sm-rank">#61</td><td class="sm-rank">#75</td>
+      </tr>
+      <tr>
+        <td>8</td><td class="sm-ind">Property & Casualty Insurance</td>
+        <td class="sm-arrow-up">↑</td>
+        <td class="sm-roc">+3.58%</td>
+        <td class="sm-rank">#9</td><td class="sm-rank">#33</td><td class="sm-rank">#40</td>
+      </tr>
+      <tr>
+        <td>9</td><td class="sm-ind">Life & Health Insurance</td>
+        <td class="sm-arrow-up">↑</td>
+        <td class="sm-roc">+3.46%</td>
+        <td class="sm-rank">#13</td><td class="sm-rank">#30</td><td class="sm-rank">#27</td>
+      </tr>
+      <tr class="sm-surge">
+        <td>10</td><td class="sm-ind">Marine Port Services</td>
+        <td class="sm-arrow-up">↑↑</td>
+        <td class="sm-roc">+3.21%</td>
+        <td class="sm-rank">#18</td><td class="sm-rank">#41</td><td class="sm-rank">#50</td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="margin-top:16px; display:flex; flex-direction:column; gap:8px;">
+    <div class="callout" style="border-color:var(--green);">
+      <strong style="color:var(--green);">Renewable Fuels #1 from #72</strong> (71-rank surge) is the most extreme Smart Money velocity in this dataset. This is not a short-term trade — it represents the Hormuz/Iran thesis permanently pulling forward the global energy transition timeline. Six months of capital allocation decisions under $110+ Brent oil don't reverse because one ceasefire is signed. The investment cycle is locked in. Watch NH3 (Clean Energy) and renewable infrastructure ETFs for institutional follow-through.
+    </div>
+    <div class="callout" style="border-color:var(--green);">
+      <strong style="color:var(--green);">Semiconductors #2 from #51</strong> — the Smart Money was pre-positioned for the Nvidia beat. The 50-rank rise in 10 sessions reflects institutional anticipation, not reaction. WBT +12.98% [H] is the ASX carrier for this theme. $725B in hyperscaler AI capex committed for 2026 (+77% YoY) means the demand curve for ASX semiconductor IP is accelerating, not plateauing.
+    </div>
+    <div class="callout amber">
+      <strong style="color:var(--amber);">Three insurance sub-industries simultaneously in top 10</strong> (Insurance Funds #4, P&C Insurance #8, Life &amp; Health #9) is structurally unusual. The rate reprieve removes reinvestment yield pressure that has suppressed insurance sector free cash flow. Globally, AIG and Chubb are running similar momentum in the US. ASX carriers: IFT [H] (indirect via investment management) and the direct insurance names.
+    </div>
+    <div class="insight-box" style="margin-top:8px;">
+      <strong style="color:#f0f4ff;">Cross-Market Correlations:</strong><br>
+      → ASX Semiconductors #2 = US semiconductors cycle confirmed via NVDA $81.6B revenue. The $91B Q2 guide is not a slowdown signal — it's $4B above the highest analyst estimates. The AI capex super-cycle has not found its ceiling.<br>
+      → ASX Marine Port Services #10 = Hormuz re-opening trade materialising. Dalrymple Bay Infrastructure raised distribution guidance today — the first direct ASX confirmation that shipping corridor expectations are resetting.<br>
+      → ASX Insurance cluster (#4, #8, #9) = global insurance sector re-rate on rate plateau. When the hiking cycle peaks, insurers benefit on both sides: reduced loss reserve discounting pressure AND duration mismatches normalise.
+    </div>
+  </div>
+</div>
+
+<!-- FX & COMMODITIES -->
+<div class="section">
+  <div class="section-title">🪙 FX, Gold & Commodities Watch <span style="color:var(--amber); font-size:10px; font-weight:400; font-family:'DM Mono',monospace;">⚠ 7d DATA 1DAY DELAYED (20/05/26)</span></div>
+  <div class="fx-grid">
+    <div class="fx-card">
+      <div class="fx-sym">AUD/USD</div>
+      <div class="fx-val">0.7149</div>
+      <div class="fx-chg pos">+0.56% (delayed)</div>
+      <div class="fx-note">5day: -1.50% · Rate reprieve likely extends AUD today. Watch for 0.72+: ~0.7% BHP/RIO revenue impact per 1¢.</div>
+    </div>
+    <div class="fx-card">
+      <div class="fx-sym">GOLD (XAUUSD)</div>
+      <div class="fx-val">$4,543</div>
+      <div class="fx-chg pos">+1.38% (delayed)</div>
+      <div class="fx-note">5day: -3.08% · Recovering as USD softens. Above $4,500 supports NST, NCM, EVN margins.</div>
+    </div>
+    <div class="fx-card">
+      <div class="fx-sym">WTI CRUDE</div>
+      <div class="fx-val">$98.26</div>
+      <div class="fx-chg pos">-5.66% (overnight)</div>
+      <div class="fx-note">BELOW $100 THRESHOLD. Iran deal "final stages." Structural inflation relief for RBA.</div>
+    </div>
+    <div class="fx-card">
+      <div class="fx-sym">BRENT CRUDE</div>
+      <div class="fx-val">$105.02</div>
+      <div class="fx-chg pos">-5.63% (overnight)</div>
+      <div class="fx-note">$85-90 normalisation would reprice Woodside/Santos by ~10-15% on earnings models.</div>
+    </div>
+    <div class="fx-card">
+      <div class="fx-sym">IRON ORE (CFR 62%)</div>
+      <div class="fx-val">$110.09</div>
+      <div class="fx-chg neg">-0.22% (delayed)</div>
+      <div class="fx-note">5day: -1.07% · Holding $110 support. Critical for BHP/FMG profitability thresholds.</div>
+    </div>
+    <div class="fx-card">
+      <div class="fx-sym">COPPER (LME)</div>
+      <div class="fx-val">$13,418/t</div>
+      <div class="fx-chg" style="color:var(--text-muted);">+0.06% (delayed)</div>
+      <div class="fx-note">5day: -4.82% · Industrial demand softness; China PMI context required.</div>
+    </div>
+    <div class="fx-card">
+      <div class="fx-sym">NICKEL (LME)</div>
+      <div class="fx-val">$18,600/t</div>
+      <div class="fx-chg neg">-1.06% (delayed)</div>
+      <div class="fx-note">Ongoing pressure; watch IGO earnings exposure.</div>
+    </div>
+    <div class="fx-card">
+      <div class="fx-sym">TIN (LME)</div>
+      <div class="fx-val">$54,200/t</div>
+      <div class="fx-chg pos">+2.65% (delayed)</div>
+      <div class="fx-note">Electronics demand; semiconductor correlation confirmed by NVDA data.</div>
+    </div>
+  </div>
+</div>
+
+<!-- KEY HEADLINES -->
+<div class="section">
+  <div class="section-title">📰 Key Headlines — 21/05/26</div>
+  <div class="headline-item">
+    <div class="headline-tag">💉 AUS JOBS / RBA PIVOT</div>
+    <div class="headline-text">April unemployment hit 4.5% — the highest since November 2021 — against the 4.3% consensus, with employment falling 19,000 in the first monthly decline in five months. Money markets immediately repriced June RBA hike odds from approximately 60% to 15%. CBA cut its 2026 growth forecast from 1.9% to 1.6% and upgraded peak unemployment to 4.6%. State Street economist: the data "validates the RBA's inclination to hold in June and raises the bar significantly for any change." Oxford Economics sees unemployment peaking at 4.8% in late 2027. The two 2026 hikes (Feb + Mar, totalling 50bp) may now represent the cycle peak.</div>
+  </div>
+  <div class="headline-item">
+    <div class="headline-tag">🤖 NVDA Q1 FY27 — RECORD QUARTER</div>
+    <div class="headline-text">Nvidia reported revenue of $81.62B (+85% YoY) against a $79.19B consensus, with non-GAAP EPS of $1.87 vs $1.77 expected. Data Center hit $75.2B (+92% YoY). Q2 guidance of $91B beat the $87.4B consensus by $3.6B. The company announced an $80B additional share buyback and raised its dividend. The four largest hyperscalers have collectively committed $725B in AI capex for 2026, up 77% year-on-year. For ASX: NXT (Nextdc) and MP1 (Megaport) are the primary institutional beneficiaries of the confirmed AI infrastructure super-cycle.</div>
+  </div>
+  <div class="headline-item">
+    <div class="headline-tag">🛢️ OIL / IRAN NORMALISATION TRADE</div>
+    <div class="headline-text">Trump described Iran deal negotiations as being in their "final stages," sending WTI down 5.66% to $98.26 — the first sub-$100 close in weeks. Three supertankers confirmed Hormuz transits. Saudi Aramco CEO had previously warned the oil market would require until 2027 to normalise if Hormuz remained blocked beyond mid-June. A deal before then compresses that timeline substantially. XEJ (-0.95%) was the only sector in the red today as ASX energy companies face structural revenue compression if Brent normalises toward $85-90.</div>
+  </div>
+  <div class="headline-item">
+    <div class="headline-tag">📊 ASX REGIME DETERIORATION</div>
+    <div class="headline-text">XJO, XAO, and XTO moved to full "Bearish" regime today (10MA &lt; 20MA &lt; 50MA all aligned bearish) — a deterioration from the prior sessions' "Neutral Bear" readings despite a 1.47% session gain. The index remains -0.87% below the 50MA and -2.06% below the 200MA. Rate reprieve is the right catalyst to arrest the decline, but regime reversal requires reclaiming 8,690 (50MA) as a minimum threshold, then 8,800 (200MA and psychological level). Regime structure reversal typically requires 3-5 sessions of sustained breadth improvement above the 50MA — one strong session is necessary but not sufficient.</div>
+  </div>
+  <div class="headline-item">
+    <div class="headline-tag">📈 KEY CORPORATE MOVERS</div>
+    <div class="headline-text">Catapult Sports (CAT.au) +10.91% [H] after FY26 management EBITDA of $24.7M beat forecasts of $23M by 8%, with 67% growth vs 50% guidance. Bell Potter retained Buy with improved price target of $4.65. Weebit Nano (WBT) +12.98% [H] as the Nvidia Q1 print directly validates ASX semiconductor IP demand. Infratil (IFT) +4.61% [H] as Contact Energy block sale completed cleanly at $9.25/share. Dalrymple Bay Infrastructure raised distribution guidance — direct confirmation of the shipping/port services recovery thesis in Smart Money.</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  LeTour Dashboard | Thursday 21 May 2026<br>
+  Data sources: RealTest · Google Sheets (7c, 7d) · Market Index · Yahoo Finance AU · ABS · CNBC · Trading Economics · Reuters AU<br>
+  ⚠ 7d commodity/FX data is 1day delayed — reflects 20/05/2026 prices<br>
+  Report generated 5–6pm AEST | ASX 4pm close data
+</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
