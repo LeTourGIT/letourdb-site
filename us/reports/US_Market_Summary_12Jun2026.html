@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>US Market Summary &mdash; 12 June 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e17;
+  --panel: #11161f;
+  --panel2: #161c28;
+  --border: #232b3a;
+  --text: #f0f4ff;
+  --muted: #7a85a0;
+  --muted2:#5a6party;
+  --accent: #5b8cff;
+  --green: #22c55e;
+  --red: #ef4444;
+  --amber: #f59e0b;
+  --font-mono: 'DM Mono', monospace;
+  --font-sans: 'DM Sans', sans-serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.muted { color: var(--muted); }
+.small { font-size: 11px; }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 20px 60px; }
+
+/* Header */
+.header {
+  border-bottom: 1px solid var(--border);
+  padding: 24px 20px 16px;
+  background: linear-gradient(180deg, #0d1320 0%, #0a0e17 100%);
+}
+.header-inner { max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px; }
+.title { font-family: var(--font-mono); font-size: 22px; font-weight: 700; letter-spacing: 1px; }
+.title .accent { color: var(--accent); }
+.subtitle { color: var(--muted); font-size: 13px; margin-top: 4px; }
+.session-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.tag { font-family: var(--font-mono); font-size: 11px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 4px; color: var(--muted); background: var(--panel); }
+
+/* Ticker bar */
+.ticker-bar {
+  background: var(--panel2);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 8px 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.ticker-track {
+  display: inline-block;
+  padding-left: 100%;
+  animation: ticker-scroll 40s linear infinite;
+}
+.ticker-sep { color: var(--muted); margin: 0 24px; }
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Section */
+.section { margin-top: 32px; }
+.section-title {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12.5px; }
+th { text-align: left; padding: 8px 10px; color: var(--muted); font-weight: 500; border-bottom: 1px solid var(--border); white-space: nowrap; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;}
+td { padding: 8px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.table-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; background: var(--panel); }
+.ticker { font-weight: 700; }
+tr.row-surge { background: rgba(34,197,94,0.06); }
+tr.row-warn { background: rgba(239,68,68,0.06); }
+tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* Macro cards */
+.macro-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 14px; }
+.macro-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+.macro-label { font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+.macro-regime { font-family: var(--font-mono); font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+.macro-row { display: flex; justify-content: space-between; font-size: 12px; padding: 3px 0; font-family: var(--font-mono); }
+
+/* Breadth tabs */
+.tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+.tab-btn {
+  font-family: var(--font-mono); font-size: 12px; padding: 8px 18px;
+  background: var(--panel); border: 1px solid var(--border); color: var(--muted);
+  cursor: pointer; border-radius: 4px; transition: all .15s;
+}
+.tab-btn.active { color: var(--accent); border-color: var(--accent); background: var(--panel2); }
+.breadth-panel { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 18px; }
+.breadth-panel.active { display: block; }
+.breadth-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 14px; }
+.bstat { background: var(--panel2); border-radius: 6px; padding: 10px 12px; }
+.bstat.wide { grid-column: span 2; }
+.blabel { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.bval { font-family: var(--font-mono); font-size: 20px; font-weight: 700; }
+.bar-track { height: 4px; background: var(--border); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 2px; }
+
+/* Sector heatmap */
+.heat-row { display: grid; grid-template-columns: 200px 1fr 70px 1fr; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.heat-label { font-family: var(--font-mono); font-size: 12.5px; font-weight: 700; }
+.heat-label .muted { font-weight: 400; font-size: 11px; display: block; }
+.heat-bar-wrap { position: relative; height: 18px; background: var(--panel2); border-radius: 3px; overflow: hidden; }
+.heat-zero { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--border); }
+.heat-bar { position: absolute; top: 2px; bottom: 2px; border-radius: 2px; }
+.heat-val { font-family: var(--font-mono); font-weight: 700; text-align: right; }
+.heat-insight { font-size: 11.5px; color: var(--muted); }
+
+/* ETF cards */
+.etf-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 14px; }
+.etf-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 14px; border-left: 3px solid var(--border); }
+.etf-card.etf-up { border-left-color: var(--green); }
+.etf-card.etf-down { border-left-color: var(--red); }
+.etf-sym { font-family: var(--font-mono); font-size: 16px; font-weight: 700; }
+.etf-name { font-size: 11px; margin: 2px 0 8px; }
+.etf-chg { font-family: var(--font-mono); font-size: 22px; font-weight: 700; }
+.etf-5d { font-size: 11px; margin-top: 4px; }
+.etf-note { font-size: 11px; color: var(--amber); margin-top: 6px; font-weight: 600; }
+
+/* Commodities/FX grid */
+.cm-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px,1fr)); gap: 12px; }
+.cm-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+.cm-sym { font-family: var(--font-mono); font-weight: 700; font-size: 13px; }
+.cm-name { font-size: 11px; margin: 2px 0 6px; }
+.cm-price { font-family: var(--font-mono); font-size: 15px; }
+.cm-chg { font-family: var(--font-mono); font-weight: 700; font-size: 14px; margin-top: 4px; }
+.cm-5d { font-size: 11px; margin-top: 2px; }
+
+/* Flags */
+.flag { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; margin-left: 4px; font-family: var(--font-mono); }
+.flag-h { background: rgba(91,140,255,0.15); color: var(--accent); }
+.flag-thin { background: rgba(245,158,11,0.15); color: var(--amber); }
+
+/* Headlines */
+.headlines-grid { display: flex; flex-direction: column; gap: 8px; }
+.headline { display: flex; gap: 10px; padding: 10px 14px; background: var(--panel); border: 1px solid var(--border); border-radius: 6px; align-items: baseline; }
+.headline-primary { border-left: 3px solid var(--accent); }
+.headline-secondary { border-left: 3px solid var(--border); }
+.headline-tertiary { border-left: 3px solid var(--border); opacity: 0.75; }
+.hl-source { font-family: var(--font-mono); font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; flex-shrink: 0; width: 80px; }
+.hl-text { font-size: 12.5px; }
+
+/* Footer */
+.footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: 11px; font-family: var(--font-mono); text-align: center; }
+
+/* Session summary */
+.summary-box { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; }
+.summary-box ul { margin: 0; padding-left: 20px; }
+.summary-box li { margin-bottom: 8px; font-size: 13px; }
+.summary-box li .hl { font-weight: 700; }
+
+@media (max-width: 700px) {
+  .heat-row { grid-template-columns: 130px 1fr 60px; }
+  .heat-insight { display: none; }
+  .bstat.wide { grid-column: span 2; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <div class="title">LETOUR<span class="accent">DB</span> &mdash; US MARKET SUMMARY</div>
+      <div class="subtitle">Session Date: Friday, 12 June 2026 &nbsp;|&nbsp; Regime: Bullish (broad-based, geopolitical-driven) &nbsp;|&nbsp; Generated from LeTour Dashboard</div>
+    </div>
+    <div class="session-tags">
+      <span class="tag">Geopolitical</span>
+      <span class="tag">Oil Reversal</span>
+      <span class="tag">Earnings Night</span>
+      <span class="tag">Sector Rotation</span>
+      <span class="tag">Semi Surge</span>
+    </div>
+  </div>
+</div>
+
+<div class="ticker-bar">
+  <div class="ticker-track">SPX 7,431.46 <span style='color:#22c55e'>+0.50%</span><span class="ticker-sep">&bull;</span>NDX 29,635.95 <span style='color:#22c55e'>+0.64%</span><span class="ticker-sep">&bull;</span>DJI 51,202.26 <span style='color:#22c55e'>+0.70%</span><span class="ticker-sep">&bull;</span>RUT 2,943.99 <span style='color:#22c55e'>+0.79%</span><span class="ticker-sep">&bull;</span>VIX 17.68 <span style='color:#22c55e'>-9.10%</span><span class="ticker-sep">&bull;</span>WTI $88.62 <span style='color:#ef4444'>-3.23%</span><span class="ticker-sep">&bull;</span>GOLD $4,239.90 <span style='color:#22c55e'>+0.45%</span><span class="ticker-sep">&bull;</span>AUD/USD 0.7043 <span style='color:#ef4444'>-0.07%</span><span class="ticker-sep">&bull;</span>IBIT $36.04 <span style='color:#ef4444'>-0.03%</span><span class="ticker-sep">&bull;</span>SPX 7,431.46 <span style='color:#22c55e'>+0.50%</span><span class="ticker-sep">&bull;</span>NDX 29,635.95 <span style='color:#22c55e'>+0.64%</span><span class="ticker-sep">&bull;</span>DJI 51,202.26 <span style='color:#22c55e'>+0.70%</span><span class="ticker-sep">&bull;</span>RUT 2,943.99 <span style='color:#22c55e'>+0.79%</span><span class="ticker-sep">&bull;</span>VIX 17.68 <span style='color:#22c55e'>-9.10%</span><span class="ticker-sep">&bull;</span>WTI $88.62 <span style='color:#ef4444'>-3.23%</span><span class="ticker-sep">&bull;</span>GOLD $4,239.90 <span style='color:#22c55e'>+0.45%</span><span class="ticker-sep">&bull;</span>AUD/USD 0.7043 <span style='color:#ef4444'>-0.07%</span><span class="ticker-sep">&bull;</span>IBIT $36.04 <span style='color:#ef4444'>-0.03%</span></div>
+</div>
+
+<div class="wrap">
+
+  <div class="section">
+    <div class="section-title">Index Performance</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr>
+          <th>Index</th><th>Close</th><th>1Day %</th><th>5day</th><th>20day</th>
+          <th>Regime</th><th>RSI-15</th><th>ROC-15</th><th>vs 50MA</th><th>vs 200MA</th><th>Volatility</th>
+        </tr></thead>
+        <tbody>
+        <tr>
+          <td class="ticker">S&P 500 <span class="muted">(SPX)</span></td>
+          <td>7,431.46</td>
+          <td style="color:#22c55e">+0.50%</td>
+          <td style="color:#ef4444">Down</td>
+          <td style="color:#ef4444">Down</td>
+          <td style="color:#f59e0b">Neutral Bull</td>
+          <td style="color:#f0f4ff">53.25</td>
+          <td style="color:#ef4444">-0.19%</td>
+          <td style="color:#22c55e">+2.47%</td>
+          <td style="color:#22c55e">+7.39%</td>
+          <td style="color:#f59e0b">Elevated &#9888;</td>
+        </tr>
+        <tr>
+          <td class="ticker">Nasdaq 100 <span class="muted">(NDX)</span></td>
+          <td>29,635.95</td>
+          <td style="color:#22c55e">+0.64%</td>
+          <td style="color:#ef4444">Down</td>
+          <td style="color:#ef4444">Down</td>
+          <td style="color:#22c55e">Bullish</td>
+          <td style="color:#f0f4ff">55.68</td>
+          <td style="color:#22c55e">+0.95%</td>
+          <td style="color:#22c55e">+5.46%</td>
+          <td style="color:#22c55e">+13.29%</td>
+          <td style="color:#f59e0b">Elevated &#9888;</td>
+        </tr>
+        <tr>
+          <td class="ticker">Dow Jones <span class="muted">(DJI)</span></td>
+          <td>51,202.26</td>
+          <td style="color:#22c55e">+0.70%</td>
+          <td style="color:#22c55e">Up</td>
+          <td style="color:#22c55e">Up</td>
+          <td style="color:#22c55e">Bullish</td>
+          <td style="color:#f0f4ff">58.45</td>
+          <td style="color:#22c55e">+1.82%</td>
+          <td style="color:#22c55e">+3.21%</td>
+          <td style="color:#22c55e">+6.20%</td>
+          <td style="color:#f59e0b">Caution &#9888;</td>
+        </tr>
+        <tr>
+          <td class="ticker">Russell 2000 <span class="muted">(RUT)</span></td>
+          <td>2,943.99</td>
+          <td style="color:#22c55e">+0.79%</td>
+          <td style="color:#22c55e">Up</td>
+          <td style="color:#22c55e">Up</td>
+          <td style="color:#22c55e">Bullish</td>
+          <td style="color:#f0f4ff">59.51</td>
+          <td style="color:#22c55e">+3.54%</td>
+          <td style="color:#22c55e">+4.89%</td>
+          <td style="color:#22c55e">+12.16%</td>
+          <td style="color:#f59e0b">Elevated &#9888;</td>
+        </tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Macro Regime Snapshot</div>
+    <div class="macro-grid">
+        <div class="macro-card">
+          <div class="macro-label">SPX &mdash; S&P 500</div>
+          <div class="macro-regime" style="color:#f59e0b">Neutral Bull</div>
+          <div class="macro-row"><span>5day</span><span style="color:#ef4444">Down</span></div>
+          <div class="macro-row"><span>20day</span><span style="color:#ef4444">Down</span></div>
+          <div class="macro-row"><span>vs 50MA</span><span style="color:#22c55e">+2.47%</span></div>
+          <div class="macro-row"><span>vs 200MA</span><span style="color:#22c55e">+7.39%</span></div>
+          <div class="macro-row"><span>RSI-15</span><span style="color:#f0f4ff">53.25</span></div>
+          <div class="macro-row"><span>Volatility</span><span style="color:#f59e0b">Elevated</span></div>
+        </div>
+        <div class="macro-card">
+          <div class="macro-label">NDX &mdash; Nasdaq 100</div>
+          <div class="macro-regime" style="color:#22c55e">Bullish</div>
+          <div class="macro-row"><span>5day</span><span style="color:#ef4444">Down</span></div>
+          <div class="macro-row"><span>20day</span><span style="color:#ef4444">Down</span></div>
+          <div class="macro-row"><span>vs 50MA</span><span style="color:#22c55e">+5.46%</span></div>
+          <div class="macro-row"><span>vs 200MA</span><span style="color:#22c55e">+13.29%</span></div>
+          <div class="macro-row"><span>RSI-15</span><span style="color:#f0f4ff">55.68</span></div>
+          <div class="macro-row"><span>Volatility</span><span style="color:#f59e0b">Elevated</span></div>
+        </div>
+        <div class="macro-card">
+          <div class="macro-label">DJI &mdash; Dow Jones</div>
+          <div class="macro-regime" style="color:#22c55e">Bullish</div>
+          <div class="macro-row"><span>5day</span><span style="color:#22c55e">Up</span></div>
+          <div class="macro-row"><span>20day</span><span style="color:#22c55e">Up</span></div>
+          <div class="macro-row"><span>vs 50MA</span><span style="color:#22c55e">+3.21%</span></div>
+          <div class="macro-row"><span>vs 200MA</span><span style="color:#22c55e">+6.20%</span></div>
+          <div class="macro-row"><span>RSI-15</span><span style="color:#f0f4ff">58.45</span></div>
+          <div class="macro-row"><span>Volatility</span><span style="color:#f59e0b">Caution</span></div>
+        </div>
+        <div class="macro-card">
+          <div class="macro-label">RUT &mdash; Russell 2000</div>
+          <div class="macro-regime" style="color:#22c55e">Bullish</div>
+          <div class="macro-row"><span>5day</span><span style="color:#22c55e">Up</span></div>
+          <div class="macro-row"><span>20day</span><span style="color:#22c55e">Up</span></div>
+          <div class="macro-row"><span>vs 50MA</span><span style="color:#22c55e">+4.89%</span></div>
+          <div class="macro-row"><span>vs 200MA</span><span style="color:#22c55e">+12.16%</span></div>
+          <div class="macro-row"><span>RSI-15</span><span style="color:#f0f4ff">59.51</span></div>
+          <div class="macro-row"><span>Volatility</span><span style="color:#f59e0b">Elevated</span></div>
+        </div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Session Summary</div>
+    <div class="summary-box">
+      <ul><li><span class='hl'>Geopolitical de-risking dominates:</span> Iran halts strikes on Israel after a fragile escalation earlier in the week — VIX collapses -9.10% (sharpest one-day vol crush of the cycle) while WTI crude falls -3.23% as Hormuz risk premium unwinds.</li><li><span class='hl'>Broad-based gains across all four indices</span> (SPX +0.50%, NDX +0.64%, DJI +0.70%, RUT +0.79%) — small caps lead, continuing the rotation into cyclicals.</li><li><span class='hl'>SPX regime anomaly:</span> downgraded to 'Neutral Bull' from 'Bullish' on 11/6 despite today's gain — 5day and 20day trends remain Down even as price rallies, a breadth-divergence flag at/near all-time highs.</li><li><span class='hl'>Semiconductor comeback fuels Technology rotation:</span> AMKR +8.71%, ONTO +6.70%, INTC +6.51%, WDC +6.35%, TER +5.72%, KLAC +5.55% (earnings beat), AMD +4.73% — Smart Money confirms with Semiconductor Equipment & Testing surging to #4 (was #87 nine days ago).</li><li><span class='hl'>Smart Money rotation extraordinarily broad:</span> 10 of the top 16 industries carry a SURGE tag, led by Marine Port Services (#1, up from #139 nine days ago) and Oil Related Services & Equipment (#2, from #131).</li><li><span class='hl'>SpaceX IPO makes history:</span> SPCX closed at ~$161 (+19%) on its Nasdaq debut, raising ~$75B in the largest IPO ever — Elon Musk becomes the world's first trillionaire on the back of the valuation.</li><li><span class='hl'>Adobe (ADBE) -6.76% despite a beat-and-raise quarter</span> — record revenue and FY26 guidance hike overshadowed by CFO Dan Durn's departure to Marvell, leaving Adobe without a permanent CEO or CFO.</li><li><span class='hl'>RS MOMO Top 20 heavily semiconductor-concentrated:</span> 10 of 20 names are semis or semi-adjacent (MXL, AXTI, ARM, MRVL, AEHR, PENG, AAOI, VSH + AMKR/ONTO/TER/KLAC in movers) — zero THIN flags in the top 20.</li><li><span class='hl'>Homebuilding cools:</span> Lennar (LEN) -4.90% on an earnings miss; the Homebuilding industry slips to #11 in Smart Money rotation (was #4 yesterday) — the only top-16 rank decliner.</li><li><span class='hl'>Materials lead sector heatmap (XLB +1.87%)</span> on a broad metals/mining surge — COPX +3.38%, SIL +3.27%, Palladium +3.46%, GDX +2.97%, REMX +2.73%.</li></ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Market Breadth</div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showBreadth('SPX', this)">S&amp;P 500</button>
+      <button class="tab-btn" onclick="showBreadth('NDX', this)">Nasdaq 100</button>
+      <button class="tab-btn" onclick="showBreadth('RUT', this)">Russell 2000</button>
+      <button class="tab-btn" onclick="showBreadth('DJI', this)">Dow Jones</button>
+    </div>
+    
+    <div class="breadth-panel active" data-panel="SPX">
+      <div class="breadth-grid">
+        <div class="bstat"><div class="blabel">Advancers</div><div class="bval" style="color:#22c55e">396</div></div>
+        <div class="bstat"><div class="blabel">Decliners</div><div class="bval" style="color:#ef4444">104</div></div>
+        <div class="bstat"><div class="blabel">Stocks +4% Today</div><div class="bval" style="color:#22c55e">6</div></div>
+        <div class="bstat"><div class="blabel">Stocks -4% Today</div><div class="bval" style="color:#ef4444">4</div></div>
+        <div class="bstat wide"><div class="blabel">% Above 20MA</div>
+          <div class="bval" style="color:#22c55e">71.0%</div>
+          <div class="bar-track"><div class="bar-fill" style="width:71.0%;background:#22c55e"></div></div></div>
+        <div class="bstat wide"><div class="blabel">% Above 50MA</div>
+          <div class="bval" style="color:#22c55e">60.2%</div>
+          <div class="bar-track"><div class="bar-fill" style="width:60.2%;background:#22c55e"></div></div></div>
+        <div class="bstat wide"><div class="blabel">% Above 200MA</div>
+          <div class="bval" style="color:#22c55e">60.4%</div>
+          <div class="bar-track"><div class="bar-fill" style="width:60.4%;background:#22c55e"></div></div></div>
+        <div class="bstat wide"><div class="blabel">T2108 (40day MA %)</div>
+          <div class="bval" style="color:#22c55e">63.4%</div>
+          <div class="bar-track"><div class="bar-fill" style="width:63.4%;background:#22c55e"></div></div></div>
+        <div class="bstat"><div class="blabel">New 20day Highs</div><div class="bval" style="color:#22c55e">101</div></div>
+        <div class="bstat"><div class="blabel">New 20day Lows</div><div class="bval" style="color:#ef4444">21</div></div>
+        <div class="bstat"><div class="blabel">New 50day Highs</div><div class="bval" style="color:#22c55e">65</div></div>
+        <div class="bstat"><div class="blabel">New 50day Lows</div><div class="bval" style="color:#ef4444">13</div></div>
+        <div class="bstat"><div class="blabel">Stocks +25% QTR</div><div class="bval" style="color:#22c55e">121</div></div>
+        <div class="bstat"><div class="blabel">Stocks -25% QTR</div><div class="bval" style="color:#ef4444">25</div></div>
+      </div>
+    </div>
+    
+    <div class="breadth-panel" data-panel="NDX">
+      <div class="breadth-grid">
+        <div class="bstat"><div class="blabel">Advancers</div><div class="bval" style="color:#22c55e">69</div></div>
+        <div class="bstat"><div class="blabel">Decliners</div><div class="bval" style="color:#ef4444">31</div></div>
+        <div class="bstat"><div class="blabel">Stocks +4% Today</div><div class="bval" style="color:#22c55e">4</div></div>
+        <div class="bstat"><div class="blabel">Stocks -4% Today</div><div class="bval" style="color:#ef4444">1</div></div>
+        <div class="bstat wide"><div class="blabel">% Above 20MA</div>
+          <div class="bval" style="color:#f59e0b">55.0%</div>
+          <div class="bar-track"><div class="bar-fill" style="width:55.0%;background:#f59e0b"></div></div></div>
+        <div class="bstat wide"><div class="blabel">% Above 50MA</div>
+          <div class="bval" style="color:#f59e0b">52.0%</div>
+          <div class="bar-track"><div class="bar-fill" style="width:52.0%;background:#f59e0b"></div></div></div>
+        <div class="bstat wide"><div class="blabel">% Above 200MA</div>
+          <div class="bval" style="color:#22c55e">58.0%</div>
+          <div class="bar-track"><div class="bar-fill" style="width:58.0%;background:#22c55e"></div></div></div>
+        <div class="bstat wide"><div class="blabel">T2108 (40day MA %)</div>
+          <div class="bval" style="color:#f59e0b">52.0%</div>
+          <div class="bar-track"><div class="bar-fill" style="width:52.0%;background:#f59e0b"></div></div></div>
+        <div class="bstat"><div class="blabel">New 20day Highs</div><div class="bval" style="color:#22c55e">11</div></div>
+        <div class="bstat"><div class="blabel">New 20day Lows</div><div class="bval" style="color:#ef4444">11</div></div>
+        <div class="bstat"><div class="blabel">New 50day Highs</div><div class="bval" style="color:#22c55e">9</div></div>
+        <div class="bstat"><div class="blabel">New 50day Lows</div><div class="bval" style="color:#ef4444">6</div></div>
+        <div class="bstat"><div class="blabel">Stocks +25% QTR</div><div class="bval" style="color:#22c55e">34</div></div>
+        <div class="bstat"><div class="blabel">Stocks -25% QTR</div><div class="bval" style="color:#ef4444">7</div></div>
+      </div>
+    </div>
+    
+    <div class="breadth-panel" data-panel="RUT">
+      <div class="breadth-grid">
+        <div class="bstat"><div class="blabel">Advancers</div><div class="bval" style="color:#22c55e">1248</div></div>
+        <div class="bstat"><div class="blabel">Decliners</div><div class="bval" style="color:#ef4444">601</div></div>
+        <div class="bstat"><div class="blabel">Stocks +4% Today</div><div class="bval" style="color:#22c55e">72</div></div>
+        <div class="bstat"><div class="blabel">Stocks -4% Today</div><div class="bval" style="color:#ef4444">30</div></div>
+        <div class="bstat wide"><div class="blabel">% Above 20MA</div>
+          <div class="bval" style="color:#22c55e">68.1%</div>
+          <div class="bar-track"><div class="bar-fill" style="width:68.1%;background:#22c55e"></div></div></div>
+        <div class="bstat wide"><div class="blabel">% Above 50MA</div>
+          <div class="bval" style="color:#22c55e">63.6%</div>
+          <div class="bar-track"><div class="bar-fill" style="width:63.6%;background:#22c55e"></div></div></div>
+        <div class="bstat wide"><div class="blabel">% Above 200MA</div>
+          <div class="bval" style="color:#22c55e">61.2%</div>
+          <div class="bar-track"><div class="bar-fill" style="width:61.2%;background:#22c55e"></div></div></div>
+        <div class="bstat wide"><div class="blabel">T2108 (40day MA %)</div>
+          <div class="bval" style="color:#22c55e">62.2%</div>
+          <div class="bar-track"><div class="bar-fill" style="width:62.2%;background:#22c55e"></div></div></div>
+        <div class="bstat"><div class="blabel">New 20day Highs</div><div class="bval" style="color:#22c55e">511</div></div>
+        <div class="bstat"><div class="blabel">New 20day Lows</div><div class="bval" style="color:#ef4444">47</div></div>
+        <div class="bstat"><div class="blabel">New 50day Highs</div><div class="bval" style="color:#22c55e">333</div></div>
+        <div class="bstat"><div class="blabel">New 50day Lows</div><div class="bval" style="color:#ef4444">28</div></div>
+        <div class="bstat"><div class="blabel">Stocks +25% QTR</div><div class="bval" style="color:#22c55e">757</div></div>
+        <div class="bstat"><div class="blabel">Stocks -25% QTR</div><div class="bval" style="color:#ef4444">285</div></div>
+      </div>
+    </div>
+    
+    <div class="breadth-panel" data-panel="DJI">
+      <div class="breadth-grid">
+        <div class="bstat"><div class="blabel">Advancers</div><div class="bval" style="color:#22c55e">21</div></div>
+        <div class="bstat"><div class="blabel">Decliners</div><div class="bval" style="color:#ef4444">9</div></div>
+        <div class="bstat"><div class="blabel">Stocks +4% Today</div><div class="bval" style="color:#22c55e">0</div></div>
+        <div class="bstat"><div class="blabel">Stocks -4% Today</div><div class="bval" style="color:#ef4444">0</div></div>
+        <div class="bstat wide"><div class="blabel">% Above 20MA</div>
+          <div class="bval" style="color:#22c55e">63.3%</div>
+          <div class="bar-track"><div class="bar-fill" style="width:63.3%;background:#22c55e"></div></div></div>
+        <div class="bstat wide"><div class="blabel">% Above 50MA</div>
+          <div class="bval" style="color:#22c55e">66.7%</div>
+          <div class="bar-track"><div class="bar-fill" style="width:66.7%;background:#22c55e"></div></div></div>
+        <div class="bstat wide"><div class="blabel">% Above 200MA</div>
+          <div class="bval" style="color:#22c55e">66.7%</div>
+          <div class="bar-track"><div class="bar-fill" style="width:66.7%;background:#22c55e"></div></div></div>
+        <div class="bstat wide"><div class="blabel">T2108 (40day MA %)</div>
+          <div class="bval" style="color:#22c55e">70.0%</div>
+          <div class="bar-track"><div class="bar-fill" style="width:70.0%;background:#22c55e"></div></div></div>
+        <div class="bstat"><div class="blabel">New 20day Highs</div><div class="bval" style="color:#22c55e">5</div></div>
+        <div class="bstat"><div class="blabel">New 20day Lows</div><div class="bval" style="color:#ef4444">3</div></div>
+        <div class="bstat"><div class="blabel">New 50day Highs</div><div class="bval" style="color:#22c55e">1</div></div>
+        <div class="bstat"><div class="blabel">New 50day Lows</div><div class="bval" style="color:#ef4444">1</div></div>
+        <div class="bstat"><div class="blabel">Stocks +25% QTR</div><div class="bval" style="color:#22c55e">5</div></div>
+        <div class="bstat"><div class="blabel">Stocks -25% QTR</div><div class="bval" style="color:#ef4444">0</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Sector Heatmap (1day % Change)</div>
+    <div class="table-scroll" style="padding: 4px 14px;">
+        <div class="heat-row">
+          <div class="heat-label">XLB <span class="muted">Materials</span></div>
+          <div class="heat-bar-wrap">
+            <div class="heat-zero"></div>
+            <div class="heat-bar" style="left:50.00%;width:43.48%;background:#166534"></div>
+          </div>
+          <div class="heat-val" style="color:#22c55e">+1.87%</div>
+          <div class="heat-insight">Copper/silver/lithium miners surge (COPX +3.38%, SIL +3.27%, REMX +2.73%)</div>
+        </div>
+        <div class="heat-row">
+          <div class="heat-label">XLF <span class="muted">Financials</span></div>
+          <div class="heat-bar-wrap">
+            <div class="heat-zero"></div>
+            <div class="heat-bar" style="left:50.00%;width:31.85%;background:#15803d"></div>
+          </div>
+          <div class="heat-val" style="color:#22c55e">+1.37%</div>
+          <div class="heat-insight">Higher 10yr yields (~4.45%) = bank NIM tailwind</div>
+        </div>
+        <div class="heat-row">
+          <div class="heat-label">XLU <span class="muted">Utilities</span></div>
+          <div class="heat-bar-wrap">
+            <div class="heat-zero"></div>
+            <div class="heat-bar" style="left:50.00%;width:25.34%;background:#15803d"></div>
+          </div>
+          <div class="heat-val" style="color:#22c55e">+1.09%</div>
+          <div class="heat-insight">Broad de-risking rally lifts rate-sensitives</div>
+        </div>
+        <div class="heat-row">
+          <div class="heat-label">XLRE <span class="muted">Real Estate</span></div>
+          <div class="heat-bar-wrap">
+            <div class="heat-zero"></div>
+            <div class="heat-bar" style="left:50.00%;width:22.79%;background:#15803d"></div>
+          </div>
+          <div class="heat-val" style="color:#22c55e">+0.98%</div>
+          <div class="heat-insight">Following utilities higher on the risk-on tape</div>
+        </div>
+        <div class="heat-row">
+          <div class="heat-label">XLK <span class="muted">Technology</span></div>
+          <div class="heat-bar-wrap">
+            <div class="heat-zero"></div>
+            <div class="heat-bar" style="left:50.00%;width:20.23%;background:#15803d"></div>
+          </div>
+          <div class="heat-val" style="color:#22c55e">+0.87%</div>
+          <div class="heat-insight">Semi-equipment comeback (KLAC/INTC/TER/AMD) offsets ADBE -6.76% drag</div>
+        </div>
+        <div class="heat-row">
+          <div class="heat-label">XLE <span class="muted">Energy</span></div>
+          <div class="heat-bar-wrap">
+            <div class="heat-zero"></div>
+            <div class="heat-bar" style="left:50.00%;width:17.44%;background:#15803d"></div>
+          </div>
+          <div class="heat-val" style="color:#22c55e">+0.75%</div>
+          <div class="heat-insight">UP despite WTI -3.23% — oil SERVICES (not crude) leading on Hormuz reopening bets</div>
+        </div>
+        <div class="heat-row">
+          <div class="heat-label">XLP <span class="muted">Cons. Staples</span></div>
+          <div class="heat-bar-wrap">
+            <div class="heat-zero"></div>
+            <div class="heat-bar" style="left:50.00%;width:15.11%;background:#15803d"></div>
+          </div>
+          <div class="heat-val" style="color:#22c55e">+0.65%</div>
+          <div class="heat-insight">Personal Products industry surging in Smart Money rotation (#6)</div>
+        </div>
+        <div class="heat-row">
+          <div class="heat-label">XLI <span class="muted">Industrials</span></div>
+          <div class="heat-bar-wrap">
+            <div class="heat-zero"></div>
+            <div class="heat-bar" style="left:50.00%;width:13.72%;background:#15803d"></div>
+          </div>
+          <div class="heat-val" style="color:#22c55e">+0.59%</div>
+          <div class="heat-insight">Marine Port Services #1 Smart Money — shipping/logistics rotation</div>
+        </div>
+        <div class="heat-row">
+          <div class="heat-label">XLY <span class="muted">Cons. Disc.</span></div>
+          <div class="heat-bar-wrap">
+            <div class="heat-zero"></div>
+            <div class="heat-bar" style="left:50.00%;width:6.05%;background:#166534aa"></div>
+          </div>
+          <div class="heat-val" style="color:#22c55e">+0.26%</div>
+          <div class="heat-insight">Mixed — ROKU +20% vs CVNA -5.49%, ASTS/RKLB sympathy selling</div>
+        </div>
+        <div class="heat-row">
+          <div class="heat-label">XLV <span class="muted">Healthcare</span></div>
+          <div class="heat-bar-wrap">
+            <div class="heat-zero"></div>
+            <div class="heat-bar" style="left:45.81%;width:4.19%;background:#7f1d1daa"></div>
+          </div>
+          <div class="heat-val" style="color:#ef4444">-0.18%</div>
+          <div class="heat-insight">LLY -2.41%, ZTS -2.25% — defensives underperform on de-risking day</div>
+        </div>
+        <div class="heat-row">
+          <div class="heat-label">XLC <span class="muted">Comm. Services</span></div>
+          <div class="heat-bar-wrap">
+            <div class="heat-zero"></div>
+            <div class="heat-bar" style="left:40.23%;width:9.77%;background:#7f1d1daa"></div>
+          </div>
+          <div class="heat-val" style="color:#ef4444">-0.42%</div>
+          <div class="heat-insight">NFLX -1.14%, META -0.26%, DIS -0.30% drag; telecom (T,VZ +2.5%) offsets</div>
+        </div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">ETF &plusmn;3% Conviction Flags</div>
+    <div class="etf-grid">
+        <div class="etf-card etf-up">
+          <div class="etf-sym">COPX</div>
+          <div class="etf-name muted">Global X Copper Miners ETF</div>
+          <div class="etf-chg" style="color:#22c55e">+3.38%</div>
+          <div class="etf-5d muted">5day: +6.61%</div>
+        </div>
+        <div class="etf-card etf-up">
+          <div class="etf-sym">SIL</div>
+          <div class="etf-name muted">Global X Silver Miners ETF</div>
+          <div class="etf-chg" style="color:#22c55e">+3.27%</div>
+          <div class="etf-5d muted">5day: +3.03%</div>
+        </div>
+        <div class="etf-card etf-down">
+          <div class="etf-sym">@WTI</div>
+          <div class="etf-name muted">WTI Crude Spot</div>
+          <div class="etf-chg" style="color:#ef4444">-3.23%</div>
+          <div class="etf-5d muted">5day: -6.04%</div>
+          <div class="etf-note">Iran ceasefire reprices oil lower</div>
+        </div>
+        <div class="etf-card etf-down">
+          <div class="etf-sym">$VIX</div>
+          <div class="etf-name muted">Cboe Volatility Index</div>
+          <div class="etf-chg" style="color:#ef4444">-9.05%</div>
+          <div class="etf-5d muted">5day: -17.81%</div>
+          <div class="etf-note">⚠ EXTREME MOVE — sharpest vol crush of the cycle</div>
+        </div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Key Movers &mdash; Top Gainers</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Sym</th><th>Company</th><th>Industry</th><th>Sector</th><th>1day %</th><th>5day %</th><th>Index</th></tr></thead>
+        <tbody>
+        <tr>
+          <td class="ticker">ROKU</td>
+          <td class="muted">Roku Inc</td>
+          <td class="muted">Entertainment Production</td>
+          <td class="muted">Consumer Cyclicals</td>
+          <td style="color:#22c55e">+20.08%</td>
+          <td style="color:#22c55e">+17.50%</td>
+          <td class="muted small">R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">AMKR</td>
+          <td class="muted">Amkor Technology</td>
+          <td class="muted">Semiconductor Equip & Testing</td>
+          <td class="muted">Technology</td>
+          <td style="color:#22c55e">+8.71%</td>
+          <td style="color:#22c55e">+27.45%</td>
+          <td class="muted small">R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">RIVN</td>
+          <td class="muted">Rivian Automotive</td>
+          <td class="muted">Auto & Truck Manufacturers</td>
+          <td class="muted">Consumer Cyclicals</td>
+          <td style="color:#22c55e">+7.85%</td>
+          <td style="color:#22c55e">+2.51%</td>
+          <td class="muted small">R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">ALB</td>
+          <td class="muted">Albemarle Corp</td>
+          <td class="muted">Specialty Chemicals</td>
+          <td class="muted">Basic Materials</td>
+          <td style="color:#22c55e">+7.14%</td>
+          <td style="color:#22c55e">+9.64%</td>
+          <td class="muted small">SPX500 R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">ONTO</td>
+          <td class="muted">Onto Innovation</td>
+          <td class="muted">Semiconductor Equip & Testing</td>
+          <td class="muted">Technology</td>
+          <td style="color:#22c55e">+6.70%</td>
+          <td style="color:#22c55e">+27.89%</td>
+          <td class="muted small">R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">INTC</td>
+          <td class="muted">Intel Corp</td>
+          <td class="muted">Semiconductors</td>
+          <td class="muted">Technology</td>
+          <td style="color:#22c55e">+6.51%</td>
+          <td style="color:#22c55e">+25.61%</td>
+          <td class="muted small">SPX500 NDX100 R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">WDC</td>
+          <td class="muted">Western Digital</td>
+          <td class="muted">Computer Hardware</td>
+          <td class="muted">Technology</td>
+          <td style="color:#22c55e">+6.35%</td>
+          <td style="color:#22c55e">+10.01%</td>
+          <td class="muted small">SPX500 NDX100 R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">COHR</td>
+          <td class="muted">Coherent Corp</td>
+          <td class="muted">Electronic Equip & Parts</td>
+          <td class="muted">Technology</td>
+          <td style="color:#22c55e">+5.90%</td>
+          <td style="color:#22c55e">+2.13%</td>
+          <td class="muted small">SPX500 R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">TER</td>
+          <td class="muted">Teradyne Inc</td>
+          <td class="muted">Semiconductor Equip & Testing</td>
+          <td class="muted">Technology</td>
+          <td style="color:#22c55e">+5.72%</td>
+          <td style="color:#22c55e">+12.65%</td>
+          <td class="muted small">SPX500 R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">KLAC</td>
+          <td class="muted">KLA Corp</td>
+          <td class="muted">Semiconductor Equip & Testing</td>
+          <td class="muted">Technology</td>
+          <td style="color:#22c55e">+5.55%</td>
+          <td style="color:#22c55e">+31.94%</td>
+          <td class="muted small">SPX500 NDX100 R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">SNDK</td>
+          <td class="muted">Sandisk Corp</td>
+          <td class="muted">Computer Hardware</td>
+          <td class="muted">Technology</td>
+          <td style="color:#22c55e">+5.24%</td>
+          <td style="color:#22c55e">+26.98%</td>
+          <td class="muted small">SPX500 NDX100 R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">AMD</td>
+          <td class="muted">Advanced Micro Devices</td>
+          <td class="muted">Semiconductors</td>
+          <td class="muted">Technology</td>
+          <td style="color:#22c55e">+4.73%</td>
+          <td style="color:#22c55e">+9.69%</td>
+          <td class="muted small">SPX500 NDX100 R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">ANET</td>
+          <td class="muted">Arista Networks</td>
+          <td class="muted">Comms & Networking</td>
+          <td class="muted">Technology</td>
+          <td style="color:#22c55e">+4.37%</td>
+          <td style="color:#22c55e">+5.81%</td>
+          <td class="muted small">SPX500 R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">QCOM</td>
+          <td class="muted">Qualcomm Inc</td>
+          <td class="muted">Semiconductors</td>
+          <td class="muted">Technology</td>
+          <td style="color:#22c55e">+4.32%</td>
+          <td style="color:#ef4444">-1.95%</td>
+          <td class="muted small">SPX500 NDX100 R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">APP</td>
+          <td class="muted">AppLovin Corp</td>
+          <td class="muted">Software</td>
+          <td class="muted">Technology</td>
+          <td style="color:#22c55e">+3.80%</td>
+          <td style="color:#ef4444">-10.85%</td>
+          <td class="muted small">SPX500 NDX100 R1000 R3000</td>
+        </tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Key Movers &mdash; Top Losers</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Sym</th><th>Company</th><th>Industry</th><th>Sector</th><th>1day %</th><th>5day %</th><th>Index</th></tr></thead>
+        <tbody>
+        <tr>
+          <td class="ticker">ASTS</td>
+          <td class="muted">AST SpaceMobile</td>
+          <td class="muted">Wireless Telecom Svcs</td>
+          <td class="muted">Technology</td>
+          <td style="color:#ef4444">-15.53%</td>
+          <td style="color:#ef4444">-11.96%</td>
+          <td class="muted small">R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">RKLB</td>
+          <td class="muted">Rocket Lab Corp</td>
+          <td class="muted">Aerospace & Defense</td>
+          <td class="muted">Industrials</td>
+          <td style="color:#ef4444">-10.79%</td>
+          <td style="color:#ef4444">-6.99%</td>
+          <td class="muted small">R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">ADBE</td>
+          <td class="muted">Adobe Inc</td>
+          <td class="muted">Software</td>
+          <td class="muted">Technology</td>
+          <td style="color:#ef4444">-6.76%</td>
+          <td style="color:#ef4444">-18.86%</td>
+          <td class="muted small">SPX500 NDX100 R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">RDDT</td>
+          <td class="muted">Reddit Inc</td>
+          <td class="muted">Online Services</td>
+          <td class="muted">Technology</td>
+          <td style="color:#ef4444">-6.44%</td>
+          <td style="color:#ef4444">-6.54%</td>
+          <td class="muted small">R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">CRCL</td>
+          <td class="muted">Circle Internet Group</td>
+          <td class="muted">Financial Technology</td>
+          <td class="muted">Technology</td>
+          <td style="color:#ef4444">-5.80%</td>
+          <td style="color:#ef4444">-3.04%</td>
+          <td class="muted small">R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">CVNA</td>
+          <td class="muted">Carvana Co</td>
+          <td class="muted">Auto Vehicles Retailers</td>
+          <td class="muted">Consumer Cyclicals</td>
+          <td style="color:#ef4444">-5.49%</td>
+          <td style="color:#ef4444">-3.62%</td>
+          <td class="muted small">SPX500 R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">LEN</td>
+          <td class="muted">Lennar Corp</td>
+          <td class="muted">Homebuilding</td>
+          <td class="muted">Consumer Cyclicals</td>
+          <td style="color:#ef4444">-4.90%</td>
+          <td style="color:#ef4444">-0.21%</td>
+          <td class="muted small">SPX500 R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">SMCI</td>
+          <td class="muted">Super Micro Computer</td>
+          <td class="muted">Computer Hardware</td>
+          <td class="muted">Technology</td>
+          <td style="color:#ef4444">-4.72%</td>
+          <td style="color:#ef4444">-26.85%</td>
+          <td class="muted small">SPX500 R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">ADSK</td>
+          <td class="muted">Autodesk Inc</td>
+          <td class="muted">Software</td>
+          <td class="muted">Technology</td>
+          <td style="color:#ef4444">-3.47%</td>
+          <td style="color:#ef4444">-13.71%</td>
+          <td class="muted small">SPX500 NDX100 R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">SNOW</td>
+          <td class="muted">Snowflake Inc</td>
+          <td class="muted">IT Services & Consulting</td>
+          <td class="muted">Technology</td>
+          <td style="color:#ef4444">-3.17%</td>
+          <td style="color:#ef4444">-2.30%</td>
+          <td class="muted small">R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">DASH</td>
+          <td class="muted">DoorDash Inc</td>
+          <td class="muted">Online Services</td>
+          <td class="muted">Technology</td>
+          <td style="color:#ef4444">-2.59%</td>
+          <td style="color:#ef4444">-3.97%</td>
+          <td class="muted small">SPX500 NDX100 R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">CPNG</td>
+          <td class="muted">Coupang Inc</td>
+          <td class="muted">Department Stores</td>
+          <td class="muted">Consumer Cyclicals</td>
+          <td style="color:#ef4444">-2.49%</td>
+          <td style="color:#22c55e">+11.02%</td>
+          <td class="muted small">R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">LLY</td>
+          <td class="muted">Eli Lilly and Co</td>
+          <td class="muted">Pharmaceuticals</td>
+          <td class="muted">Healthcare</td>
+          <td style="color:#ef4444">-2.41%</td>
+          <td style="color:#22c55e">+0.14%</td>
+          <td class="muted small">SPX500 R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">PLTR</td>
+          <td class="muted">Palantir Technologies</td>
+          <td class="muted">Software</td>
+          <td class="muted">Technology</td>
+          <td style="color:#ef4444">-2.36%</td>
+          <td style="color:#ef4444">-5.56%</td>
+          <td class="muted small">SPX500 NDX100 R1000 R3000</td>
+        </tr>
+        <tr>
+          <td class="ticker">ZTS</td>
+          <td class="muted">Zoetis Inc</td>
+          <td class="muted">Pharmaceuticals</td>
+          <td class="muted">Healthcare</td>
+          <td style="color:#ef4444">-2.25%</td>
+          <td style="color:#22c55e">+0.16%</td>
+          <td class="muted small">SPX500 R1000 R3000</td>
+        </tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">RS MOMO &mdash; Top 20 Relative Strength Spotlight</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Rank</th><th>Symbol</th><th>RS Combo</th><th>Sector</th><th>Industry</th><th>1day %</th><th>3Month %</th><th>ADR 20%</th></tr></thead>
+        <tbody>
+        <tr>
+          <td class="muted">1</td>
+          <td class="ticker">RXT </td>
+          <td style="color:#22c55e">98.95</td>
+          <td class="muted">Technology</td>
+          <td class="muted">IT Services & Consulting</td>
+          <td style="color:#ef4444">-2.86%</td>
+          <td style="color:#22c55e">+194.10%</td>
+          <td style="color:#7a85a0">18.4%</td>
+        </tr>
+        <tr>
+          <td class="muted">2</td>
+          <td class="ticker">OTLK <span class="flag flag-h">[H]</span></td>
+          <td style="color:#22c55e">98.90</td>
+          <td class="muted">Healthcare</td>
+          <td class="muted">Biotechnology & Medical Research</td>
+          <td style="color:#22c55e">+10.91%</td>
+          <td style="color:#22c55e">+248.60%</td>
+          <td style="color:#7a85a0">21.2%</td>
+        </tr>
+        <tr>
+          <td class="muted">3</td>
+          <td class="ticker">STI </td>
+          <td style="color:#22c55e">98.88</td>
+          <td class="muted">Industrials</td>
+          <td class="muted">Electrical Components & Equipment</td>
+          <td style="color:#ef4444">-2.17%</td>
+          <td style="color:#22c55e">+378.60%</td>
+          <td style="color:#7a85a0">21.8%</td>
+        </tr>
+        <tr>
+          <td class="muted">4</td>
+          <td class="ticker">AGL </td>
+          <td style="color:#22c55e">98.86</td>
+          <td class="muted">Healthcare</td>
+          <td class="muted">Healthcare Facilities & Services</td>
+          <td style="color:#ef4444">-2.80%</td>
+          <td style="color:#22c55e">+665.40%</td>
+          <td style="color:#7a85a0">10.7%</td>
+        </tr>
+        <tr>
+          <td class="muted">5</td>
+          <td class="ticker">EDHL </td>
+          <td style="color:#22c55e">98.81</td>
+          <td class="muted">Consumer Cyclicals</td>
+          <td class="muted">Advertising & Marketing</td>
+          <td style="color:#22c55e">+44.48%</td>
+          <td style="color:#22c55e">+159.50%</td>
+          <td style="color:#7a85a0">32.1%</td>
+        </tr>
+        <tr>
+          <td class="muted">6</td>
+          <td class="ticker">BAND </td>
+          <td style="color:#22c55e">98.79</td>
+          <td class="muted">Technology</td>
+          <td class="muted">Software</td>
+          <td style="color:#22c55e">+1.63%</td>
+          <td style="color:#22c55e">+336.20%</td>
+          <td style="color:#7a85a0">9.1%</td>
+        </tr>
+        <tr>
+          <td class="muted">7</td>
+          <td class="ticker">MXL </td>
+          <td style="color:#22c55e">98.75</td>
+          <td class="muted">Technology</td>
+          <td class="muted">Semiconductors</td>
+          <td style="color:#22c55e">+4.16%</td>
+          <td style="color:#22c55e">+413.10%</td>
+          <td style="color:#7a85a0">13.0%</td>
+        </tr>
+        <tr>
+          <td class="muted">8</td>
+          <td class="ticker">AXTI </td>
+          <td style="color:#22c55e">98.72</td>
+          <td class="muted">Technology</td>
+          <td class="muted">Semiconductors</td>
+          <td style="color:#22c55e">+10.01%</td>
+          <td style="color:#22c55e">+99.30%</td>
+          <td style="color:#7a85a0">15.9%</td>
+        </tr>
+        <tr>
+          <td class="muted">9</td>
+          <td class="ticker">AMPG </td>
+          <td style="color:#22c55e">98.70</td>
+          <td class="muted">Technology</td>
+          <td class="muted">Comms & Networking</td>
+          <td style="color:#ef4444">-2.08%</td>
+          <td style="color:#22c55e">+224.10%</td>
+          <td style="color:#7a85a0">19.7%</td>
+        </tr>
+        <tr>
+          <td class="muted">10</td>
+          <td class="ticker">HYLN </td>
+          <td style="color:#22c55e">98.66</td>
+          <td class="muted">Industrials</td>
+          <td class="muted">Heavy Electrical Equipment</td>
+          <td style="color:#ef4444">-1.46%</td>
+          <td style="color:#22c55e">+287.40%</td>
+          <td style="color:#7a85a0">17.7%</td>
+        </tr>
+        <tr>
+          <td class="muted">11</td>
+          <td class="ticker">ARM </td>
+          <td style="color:#22c55e">98.63</td>
+          <td class="muted">Technology</td>
+          <td class="muted">Semiconductors</td>
+          <td style="color:#22c55e">+11.27%</td>
+          <td style="color:#22c55e">+196.70%</td>
+          <td style="color:#7a85a0">10.1%</td>
+        </tr>
+        <tr>
+          <td class="muted">12</td>
+          <td class="ticker">MRVL </td>
+          <td style="color:#22c55e">98.61</td>
+          <td class="muted">Technology</td>
+          <td class="muted">Semiconductors</td>
+          <td style="color:#ef4444">-0.36%</td>
+          <td style="color:#22c55e">+219.20%</td>
+          <td style="color:#7a85a0">10.0%</td>
+        </tr>
+        <tr>
+          <td class="muted">13</td>
+          <td class="ticker">AEHR </td>
+          <td style="color:#22c55e">98.50</td>
+          <td class="muted">Technology</td>
+          <td class="muted">Semi Equipment & Testing</td>
+          <td style="color:#22c55e">+5.28%</td>
+          <td style="color:#22c55e">+198.70%</td>
+          <td style="color:#7a85a0">13.0%</td>
+        </tr>
+        <tr>
+          <td class="muted">14</td>
+          <td class="ticker">DELL </td>
+          <td style="color:#22c55e">98.49</td>
+          <td class="muted">Technology</td>
+          <td class="muted">Computer Hardware</td>
+          <td style="color:#22c55e">+1.05%</td>
+          <td style="color:#22c55e">+165.10%</td>
+          <td style="color:#7a85a0">7.0%</td>
+        </tr>
+        <tr>
+          <td class="muted">15</td>
+          <td class="ticker">PENG </td>
+          <td style="color:#22c55e">98.43</td>
+          <td class="muted">Technology</td>
+          <td class="muted">Semiconductors</td>
+          <td style="color:#ef4444">-0.31%</td>
+          <td style="color:#22c55e">+266.20%</td>
+          <td style="color:#7a85a0">11.0%</td>
+        </tr>
+        <tr>
+          <td class="muted">16</td>
+          <td class="ticker">ATEX <span class="flag flag-h">[H]</span></td>
+          <td style="color:#22c55e">98.40</td>
+          <td class="muted">Technology</td>
+          <td class="muted">Wireless Telecom Services</td>
+          <td style="color:#22c55e">+1.30%</td>
+          <td style="color:#22c55e">+116.50%</td>
+          <td style="color:#7a85a0">8.2%</td>
+        </tr>
+        <tr>
+          <td class="muted">17</td>
+          <td class="ticker">AAOI </td>
+          <td style="color:#22c55e">98.34</td>
+          <td class="muted">Technology</td>
+          <td class="muted">Electronic Equip & Parts</td>
+          <td style="color:#ef4444">-2.16%</td>
+          <td style="color:#22c55e">+82.50%</td>
+          <td style="color:#7a85a0">13.8%</td>
+        </tr>
+        <tr>
+          <td class="muted">18</td>
+          <td class="ticker">VSH </td>
+          <td style="color:#22c55e">98.27</td>
+          <td class="muted">Technology</td>
+          <td class="muted">Semiconductors</td>
+          <td style="color:#22c55e">+1.33%</td>
+          <td style="color:#22c55e">+239.50%</td>
+          <td style="color:#7a85a0">10.1%</td>
+        </tr>
+        <tr>
+          <td class="muted">19</td>
+          <td class="ticker">AKAN </td>
+          <td style="color:#22c55e">98.17</td>
+          <td class="muted">Healthcare</td>
+          <td class="muted">Healthcare Facilities & Services</td>
+          <td style="color:#22c55e">+20.47%</td>
+          <td style="color:#22c55e">+424.80%</td>
+          <td style="color:#7a85a0">25.3%</td>
+        </tr>
+        <tr>
+          <td class="muted">20</td>
+          <td class="ticker">APPS </td>
+          <td style="color:#22c55e">98.15</td>
+          <td class="muted">Technology</td>
+          <td class="muted">Software</td>
+          <td style="color:#ef4444">-3.75%</td>
+          <td style="color:#22c55e">+199.40%</td>
+          <td style="color:#7a85a0">12.3%</td>
+        </tr></tbody>
+      </table>
+    </div>
+    <div style="margin-top:10px;" class="muted small">[H] = new 20-day high &nbsp;&middot;&nbsp; &#9888; THIN = ADR20% &gt; 35% (low-float, speculative) &nbsp;&middot;&nbsp; Zero THIN flags in today's top 20; 10 of 20 names are semiconductor or semi-adjacent.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Smart Money &mdash; Top 16 Industry Rotation</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Rank</th><th>Industry</th><th>ROC</th><th>1day Ago</th><th>5day Ago</th><th>9day Ago</th><th>Signal</th></tr></thead>
+        <tbody>
+        <tr class="row-surge">
+          <td class="muted">1</td>
+          <td class="ticker">Marine Port Services</td>
+          <td style="color:#22c55e">+25.93%</td>
+          <td class="muted">#1</td>
+          <td class="muted">#139</td>
+          <td class="muted">#139</td>
+          <td style="color:#22c55e;font-weight:600">&#8593;&#8593; SURGE</td>
+        </tr>
+        <tr class="row-surge">
+          <td class="muted">2</td>
+          <td class="ticker">Oil Related Services & Equipment</td>
+          <td style="color:#22c55e">+19.20%</td>
+          <td class="muted">#2</td>
+          <td class="muted">#48</td>
+          <td class="muted">#131</td>
+          <td style="color:#22c55e;font-weight:600">&#8593;&#8593; SURGE</td>
+        </tr>
+        <tr class="row-surge">
+          <td class="muted">3</td>
+          <td class="ticker">Fishing & Farming</td>
+          <td style="color:#22c55e">+13.70%</td>
+          <td class="muted">#3</td>
+          <td class="muted">#70</td>
+          <td class="muted">#133</td>
+          <td style="color:#22c55e;font-weight:600">&#8593;&#8593; SURGE</td>
+        </tr>
+        <tr class="row-surge">
+          <td class="muted">4</td>
+          <td class="ticker">Semiconductor Equipment & Testing</td>
+          <td style="color:#22c55e">+13.63%</td>
+          <td class="muted">#11</td>
+          <td class="muted">#76</td>
+          <td class="muted">#87</td>
+          <td style="color:#22c55e;font-weight:600">&#8593;&#8593; SURGE</td>
+        </tr>
+        <tr class="row-surge">
+          <td class="muted">5</td>
+          <td class="ticker">Managed Healthcare</td>
+          <td style="color:#22c55e">+13.16%</td>
+          <td class="muted">#7</td>
+          <td class="muted">#15</td>
+          <td class="muted">#89</td>
+          <td style="color:#22c55e;font-weight:600">&#8593;&#8593; SURGE</td>
+        </tr>
+        <tr class="row-surge">
+          <td class="muted">6</td>
+          <td class="ticker">Personal Products</td>
+          <td style="color:#22c55e">+10.54%</td>
+          <td class="muted">#25</td>
+          <td class="muted">#50</td>
+          <td class="muted">#47</td>
+          <td style="color:#22c55e;font-weight:600">&#8593;&#8593; SURGE</td>
+        </tr>
+        <tr class="row-surge">
+          <td class="muted">7</td>
+          <td class="ticker">Advertising & Marketing</td>
+          <td style="color:#22c55e">+9.52%</td>
+          <td class="muted">#23</td>
+          <td class="muted">#59</td>
+          <td class="muted">#67</td>
+          <td style="color:#22c55e;font-weight:600">&#8593;&#8593; SURGE</td>
+        </tr>
+        <tr class="row-surge">
+          <td class="muted">8</td>
+          <td class="ticker">Personal Services</td>
+          <td style="color:#22c55e">+8.22%</td>
+          <td class="muted">#9</td>
+          <td class="muted">#3</td>
+          <td class="muted">#106</td>
+          <td style="color:#22c55e;font-weight:600">&#8593;&#8593; SURGE</td>
+        </tr>
+        <tr class="">
+          <td class="muted">9</td>
+          <td class="ticker">Appliances Tools & Housewares</td>
+          <td style="color:#22c55e">+7.94%</td>
+          <td class="muted">#10</td>
+          <td class="muted">#43</td>
+          <td class="muted">#32</td>
+          <td style="color:#22c55e;font-weight:600">&#8593;&#8593;</td>
+        </tr>
+        <tr class="row-surge">
+          <td class="muted">10</td>
+          <td class="ticker">Non-Paper Containers & Packaging</td>
+          <td style="color:#22c55e">+7.51%</td>
+          <td class="muted">#17</td>
+          <td class="muted">#80</td>
+          <td class="muted">#105</td>
+          <td style="color:#22c55e;font-weight:600">&#8593;&#8593; SURGE</td>
+        </tr>
+        <tr class="">
+          <td class="muted">11</td>
+          <td class="ticker">Homebuilding</td>
+          <td style="color:#22c55e">+7.37%</td>
+          <td class="muted">#4</td>
+          <td class="muted">#6</td>
+          <td class="muted">#17</td>
+          <td style="color:#22c55e;font-weight:600">&#8593;</td>
+        </tr>
+        <tr class="">
+          <td class="muted">12</td>
+          <td class="ticker">Paper Packaging</td>
+          <td style="color:#22c55e">+7.04%</td>
+          <td class="muted">#30</td>
+          <td class="muted">#26</td>
+          <td class="muted">#39</td>
+          <td style="color:#22c55e;font-weight:600">&#8593;&#8593;</td>
+        </tr>
+        <tr class="">
+          <td class="muted">13</td>
+          <td class="ticker">Ground Freight & Logistics</td>
+          <td style="color:#22c55e">+7.00%</td>
+          <td class="muted">#12</td>
+          <td class="muted">#8</td>
+          <td class="muted">#15</td>
+          <td style="color:#7a85a0;font-weight:600">&#8594;</td>
+        </tr>
+        <tr class="row-warn">
+          <td class="muted">14</td>
+          <td class="ticker">Passenger Transportation Ground & Sea</td>
+          <td style="color:#22c55e">+6.86%</td>
+          <td class="muted">#5</td>
+          <td class="muted">#9</td>
+          <td class="muted">#6</td>
+          <td style="color:#ef4444;font-weight:600">&#8595;</td>
+        </tr>
+        <tr class="row-surge">
+          <td class="muted">15</td>
+          <td class="ticker">Casinos & Gaming</td>
+          <td style="color:#22c55e">+6.69%</td>
+          <td class="muted">#13</td>
+          <td class="muted">#29</td>
+          <td class="muted">#53</td>
+          <td style="color:#22c55e;font-weight:600">&#8593;&#8593; SURGE</td>
+        </tr>
+        <tr class="">
+          <td class="muted">16</td>
+          <td class="ticker">Apparel & Accessories Retailers</td>
+          <td style="color:#22c55e">+6.51%</td>
+          <td class="muted">#26</td>
+          <td class="muted">#21</td>
+          <td class="muted">#45</td>
+          <td style="color:#22c55e;font-weight:600">&#8593;&#8593;</td>
+        </tr></tbody>
+      </table>
+    </div>
+    <div style="margin-top:10px;" class="muted small">10 of 16 industries carry a SURGE tag &mdash; an extraordinarily broad velocity event. Homebuilding (#11) is the sole rank-decliner, coinciding with LEN's earnings miss.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Commodities</div>
+    <div class="cm-grid">
+        <div class="cm-card">
+          <div class="cm-sym">XAUUSD</div>
+          <div class="cm-name muted">Gold Spot</div>
+          <div class="cm-price">$4,218.77</div>
+          <div class="cm-chg" style="color:#22c55e">+0.19%</div>
+          <div class="cm-5d muted">5day: -2.54%</div>
+        </div>
+        <div class="cm-card">
+          <div class="cm-sym">GC=F</div>
+          <div class="cm-name muted">Gold Futures</div>
+          <div class="cm-price">$4,239.90</div>
+          <div class="cm-chg" style="color:#22c55e">+0.45%</div>
+          
+        </div>
+        <div class="cm-card">
+          <div class="cm-sym">SLV</div>
+          <div class="cm-name muted">Silver Miners ETF (SLV)</div>
+          <div class="cm-price">$61.29</div>
+          <div class="cm-chg" style="color:#22c55e">+0.77%</div>
+          <div class="cm-5d muted">5day: -0.45%</div>
+        </div>
+        <div class="cm-card">
+          <div class="cm-sym">@WTI</div>
+          <div class="cm-name muted">WTI Crude (Spot)</div>
+          <div class="cm-price">$88.62</div>
+          <div class="cm-chg" style="color:#ef4444">-3.23%</div>
+          <div class="cm-5d muted">5day: -6.04%</div>
+        </div>
+        <div class="cm-card">
+          <div class="cm-sym">BZ=F</div>
+          <div class="cm-name muted">Brent Crude</div>
+          <div class="cm-price">$86.71</div>
+          <div class="cm-chg" style="color:#ef4444">-2.35%</div>
+          
+        </div>
+        <div class="cm-card">
+          <div class="cm-sym">@PA</div>
+          <div class="cm-name muted">Palladium</div>
+          <div class="cm-price">+3.46% (1day)</div>
+          <div class="cm-chg" style="color:#22c55e">+3.46%</div>
+          
+        </div>
+        <div class="cm-card">
+          <div class="cm-sym">GDX</div>
+          <div class="cm-name muted">Gold Miners ETF</div>
+          <div class="cm-price">+2.97%</div>
+          <div class="cm-chg" style="color:#22c55e">+2.97%</div>
+          <div class="cm-5d muted">5day: +1.51%</div>
+        </div>
+        <div class="cm-card">
+          <div class="cm-sym">REMX</div>
+          <div class="cm-name muted">Rare Earth ETF</div>
+          <div class="cm-price">+2.73%</div>
+          <div class="cm-chg" style="color:#22c55e">+2.73%</div>
+          <div class="cm-5d muted">5day: +7.80%</div>
+        </div>
+        <div class="cm-card">
+          <div class="cm-sym">LIT</div>
+          <div class="cm-name muted">Lithium & Battery ETF</div>
+          <div class="cm-price">+2.02%</div>
+          <div class="cm-chg" style="color:#22c55e">+2.02%</div>
+          
+        </div>
+        <div class="cm-card">
+          <div class="cm-sym">XOP</div>
+          <div class="cm-name muted">Oil & Gas E&P ETF</div>
+          <div class="cm-price">+1.18%</div>
+          <div class="cm-chg" style="color:#22c55e">+1.18%</div>
+          
+        </div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">FX &amp; Digital Assets</div>
+    <div class="cm-grid">
+        <div class="cm-card">
+          <div class="cm-sym">AUDUSD</div>
+          <div class="cm-name muted">AUD/USD</div>
+          <div class="cm-price">0.7043</div>
+          <div class="cm-chg" style="color:#ef4444">-0.07%</div>
+          <div class="cm-5d muted">5day: -0.03%</div>
+        </div>
+        <div class="cm-card">
+          <div class="cm-sym">&YAP</div>
+          <div class="cm-name muted">ASX SPI 200 Futures</div>
+          <div class="cm-price">8,814</div>
+          <div class="cm-chg" style="color:#22c55e">+1.92%</div>
+          <div class="cm-5d muted">5day: +1.42%</div>
+        </div>
+        <div class="cm-card">
+          <div class="cm-sym">&ES</div>
+          <div class="cm-name muted">E-mini S&P 500 Futures</div>
+          <div class="cm-price">7,435</div>
+          <div class="cm-chg" style="color:#22c55e">+0.53%</div>
+          
+        </div>
+        <div class="cm-card">
+          <div class="cm-sym">IBIT</div>
+          <div class="cm-name muted">iShares Bitcoin Trust</div>
+          <div class="cm-price">$36.04</div>
+          <div class="cm-chg" style="color:#ef4444">-0.03%</div>
+          <div class="cm-5d muted">5day: +5.57%</div>
+        </div>
+        <div class="cm-card">
+          <div class="cm-sym">ETHA</div>
+          <div class="cm-name muted">iShares Ethereum Trust</div>
+          <div class="cm-price">$12.57</div>
+          <div class="cm-chg" style="color:#ef4444">-1.02%</div>
+          <div class="cm-5d muted">5day: +5.90%</div>
+        </div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Key Headlines</div>
+    <div class="headlines-grid">
+        <div class="headline headline-primary">
+          <span class="hl-source">CNBC</span>
+          <span class="hl-text">S&P 500 closes higher as chips stage a comeback, Iran stops strikes on Israel</span>
+        </div>
+        <div class="headline headline-primary">
+          <span class="hl-source">CNBC</span>
+          <span class="hl-text">SpaceX IPO closes at $161, up 19% after record debut — largest IPO in history</span>
+        </div>
+        <div class="headline headline-secondary">
+          <span class="hl-source">CNBC</span>
+          <span class="hl-text">Elon Musk becomes world's first trillionaire as SpaceX begins trading on Nasdaq</span>
+        </div>
+        <div class="headline headline-secondary">
+          <span class="hl-source">CNBC</span>
+          <span class="hl-text">Treasury yields move higher as traders monitor potential U.S.-Iran peace deal</span>
+        </div>
+        <div class="headline headline-secondary">
+          <span class="hl-source">CNBC World</span>
+          <span class="hl-text">Netanyahu says war with Iran, Hezbollah isn't over after Tehran halts strikes</span>
+        </div>
+        <div class="headline headline-secondary">
+          <span class="hl-source">CNBC World</span>
+          <span class="hl-text">Trump denies Iran's account of deal terms, decries new drone attack as 'dishonorable'</span>
+        </div>
+        <div class="headline headline-secondary">
+          <span class="hl-source">CNBC World</span>
+          <span class="hl-text">Iraq and UAE race to establish alternative oil pipelines as exports through Hormuz dry up</span>
+        </div>
+        <div class="headline headline-secondary">
+          <span class="hl-source">CNBC</span>
+          <span class="hl-text">Paramount-WBD merger wins approval from DOJ</span>
+        </div>
+        <div class="headline headline-tertiary">
+          <span class="hl-source">CNBC</span>
+          <span class="hl-text">For Warsh as Fed chair, silence may be the point</span>
+        </div>
+        <div class="headline headline-tertiary">
+          <span class="hl-source">CNBC</span>
+          <span class="hl-text">Investors questioning gold's role in portfolios, says Morgan Stanley — another metal set to outperform</span>
+        </div>
+        <div class="headline headline-tertiary">
+          <span class="hl-source">MarketWatch</span>
+          <span class="hl-text">'This is not a flash in the pan': why value stocks are beating growth by a wide margin</span>
+        </div>
+        <div class="headline headline-tertiary">
+          <span class="hl-source">CNBC</span>
+          <span class="hl-text">Goldman Sachs sees RBI rate hike cycle starting in October as inflation risks build</span>
+        </div></div>
+  </div>
+
+  <div class="footer">
+    LeTour Dashboard &middot; US Market Summary &middot; Session Date 12/06/2026 &middot; Data sourced from RealTest/Google Sheets dashboard (ground truth) with supplementary web research (CNBC, MarketWatch)
+  </div>
+
+</div>
+
+<script>
+function showBreadth(sym, btn) {
+  document.querySelectorAll('.breadth-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.breadth-panel[data-panel="' + sym + '"]').classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
