@@ -181,7 +181,7 @@ function tagsHtml(arr) {
   return arr.map(function(t){return '<span class="tag '+tagCls(t)+'">'+t+'</span>';}).join('');
 }
 
-function reportUrl(r)  { return '/'+r.market.toLowerCase()+'/reports/'+r.html_file; }
+function reportUrl(r)  { return '/'+String(r.market||'').toLowerCase()+'/reports/'+(r.html_file||''); }
 function fullUrl(r)    { return '/downloads/'+(r.market==='US'?'Discord_FULL_US_':'Discord_FULL_ASX_')+r.file_date+'.txt'; }
 function condUrl(r)    { return '/downloads/'+(r.market==='US'?'Discord_CONDENSED_US_':'Discord_CONDENSED_ASX_')+r.file_date+'.txt'; }
 function actionBtns(r) {
@@ -224,6 +224,7 @@ function renderTables() {
   var all=[],us=[],asx=[];
   for (var i=0;i<reports.length;i++) {
     var r=reports[i];
+    try {
     var chg=parseFloat(r.index_change||0)>=0?'up':'dn';
     var tgs=tagsHtml(r.tags);
     var acts=actionBtns(r);
@@ -231,6 +232,7 @@ function renderTables() {
     all.push('<tr '+attr+'><td class="col-date">'+r.date+'</td><td>'+r.market+'</td><td class="col-val">'+r.index_close+'</td><td class="col-val '+chg+'">'+r.index_change+'</td><td class="col-tags">'+tgs+'</td><td class="col-actions">'+acts+'</td></tr>');
     if (r.market==='US')  us.push('<tr '+attr+'><td class="col-date">'+r.date+'</td><td class="col-val">'+r.index_close+'</td><td class="col-val '+chg+'">'+r.index_change+'</td><td class="col-val" style="color:var(--text-muted)">'+(r.vix||'—')+'</td><td style="font-size:11px;color:var(--accent);font-family:\'DM Mono\',monospace">'+(r.smart_money_top||'—')+'</td><td class="col-tags">'+tgs+'</td><td class="col-actions">'+acts+'</td></tr>');
     if (r.market==='ASX') asx.push('<tr '+attr+'><td class="col-date">'+r.date+'</td><td class="col-val">'+r.index_close+'</td><td class="col-val '+chg+'">'+r.index_change+'</td><td style="font-size:10px;color:var(--text-muted);font-family:\'DM Mono\',monospace">'+(r.regime||'—')+'</td><td style="font-size:11px;color:#c9a227;font-family:\'DM Mono\',monospace">'+(r.smart_money_top||'—')+'</td><td class="col-tags">'+tgs+'</td><td class="col-actions">'+acts+'</td></tr>');
+    } catch(e){ console.warn('report-index: skipped a row that failed to render',r,e); }
   }
   if (all.length)  document.getElementById('tbody-all').innerHTML=all.join('');
   if (us.length)   document.getElementById('tbody-us').innerHTML=us.join('');
@@ -264,7 +266,14 @@ fetch('/report-index.json')
   .then(function(r){return r.json();})
   .then(function(data){
     if (!Array.isArray(data)||!data.length) return;
-    reports=data.sort(function(a,b){return new Date(b.date_iso)-new Date(a.date_iso);});
+    // Guard: drop records missing renderer-critical fields so a single bad
+    // entry can never blank the whole archive; surface them in the console.
+    var skipped=data.filter(function(r){return !r||!r.market||!r.html_file||!r.date_iso;});
+    if (skipped.length) console.warn('report-index: skipped '+skipped.length+' malformed entr'+(skipped.length===1?'y':'ies'),skipped);
+    reports=data.filter(function(r){return r&&r.market&&r.html_file&&r.date_iso;})
+                .map(function(r){if(Array.isArray(r.smart_money_top))r.smart_money_top=(r.smart_money_top[0]||'').split(' (')[0];return r;})
+                .sort(function(a,b){return new Date(b.date_iso)-new Date(a.date_iso);});
+    if (!reports.length) return;
     var tagSet={};
     reports.forEach(function(r){(r.tags||[]).forEach(function(t){tagSet[t]=1;});});
     var sel=document.getElementById('tag-filter');
@@ -273,7 +282,11 @@ fetch('/report-index.json')
     document.getElementById('footer-count').textContent=reports.length+' report'+(reports.length!==1?'s':'')+' in archive';
     renderCards();
     renderTables();
-  }).catch(function(){});
+  }).catch(function(err){
+    console.error('report-index load failed:',err);
+    var fc=document.getElementById('footer-count');
+    if (fc) fc.textContent='archive failed to load \u2014 see console';
+  });
 </script>
 </body>
 </html>
