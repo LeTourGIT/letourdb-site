@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASX — Qullamaggie Screens — LeTourDB</title>
+<link rel="stylesheet" href="/qullamaggie/assets/wrapper.css">
+</head>
+<body>
+
+<nav>
+  <a href="/index.html" class="nav-logo">LeTour<span>DB</span></a>
+  <div class="nav-links">
+    <a href="/index.html">Dashboard</a>
+    <a href="/us/index.html">US Archive</a>
+    <a href="/asx/index.html">ASX Archive</a>
+    <a href="/qullamaggie/index.html" class="active">Qullamaggie Screens</a>
+  </div>
+  <div class="nav-right" id="nav-updated"></div>
+</nav>
+
+<div class="hero">
+  <div class="hero-in">
+    <div class="crumb"><a href="/qullamaggie/index.html">Qullamaggie Screens</a> / ASX</div>
+    <h1>ASX</h1>
+    <div class="sub">CONTINUATION SCREEN &nbsp;·&nbsp; LATEST + ARCHIVE</div>
+  </div>
+</div>
+
+<div class="container">
+  <div id="latest"><div class="msg" id="loading">Loading&hellip;</div></div>
+
+  <div class="section-title">Archive</div>
+  <div id="archive"><div class="msg">Loading&hellip;</div></div>
+</div>
+
+<footer>
+  <div id="footer-count">group: asx</div>
+  <div>LeTour Dashboard System</div>
+</footer>
+
+<script>
+var SLUG="asx", TITLE="ASX", FAM="asx";
+
+function fmtDate(iso){
+  var m=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var p=(iso||"").split("-");
+  if(p.length!==3) return iso||"\u2014";
+  return parseInt(p[2],10)+" "+m[parseInt(p[1],10)-1]+" "+p[0];
+}
+
+fetch("./manifest.json",{cache:"no-store"})
+  .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+  .then(function(d){
+    var screens=(d.screens||[]).slice().sort(function(a,b){return a.date<b.date?1:-1;});
+    var latestBox=document.getElementById("latest");
+    var archBox=document.getElementById("archive");
+
+    if(!screens.length){
+      latestBox.innerHTML='<div class="empty-state">No screens published yet</div>';
+      archBox.innerHTML='';
+      return;
+    }
+
+    var latest=screens[0];
+    document.getElementById("nav-updated").textContent="Updated: "+fmtDate(latest.date);
+
+    latestBox.innerHTML=
+      '<div class="latest-card">'+
+        '<div class="lhead '+FAM+'"><span class="ltitle '+FAM+'">Latest Screen</span></div>'+
+        '<div class="lbody">'+
+          '<span class="ldate">'+fmtDate(latest.date)+'</span>'+
+          '<span class="lact"><a class="btn-primary" href="./'+latest.file+'" target="_blank">View Latest &rarr;</a></span>'+
+        '</div>'+
+      '</div>';
+
+    var rows=screens.map(function(s,i){
+      return '<tr>'+
+        '<td class="col-date">'+fmtDate(s.date)+'</td>'+
+        '<td>'+(i===0?'<span class="col-latest">Latest</span>':'')+'</td>'+
+        '<td class="col-actions"><a class="btn-sm" href="./'+s.file+'" target="_blank">View</a></td>'+
+      '</tr>';
+    }).join('');
+
+    archBox.innerHTML=
+      '<table class="archive-table"><thead><tr>'+
+        '<th>Date</th><th></th><th>Screen</th>'+
+      '</tr></thead><tbody>'+rows+'</tbody></table>';
+  })
+  .catch(function(e){
+    document.getElementById("latest").innerHTML='<div class="msg err">Could not load manifest.json ('+e.message+').</div>';
+    document.getElementById("archive").innerHTML='';
+  });
+</script>
+</body>
+</html>

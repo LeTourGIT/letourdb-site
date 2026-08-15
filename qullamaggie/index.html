@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qullamaggie Screens — LeTourDB</title>
+<link rel="stylesheet" href="/qullamaggie/assets/wrapper.css">
+</head>
+<body>
+
+<nav>
+  <a href="/index.html" class="nav-logo">LeTour<span>DB</span></a>
+  <div class="nav-links">
+    <a href="/index.html">Dashboard</a>
+    <a href="/us/index.html">US Archive</a>
+    <a href="/asx/index.html">ASX Archive</a>
+    <a href="/qullamaggie/index.html" class="active">Qullamaggie Screens</a>
+  </div>
+  <div class="nav-right" id="nav-updated"></div>
+</nav>
+
+<div class="hero">
+  <div class="hero-in">
+    <h1>Qullamaggie Screens</h1>
+    <div class="sub">CONTINUATION SCREENS &nbsp;·&nbsp; US R1000 · US ALL · ASX &nbsp;·&nbsp; LETOUR DASHBOARD SYSTEM</div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="section-title">Screen Groups</div>
+  <div class="grid" id="cards">
+    <div class="msg" id="loading">Loading latest screens…</div>
+  </div>
+</div>
+
+<footer>
+  <div id="footer-count">Qullamaggie continuation screens</div>
+  <div>LeTour Dashboard System</div>
+</footer>
+
+<script>
+// slug -> display title + market family (drives US/ASX colour coding)
+var GROUPS = [
+  { slug:"us-r1000", title:"US R1000 / NASDAQ Universe", fam:"us"  },
+  { slug:"us-all",   title:"US All Stocks",              fam:"us"  },
+  { slug:"asx",      title:"ASX",                         fam:"asx" }
+];
+
+function fmtDate(iso){
+  var m=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var p=(iso||"").split("-");
+  if(p.length!==3) return iso||"\u2014";
+  return parseInt(p[2],10)+" "+m[parseInt(p[1],10)-1]+" "+p[0];
+}
+
+function loadGroup(g){
+  return fetch("/qullamaggie/"+g.slug+"/manifest.json",{cache:"no-store"})
+    .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(d){
+      var screens=(d.screens||[]).slice().sort(function(a,b){return a.date<b.date?1:-1;});
+      return Object.assign({},g,{screens:screens,latest:screens[0]||null});
+    })
+    .catch(function(){ return Object.assign({},g,{screens:[],latest:null,error:true}); });
+}
+
+Promise.all(GROUPS.map(loadGroup)).then(function(results){
+  var box=document.getElementById("cards");
+  box.innerHTML="";
+  var newest="";
+  results.forEach(function(r){
+    if(r.latest && r.latest.date>newest) newest=r.latest.date;
+    var a=document.createElement("a");
+    a.className="gcard";
+    a.href="/qullamaggie/"+r.slug+"/index.html";
+    var body;
+    if(r.error){
+      body='<div class="gempty" style="color:var(--amber)">manifest unavailable</div>';
+    }else if(r.latest){
+      body='<div class="glatest">Latest screen</div>'+
+           '<div class="gdate">'+fmtDate(r.latest.date)+'</div>'+
+           '<div class="gcount">'+r.screens.length+' screen'+(r.screens.length===1?'':'s')+' in archive</div>'+
+           '<div class="gcta">Open group &rarr;</div>';
+    }else{
+      body='<div class="gempty">No screens published yet</div>';
+    }
+    a.innerHTML=
+      '<div class="ghead '+r.fam+'">'+
+        '<span class="gtitle '+r.fam+'">'+r.title+'</span>'+
+        '<span class="gtag">'+r.slug+'</span>'+
+      '</div>'+
+      '<div class="gbody">'+body+'</div>';
+    box.appendChild(a);
+  });
+  if(newest) document.getElementById("nav-updated").textContent="Updated: "+fmtDate(newest);
+});
+</script>
+</body>
+</html>
