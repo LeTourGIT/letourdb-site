@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASX &mdash; Screen Statistics &mdash; LeTourDB</title>
+<link rel="stylesheet" href="/qullamaggie/assets/wrapper.css">
+<link rel="stylesheet" href="/qullamaggie/assets/stats.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+<nav>
+  <a href="/index.html" class="nav-logo">LeTour<span>DB</span></a>
+  <div class="nav-links">
+    <a href="/index.html">Dashboard</a>
+    <a href="/us/index.html">US Archive</a>
+    <a href="/asx/index.html">ASX Archive</a>
+    <a href="/qullamaggie/index.html" class="active">Qullamaggie Screens</a>
+  </div>
+  <div class="nav-right" id="nav-updated"></div>
+</nav>
+
+<div class="hero">
+  <div class="hero-in">
+    <div class="crumb"><a href="/qullamaggie/index.html">Qullamaggie Screens</a> / <a href="/qullamaggie/asx/index.html">ASX</a> / Statistics</div>
+    <h1>ASX &middot; Statistics</h1>
+    <div class="sub">SETUP TIER TRENDS &nbsp;&middot;&nbsp; TIER A / TIER B / EXCLUDE &nbsp;&middot;&nbsp; MARKET-REGIME LENS</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="stat-actions">
+    <a class="btn-sm" href="/qullamaggie/asx/index.html">&larr; Screens &amp; archive</a>
+    <a class="btn-sm" href="/qullamaggie/index.html">All groups</a>
+  </div>
+
+  <div id="content"><div class="msg" id="loading">Loading statistics&hellip;</div></div>
+
+</div>
+
+<footer>
+  <div id="footer-count">group: asx &middot; statistics</div>
+  <div>LeTour Dashboard System</div>
+</footer>
+
+<script>
+var SLUG="asx", TITLE="ASX", FAM="asx";
+var BENCH="ASX 200";              /* display label, e.g. "S&P 500" / "ASX 200" */
+var BENCH_MARKET="ASX";/* report-index.json market to align against */
+
+/* palette (concrete hex for canvas rendering) */
+var C={total:"#7a85a0",a:"#22c55e",b:"#f59e0b",x:"#ef4444",
+       health:"#818cf8",apct:"#60a5fa",ratio:"#fbbf24",bench:"#e4e8f2",
+       grid:"#222840",tick:"#7a85a0",dim:"#424d68"};
+
+var MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function fmtDate(iso){var p=(iso||"").split("-");if(p.length!==3)return iso||"\u2014";
+  return parseInt(p[2],10)+" "+MON[parseInt(p[1],10)-1]+" "+p[0];}
+function fmtShort(iso){var p=(iso||"").split("-");if(p.length!==3)return iso||"";
+  return parseInt(p[2],10)+" "+MON[parseInt(p[1],10)-1];}
+function toNum(v){if(v===null||v===undefined||v==="")return null;
+  var n=Number(String(v).replace(/[,\s]/g,""));return isNaN(n)?null:n;}
+
+/* Setup Health = quality-weighted share of actionable names screened.
+   100 * (A + 0.5*B) / (A+B+X). High when prime setups dominate;
+   falls as the Exclude bucket swells. Bounded 0-100. */
+function health(a,b,x){var t=a+b+x;return t?Math.round(100*(a+0.5*b)/t):0;}
+
+/* Build date -> index_close map from report-index.json for this group's market.
+   Tolerates either a bare array or {reports|records|data:[...]}. */
+function benchMapFrom(idx){
+  var map={};
+  if(!idx)return map;
+  var arr=Array.isArray(idx)?idx:(idx.reports||idx.records||idx.data||[]);
+  arr.forEach(function(r){
+    if(!r)return;
+    var mkt=(r.market||"").toString().toUpperCase();
+    if(mkt!==BENCH_MARKET)return;
+    var d=r.date_iso||r.date;
+    var v=toNum(r.index_close);
+    if(d&&v!==null)map[d]=v;
+  });
+  return map;
+}
+
+Promise.all([
+  fetch("./manifest.json",{cache:"no-store"})
+    .then(function(r){if(!r.ok)throw new Error("manifest "+r.status);return r.json();}),
+  fetch("/report-index.json",{cache:"no-store"})
+    .then(function(r){return r.ok?r.json():null;})
+    .catch(function(){return null;})   /* benchmark is optional; page still works */
+]).then(function(res){
+  render(res[0], benchMapFrom(res[1]));
+}).catch(function(e){
+  document.getElementById("content").innerHTML=
+    '<div class="msg err">Could not load manifest.json ('+e.message+').</div>';
+});
+
+function render(d, benchMap){
+  var raw=(d.screens||[]).slice();
+  if(!raw.length){
+    document.getElementById("content").innerHTML=
+      '<div class="empty-state">No screens published yet.<br>Statistics will appear once the first screen is uploaded.</div>';
+    return;
+  }
+  var asc=raw.slice().sort(function(p,q){return p.date<q.date?-1:1;});
+  var rows=asc.map(function(s){
+    var a=+s.a||0,b=+s.b||0,x=+s.x||0,t=a+b+x;
+    var override=toNum(s.bench);
+    var bench=(override!==null)?override:(benchMap[s.date]!==undefined?benchMap[s.date]:null);
+    return {date:s.date,file:s.file,a:a,b:b,x:x,total:t,
+            apct:t?Math.round(1000*a/t)/10:0,
+            ratio:Math.round(100*(a/Math.max(x,1)))/100,
+            health:health(a,b,x),
+            bench:bench};
+  });
+  var labels=rows.map(function(r){return fmtShort(r.date);});
+  var hasBench=rows.some(function(r){return r.bench!==null;});
+
+  var latest=rows[rows.length-1];
+  document.getElementById("nav-updated").textContent="Updated: "+fmtDate(latest.date);
+
+  var benchNote="";
+  if(!hasBench){
+    benchNote='<div class="toggle-note" style="color:var(--amber)">'
+      +BENCH+' overlay unavailable &mdash; no matching '+BENCH_MARKET
+      +' index_close found in /report-index.json for these dates.</div>';
+  }
+
+  var html=""
+   + tilesHTML(rows)
+   + '<div class="panel">'
+   +   '<div class="phead"><span class="ptitle">Composition per screen</span>'
+   +     '<span class="phint">stacked Tier A / B / Exclude &middot; bar height = total names screened</span></div>'
+   +   '<div class="chart-wrap"><canvas id="cComp"></canvas></div>'
+   + '</div>'
+   + '<div class="panel">'
+   +   '<div class="phead"><span class="ptitle">Trend explorer</span>'
+   +     '<span class="phint">toggle metrics &middot; test what moves with the market</span></div>'
+   +   '<div class="toggle-note">Metrics (multi-select):</div>'
+   +   togglesHTML(hasBench)
+   +   benchNote
+   +   '<div class="chart-wrap tall"><canvas id="cTrend"></canvas></div>'
+   + '</div>'
+   + '<div class="caption">'
+   +   '<b>Reading gaps:</b> only dates a screen was actually published appear on the axis. '
+   +   'A gap (e.g. a skipped day) means the screen was not run that day &mdash; <b>not</b> zero setups. '
+   +   'Points are spaced evenly per screen, not by calendar distance.<br>'
+   +   '<b>Setup Health</b> = 100 &times; (A + &frac12;B) / (A+B+X): a quality-weighted share of '
+   +   'actionable names. Rising Health / Tier&nbsp;A with a shrinking Exclude bucket is the '
+   +   'risk-on read to test against ' + BENCH + '.<br>'
+   +   '<b>' + BENCH + ' overlay</b> is pulled live from the dashboard\'s /report-index.json '
+   +   '(index_close, ' + BENCH_MARKET + '), aligned to each screen date.'
+   + '</div>'
+   + '<div class="section-title">Per-screen data</div>'
+   + tableHTML(rows.slice().reverse(), hasBench);
+
+  document.getElementById("content").innerHTML=html;
+  drawComposition(labels, rows);
+  drawTrend(labels, rows, hasBench);
+}
+
+/* ---------- stat tiles ---------- */
+function deltaHTML(cur,prev,colored){
+  if(prev===undefined||prev===null)return '<div class="tdelta flat">first screen</div>';
+  var dv=Math.round((cur-prev)*100)/100;
+  var arrow=dv>0?"\u25b2":(dv<0?"\u25bc":"\u2013");
+  var cls=colored?(dv>0?"up":(dv<0?"dn":"flat")):"";
+  var sign=dv>0?"+":"";
+  return '<div class="tdelta '+cls+'">'+arrow+' '+sign+dv+' vs prev</div>';
+}
+function tile(label,val,accent,dC,dP,colored,small){
+  return '<div class="tile '+(accent||"")+'">'
+    + '<div class="tlabel">'+label+'</div>'
+    + '<div class="tval"'+(small?' style="font-size:20px"':'')+'>'+val+'</div>'
+    + deltaHTML(dC,dP,colored)+'</div>';
+}
+function tilesHTML(rows){
+  var n=rows.length,cur=rows[n-1],prev=n>1?rows[n-2]:null;
+  var pv=function(k){return prev?prev[k]:null;};
+  return '<div class="tiles">'
+    + tile("Latest screen",fmtShort(cur.date),"",null,null,false,true)
+    + tile("Total names",cur.total,"",cur.total,pv("total"),false)
+    + tile("Tier A",cur.a,"accent-a",cur.a,pv("a"),false)
+    + tile("Tier B",cur.b,"accent-b",cur.b,pv("b"),false)
+    + tile("Exclude",cur.x,"accent-x",cur.x,pv("x"),false)
+    + tile("Setup Health",cur.health,"accent-h",cur.health,pv("health"),true)
+    + '</div>';
+}
+
+/* ---------- toggle chips ---------- */
+var SERIES=[
+  {key:"total", label:"Total",       axis:"yCount", def:true },
+  {key:"a",     label:"Tier A",      axis:"yCount", def:true },
+  {key:"b",     label:"Tier B",      axis:"yCount", def:false},
+  {key:"x",     label:"Exclude",     axis:"yCount", def:false},
+  {key:"health",label:"Setup Health",axis:"yScore", def:false},
+  {key:"apct",  label:"Tier A %",    axis:"yScore", def:false},
+  {key:"ratio", label:"A : Excl",    axis:"yRatio", def:false}
+];
+function togglesHTML(hasBench){
+  var h='<div class="toggles">';
+  SERIES.forEach(function(s){
+    h+='<span class="chip'+(s.def?' on':'')+'" data-series="'+s.key+'">'
+      +'<span class="dot"></span>'+s.label+'</span>';
+  });
+  var cls=hasBench?"chip":"chip disabled";
+  var style=hasBench?"":' style="opacity:.4;cursor:not-allowed"';
+  h+='<span class="'+cls+'" data-series="bench"'+style+' title="'
+    +(hasBench?"overlay "+BENCH:BENCH+" not available")+'">'
+    +'<span class="dot"></span>'+BENCH+' overlay</span>';
+  return h+'</div>';
+}
+
+/* ---------- charts ---------- */
+var trendChart=null;
+function baseGrid(){return {color:C.grid,drawTicks:false};}
+
+function drawComposition(labels,rows){
+  var ctx=document.getElementById("cComp").getContext("2d");
+  new Chart(ctx,{
+    type:"bar",
+    data:{labels:labels,datasets:[
+      {label:"Tier A",data:rows.map(function(r){return r.a;}),backgroundColor:C.a,stack:"s",borderWidth:0},
+      {label:"Tier B",data:rows.map(function(r){return r.b;}),backgroundColor:C.b,stack:"s",borderWidth:0},
+      {label:"Exclude",data:rows.map(function(r){return r.x;}),backgroundColor:C.x,stack:"s",borderWidth:0}
+    ]},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:"index",intersect:false},
+      scales:{
+        x:{stacked:true,grid:{display:false},ticks:{color:C.tick,font:{family:"DM Mono",size:10}}},
+        y:{stacked:true,beginAtZero:true,grid:baseGrid(),
+           ticks:{color:C.tick,font:{family:"DM Mono",size:10},precision:0},
+           title:{display:true,text:"Names screened",color:C.dim,font:{family:"DM Mono",size:10}}}
+      },
+      plugins:{
+        legend:{labels:{color:C.tick,font:{family:"DM Mono",size:11},boxWidth:12,boxHeight:12}},
+        tooltip:{callbacks:{footer:function(items){
+          var t=0;items.forEach(function(i){t+=i.parsed.y;});return "Total: "+t;}}}
+      }
+    }
+  });
+}
+
+function drawTrend(labels,rows,hasBench){
+  var mk=function(s){
+    var col=C[s.key];
+    var extra=(s.key==="bench")
+      ? {borderDash:[5,4],borderWidth:1.5,pointRadius:2,spanGaps:true,hidden:!s._on}
+      : {borderWidth:2,pointRadius:2.5,tension:.25,hidden:!s._on};
+    return Object.assign({
+      label:s.label,data:rows.map(function(r){return r[s.key];}),
+      borderColor:col,backgroundColor:col,yAxisID:s.axis,
+      pointBackgroundColor:col,pointBorderColor:col
+    },extra);
+  };
+  var defs=SERIES.map(function(s){s._on=s.def;return mk(s);});
+  if(hasBench)defs.push(mk({key:"bench",label:BENCH,axis:"yBench",_on:false}));
+
+  var scales={
+    x:{grid:{display:false},ticks:{color:C.tick,font:{family:"DM Mono",size:10}}},
+    yCount:{position:"left",beginAtZero:true,grid:baseGrid(),
+      ticks:{color:C.tick,font:{family:"DM Mono",size:10},precision:0},
+      title:{display:true,text:"Count",color:C.dim,font:{family:"DM Mono",size:9}}},
+    yScore:{position:"right",min:0,max:100,display:false,grid:{drawOnChartArea:false},
+      ticks:{color:C.tick,font:{family:"DM Mono",size:10}},
+      title:{display:true,text:"Health / A%",color:C.dim,font:{family:"DM Mono",size:9}}},
+    yRatio:{position:"right",beginAtZero:true,display:false,grid:{drawOnChartArea:false},
+      ticks:{color:C.tick,font:{family:"DM Mono",size:10}},
+      title:{display:true,text:"A : Excl",color:C.dim,font:{family:"DM Mono",size:9}}}
+  };
+  if(hasBench){
+    scales.yBench={position:"right",display:false,grid:{drawOnChartArea:false},
+      ticks:{color:C.tick,font:{family:"DM Mono",size:10}},
+      title:{display:true,text:BENCH,color:C.dim,font:{family:"DM Mono",size:9}}};
+  }
+
+  var ctx=document.getElementById("cTrend").getContext("2d");
+  trendChart=new Chart(ctx,{
+    type:"line",data:{labels:labels,datasets:defs},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:"index",intersect:false},
+      scales:scales,
+      plugins:{legend:{display:false},
+        tooltip:{itemSort:function(a,b){return b.parsed.y-a.parsed.y;}}}
+    }
+  });
+  syncAxes();
+  wireChips();
+}
+
+/* show a y-axis only if a visible dataset uses it */
+function syncAxes(){
+  if(!trendChart)return;
+  var used={};
+  trendChart.data.datasets.forEach(function(ds){if(!ds.hidden)used[ds.yAxisID]=true;});
+  ["yScore","yRatio","yBench"].forEach(function(ax){
+    if(trendChart.options.scales[ax])trendChart.options.scales[ax].display=!!used[ax];
+  });
+  trendChart.update();
+}
+
+function wireChips(){
+  document.querySelectorAll('.chip[data-series]').forEach(function(chip){
+    if(chip.classList.contains("disabled"))return;
+    chip.addEventListener("click",function(){
+      var key=chip.getAttribute("data-series");
+      var ds=trendChart.data.datasets.filter(function(d){return d.label===seriesLabel(key);})[0];
+      if(!ds)return;
+      ds.hidden=!ds.hidden;
+      chip.classList.toggle("on",!ds.hidden);
+      syncAxes();
+    });
+  });
+}
+function seriesLabel(key){
+  if(key==="bench")return BENCH;
+  var s=SERIES.filter(function(x){return x.key===key;})[0];
+  return s?s.label:key;
+}
+
+/* ---------- data table ---------- */
+function tableHTML(rowsDesc,hasBench){
+  var head='<table class="archive-table"><thead><tr>'
+    +'<th>Date</th>'
+    +'<th class="rt">A</th><th class="rt">B</th><th class="rt">Excl</th>'
+    +'<th class="rt">Total</th><th class="rt">A%</th><th class="rt">Health</th>'
+    +(hasBench?'<th class="rt">'+BENCH+'</th>':'')
+    +'<th>Screen</th></tr></thead><tbody>';
+  var body=rowsDesc.map(function(r){
+    return '<tr>'
+      +'<td class="col-date">'+fmtDate(r.date)+'</td>'
+      +'<td class="num a">'+r.a+'</td>'
+      +'<td class="num b">'+r.b+'</td>'
+      +'<td class="num x">'+r.x+'</td>'
+      +'<td class="num tot">'+r.total+'</td>'
+      +'<td class="num">'+r.apct.toFixed(1)+'</td>'
+      +'<td class="num">'+r.health+'</td>'
+      +(hasBench?'<td class="num">'+(r.bench===null?'\u2013':r.bench.toLocaleString())+'</td>':'')
+      +'<td class="col-actions"><a class="btn-sm" href="./'+r.file+'" target="_blank">View</a></td>'
+      +'</tr>';
+  }).join('');
+  return head+body+'</tbody></table>';
+}
+</script>
+</body>
+</html>

@@ -31,6 +31,11 @@
   <div class="grid" id="cards">
     <div class="msg" id="loading">Loading latest screens…</div>
   </div>
+
+  <div class="section-title">Screen Statistics</div>
+  <div class="grid" id="stats-cards">
+    <div class="msg" id="stats-loading">Loading statistics…</div>
+  </div>
 </div>
 
 <footer>
@@ -92,6 +97,38 @@ Promise.all(GROUPS.map(loadGroup)).then(function(results){
     box.appendChild(a);
   });
   if(newest) document.getElementById("nav-updated").textContent="Updated: "+fmtDate(newest);
+
+  // ---- Screen Statistics cards (reuse the manifests already fetched) ----
+  var sbox=document.getElementById("stats-cards");
+  sbox.innerHTML="";
+  results.forEach(function(r){
+    var a=document.createElement("a");
+    a.className="gcard";
+    a.href="/qullamaggie/"+r.slug+"/stats.html";
+    var body;
+    if(r.error){
+      body='<div class="gempty" style="color:var(--amber)">manifest unavailable</div>';
+    }else if(r.latest){
+      var la=+r.latest.a||0, lb=+r.latest.b||0, lx=+r.latest.x||0, lt=la+lb+lx;
+      var hstr=(lt?Math.round(100*(la+0.5*lb)/lt):0);
+      body='<div class="glatest">Latest &middot; '+fmtDate(r.latest.date)+'</div>'+
+           '<div class="gcount" style="margin-top:8px">'+
+             '<span style="color:var(--green)">A '+la+'</span> &middot; '+
+             '<span style="color:var(--amber)">B '+lb+'</span> &middot; '+
+             '<span style="color:var(--red)">Excl '+lx+'</span></div>'+
+           '<div class="gcount">Total '+lt+' &middot; Health '+hstr+'</div>'+
+           '<div class="gcta">View statistics &rarr;</div>';
+    }else{
+      body='<div class="gempty">No screens yet</div>';
+    }
+    a.innerHTML=
+      '<div class="ghead '+r.fam+'">'+
+        '<span class="gtitle '+r.fam+'">'+r.title+'</span>'+
+        '<span class="gtag">'+r.slug+'</span>'+
+      '</div>'+
+      '<div class="gbody">'+body+'</div>';
+    sbox.appendChild(a);
+  });
 });
 </script>
 </body>
